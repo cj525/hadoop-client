@@ -171,7 +171,7 @@ Scenario: Delete a table
 		| DELETE | test/schema |
 
 Scenario: Find cells with an empty table
-	Given I will always get a response with a status of "NotFound" and content equivalent to the resource called "HBaseXml_FindCellsEmptyResponse"
+	Given I will always get a response with a status of "NotFound" and content equivalent to the resource called "NotFoundResponse"
 	When I read all cells from the "test" table
 	Then my set should contain 0 cells
 
@@ -182,3 +182,9 @@ Scenario: No Server Response
 		| method | resource    |
 		| GET    | test/schema |
 	And there should have been a WebException with a message equivalent to the resource called "NoServerResponse"
+
+Scenario: Read a value from an empty table
+	Given I have an identifier consisting of a "test", a "row", a "column", and a "qualifier"
+	And I will always get a response with a status of "NotFound" and content equivalent to the resource called "NotFoundResponse"
+	When I read a single value using my identifier
+	Then the result should be "{null}"

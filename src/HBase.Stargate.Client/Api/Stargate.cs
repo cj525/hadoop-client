@@ -176,10 +176,10 @@ namespace HBase.Stargate.Client.Api
 			IRestResponse response = await SendRequestAsync(Method.GET, resource, Options.ContentType);
 			_errorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK, HttpStatusCode.NotFound);
 
-			return _converter.ConvertCells(response.Content, identifier.Table)
-				.Select(cell => cell.Value)
-				.FirstOrDefault();
-		}
+            return response.StatusCode == HttpStatusCode.OK
+                ? _converter.ConvertCells(response.Content, identifier.Table).Select(cell => cell.Value).FirstOrDefault()
+                : null;
+        }
 
 		/// <summary>
 		///    Reads the value with the matching identifier.
@@ -194,9 +194,9 @@ namespace HBase.Stargate.Client.Api
 			IRestResponse response = SendRequest(Method.GET, resource, Options.ContentType);
 			_errorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK, HttpStatusCode.NotFound);
 
-			return _converter.ConvertCells(response.Content, identifier.Table)
-				.Select(cell => cell.Value)
-				.FirstOrDefault();
+		    return response.StatusCode == HttpStatusCode.OK
+		        ? _converter.ConvertCells(response.Content, identifier.Table).Select(cell => cell.Value).FirstOrDefault()
+		        : null;
 		}
 
 		/// <summary>

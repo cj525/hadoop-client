@@ -210,6 +210,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -229,7 +230,6 @@
     <None Include="Resources\HBaseXml_Set_HelloWorld.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\HBaseXml_FindCellsEmptyResponse.xml" />
     <Content Include="Resources\HBaseXml_TableSchema1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
