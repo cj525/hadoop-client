@@ -67,6 +67,12 @@ namespace _specs.Steps
 			values.CompareToSet(_cells.CellSet.Select(cell => (TestCell) cell));
 		}
 
+        [Then(@"the result should be ""(.+)""")]
+        public void CheckResulValue(TestString value)
+        {
+            _cells.CellValue.Should().Be(value);
+        }
+
 		private static bool CellMatchesTestValue(Cell cell, TestCell testCell)
 		{
 			return cell.Identifier.Row == testCell.Row
