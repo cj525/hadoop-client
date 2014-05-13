@@ -19,19 +19,40 @@
 
 #endregion
 
+using HBase.Stargate.Client.TypeConversion;
+
+using Newtonsoft.Json.Linq;
+
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   Simple filter that returns first N columns on row only. This filter was written to test filters
-  ///   in Get and as soon as it gets its quota of columns, filterAllRemaining() returns true. This makes
-  ///   this filter unsuitable as a Scan filter.
+  ///   Base type for filters that set a numeric "limit" property.
   /// </summary>
-  public class ColumnCountGetFilter : LimitFilter
+  public abstract class LimitFilter : ScannerFilterBase
   {
+    private const string _limitPropertyName = "limit";
+    private readonly int _limit;
+
     /// <summary>
-    ///   Initializes a new instance of the <see cref="ColumnCountGetFilter" /> class.
+    ///   Initializes a new instance of the <see cref="LimitFilter" /> class.
     /// </summary>
     /// <param name="limit">The limit.</param>
-    public ColumnCountGetFilter(int limit) : base(limit) {}
+    protected LimitFilter(int limit)
+    {
+      _limit = limit;
+    }
+
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+
+      json[_limitPropertyName] = _limit;
+
+      return json;
+    }
   }
 }
