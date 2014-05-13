@@ -19,19 +19,44 @@
 
 #endregion
 
+using HBase.Stargate.Client.TypeConversion;
+
+using Newtonsoft.Json.Linq;
+
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   Simple filter that returns first N columns on row only. This filter was written to test filters
-  ///   in Get and as soon as it gets its quota of columns, filterAllRemaining() returns true. This makes
-  ///   this filter unsuitable as a Scan filter.
+  ///   Initializes filter with an integer offset and limit. The offset is arrived
+  ///   at scanning sequentially and skipping entries. The specified number of columns
+  ///   are then retrieved. If multiple column families are involved, the columns may
+  ///   be spread across them.
   /// </summary>
-  public class ColumnCountGetFilter : LimitFilter
+  public class ColumnPaginationFilter : LimitFilter
   {
+    private const string _offsetPropertyName = "offset";
+    private readonly int _offset;
+
     /// <summary>
-    ///   Initializes a new instance of the <see cref="ColumnCountGetFilter" /> class.
+    ///   Initializes a new instance of the <see cref="ColumnPaginationFilter" /> class.
     /// </summary>
     /// <param name="limit">The limit.</param>
-    public ColumnCountGetFilter(int limit) : base(limit) {}
+    /// <param name="offset">The offset.</param>
+    public ColumnPaginationFilter(int limit, int offset) : base(limit)
+    {
+      _offset = offset;
+    }
+
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+
+      json[_offsetPropertyName] = _offset;
+
+      return json;
+    }
   }
 }
