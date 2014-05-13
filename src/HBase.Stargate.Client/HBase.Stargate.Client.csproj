@@ -57,6 +57,7 @@
     <Compile Include="Api\BinaryComparator.cs" />
     <Compile Include="Api\ColumnCountGetFilter.cs" />
     <Compile Include="Api\ColumnPaginationFilter.cs" />
+    <Compile Include="Api\KeyOnlyFilter.cs" />
     <Compile Include="Api\LimitFilter.cs" />
     <Compile Include="Api\ColumnPrefixFilter.cs" />
     <Compile Include="Api\ColumnRangeFilter.cs" />
