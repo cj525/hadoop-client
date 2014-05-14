@@ -88,6 +88,7 @@
     <Compile Include="Api\Scanner.cs" />
     <Compile Include="Api\ScannerFilterBase.cs" />
     <Compile Include="Api\ScannerOptions.cs" />
+    <Compile Include="Api\SingleColumnValueExcludeFilter.cs" />
     <Compile Include="Api\SingleColumnValueFilter.cs" />
     <Compile Include="Api\Stargate.cs" />
     <Compile Include="Api\TimestampsFilter.cs" />
