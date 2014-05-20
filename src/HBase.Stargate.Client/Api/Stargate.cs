@@ -60,15 +60,15 @@ namespace HBase.Stargate.Client.Api
 		///    Initializes a new instance of the <see cref="Stargate" /> class.
 		/// </summary>
 		/// <param name="options">The options.</param>
-		/// <param name="resourceBuilder">The resource builder.</param>
+		/// <param name="resourceBuilderFactory">The resource builder factory.</param>
 		/// <param name="restSharp">The RestSharp factory.</param>
 		/// <param name="converterFactory">The converter factory.</param>
 		/// <param name="errorProvider">The error provider.</param>
 		/// <param name="scannerConverter">The scanner converter.</param>
-		public Stargate(IStargateOptions options, IResourceBuilder resourceBuilder, IRestSharpFactory restSharp, IMimeConverterFactory converterFactory,
-			IErrorProvider errorProvider, IScannerOptionsConverter scannerConverter)
+		public Stargate(IStargateOptions options, Func<IStargateOptions,IResourceBuilder> resourceBuilderFactory, IRestSharpFactory restSharp,
+            IMimeConverterFactory converterFactory, IErrorProvider errorProvider, IScannerOptionsConverter scannerConverter)
 		{
-			_resourceBuilder = resourceBuilder;
+		    _resourceBuilder = resourceBuilderFactory(options);
 			_restSharp = restSharp;
 			_errorProvider = errorProvider;
 			_scannerConverter = scannerConverter;
@@ -425,7 +425,7 @@ namespace HBase.Stargate.Client.Api
 		/// <param name="options">The options.</param>
 		public static IStargate Create(IStargateOptions options)
 		{
-			var resourceBuilder = new ResourceBuilder(options);
+			Func<IStargateOptions,IResourceBuilder> resourceBuilderFactory = opt => new ResourceBuilder(opt);
 			var restSharp = new RestSharpFactory(url => new RestClient(url), (resource, method) => new RestRequest(resource, method));
 			var codec = new Base64Codec();
 			var mimeConverters = new MimeConverterFactory(new[]
@@ -443,7 +443,7 @@ namespace HBase.Stargate.Client.Api
 				? DefaultFalseRowKey
 				: options.FalseRowKey;
 
-			return new Stargate(options, resourceBuilder, restSharp, mimeConverters, errors, scannerConverter);
+            return new Stargate(options, resourceBuilderFactory, restSharp, mimeConverters, errors, scannerConverter);
 		}
 
 		/// <summary>
