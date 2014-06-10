@@ -82,6 +82,7 @@
     <Compile Include="Api\PrefixFilter.cs" />
     <Compile Include="Api\QualifierFilter.cs" />
     <Compile Include="Api\RandomRowFilter.cs" />
+    <Compile Include="Api\RawJsonFilter.cs" />
     <Compile Include="Api\ResourceBuilder.cs" />
     <Compile Include="Api\RestConstants.cs" />
     <Compile Include="Api\RowFilter.cs" />
