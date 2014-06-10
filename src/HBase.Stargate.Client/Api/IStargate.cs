@@ -19,6 +19,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,7 +37,8 @@ namespace HBase.Stargate.Client.Api
 		/// </summary>
 		/// <param name="identifier">The identifier.</param>
 		/// <param name="value">The value.</param>
-		Task WriteValueAsync(Identifier identifier, string value);
+    [Obsolete("Use Task.Run(() => gate.WriteValue(identifier,value)) instead")]
+    Task WriteValueAsync(Identifier identifier, string value);
 
 		/// <summary>
 		///    Writes the value to HBase using the identifier.
@@ -49,7 +51,8 @@ namespace HBase.Stargate.Client.Api
 		///    Writes the cells to HBase.
 		/// </summary>
 		/// <param name="cells">The cells.</param>
-		Task WriteCellsAsync(CellSet cells);
+    [Obsolete("Use Task.Run(() => gate.WriteCells(cells)) instead")]
+    Task WriteCellsAsync(CellSet cells);
 
 		/// <summary>
 		///    Writes the cells to HBase.
@@ -61,7 +64,8 @@ namespace HBase.Stargate.Client.Api
 		///    Deletes the item with the matching identifier from HBase.
 		/// </summary>
 		/// <param name="identifier">The identifier.</param>
-		Task DeleteItemAsync(Identifier identifier);
+    [Obsolete("Use Task.Run(() => gate.DeleteItem(identifier)) instead")]
+    Task DeleteItemAsync(Identifier identifier);
 
 		/// <summary>
 		///    Deletes the item with the matching identifier from HBase.
@@ -73,7 +77,8 @@ namespace HBase.Stargate.Client.Api
 		///    Reads the value with the matching identifier.
 		/// </summary>
 		/// <param name="identifier">The identifier.</param>
-		Task<string> ReadValueAsync(Identifier identifier);
+    [Obsolete("Use Task.Run(() => gate.ReadValue(identifier)) instead")]
+    Task<string> ReadValueAsync(Identifier identifier);
 
 		/// <summary>
 		///    Reads the value with the matching identifier.
@@ -85,7 +90,8 @@ namespace HBase.Stargate.Client.Api
 		///    Finds the cells matching the query.
 		/// </summary>
 		/// <param name="query"></param>
-		Task<CellSet> FindCellsAsync(CellQuery query);
+    [Obsolete("Use Task.Run(() => gate.FindCells(query)) instead")]
+    Task<CellSet> FindCellsAsync(CellQuery query);
 
 		/// <summary>
 		///    Finds the cells matching the query.
@@ -103,7 +109,8 @@ namespace HBase.Stargate.Client.Api
 		///    Creates the table.
 		/// </summary>
 		/// <param name="tableSchema">The table schema.</param>
-		Task CreateTableAsync(TableSchema tableSchema);
+    [Obsolete("Use Task.Run(() => gate.CreateTable(tableSchema)) instead")]
+    Task CreateTableAsync(TableSchema tableSchema);
 
 		/// <summary>
 		///    Gets the table names.
@@ -115,7 +122,8 @@ namespace HBase.Stargate.Client.Api
 		///    Gets the table names.
 		/// </summary>
 		/// <returns></returns>
-		Task<IEnumerable<string>> GetTableNamesAsync();
+    [Obsolete("Use Task.Run(() => gate.GetTableNames()) instead")]
+    Task<IEnumerable<string>> GetTableNamesAsync();
 
 		/// <summary>
 		/// Deletes the table.
@@ -127,13 +135,15 @@ namespace HBase.Stargate.Client.Api
 		/// Deletes the table.
 		/// </summary>
 		/// <param name="tableName">Name of the table.</param>
-		Task DeleteTableAsync(string tableName);
+    [Obsolete("Use Task.Run(() => gate.DeleteTable(tableName)) instead")]
+    Task DeleteTableAsync(string tableName);
 
 		/// <summary>
 		/// Gets the table schema.
 		/// </summary>
 		/// <param name="tableName">Name of the table.</param>
-		Task<TableSchema> GetTableSchemaAsync(string tableName);
+    [Obsolete("Use Task.Run(() => gate.GetTableSchema(tableName)) instead")]
+    Task<TableSchema> GetTableSchemaAsync(string tableName);
 
 		/// <summary>
 		/// Gets the table schema.
@@ -145,7 +155,8 @@ namespace HBase.Stargate.Client.Api
 		/// Creates the scanner.
 		/// </summary>
 		/// <param name="options">The options.</param>
-		Task<IScanner> CreateScannerAsync(ScannerOptions options);
+    [Obsolete("Use Task.Run(() => gate.CreateScanner(options)) instead")]
+    Task<IScanner> CreateScannerAsync(ScannerOptions options);
 
 		/// <summary>
 		/// Creates the scanner.
@@ -163,7 +174,8 @@ namespace HBase.Stargate.Client.Api
 		/// Deletes the scanner.
 		/// </summary>
 		/// <param name="scanner">The scanner.</param>
-		Task DeleteScannerAsync(IScanner scanner);
+    [Obsolete("Use Task.Run(() => gate.DeleteScanner(scanner)) instead")]
+    Task DeleteScannerAsync(IScanner scanner);
 
 		/// <summary>
 		/// Gets the scanner result.
@@ -175,6 +187,7 @@ namespace HBase.Stargate.Client.Api
 		/// Gets the scanner result.
 		/// </summary>
 		/// <param name="scanner">The scanner.</param>
-		Task<CellSet> GetScannerResultAsync(IScanner scanner);
+    [Obsolete("Use Task.Run(() => gate.GetScannerResult(scanner)) instead")]
+    Task<CellSet> GetScannerResultAsync(IScanner scanner);
 	}
 }
