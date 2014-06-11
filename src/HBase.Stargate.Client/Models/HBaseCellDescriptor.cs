@@ -1,6 +1,6 @@
 #region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,27 +19,65 @@
 
 #endregion
 
+using System;
+
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Describes a cell in HBase.
-	/// </summary>
-	public class HBaseCellDescriptor
-	{
-		/// <summary>
-		///    Gets or sets the column.
-		/// </summary>
-		/// <value>
-		///    The column.
-		/// </value>
-		public string Column { get; set; }
+  /// <summary>
+  ///   Describes a cell in HBase.
+  /// </summary>
+  public class HBaseCellDescriptor : IEquatable<HBaseCellDescriptor>
+  {
+    /// <summary>
+    ///   Gets or sets the column.
+    /// </summary>
+    public string Column { get; set; }
 
-		/// <summary>
-		///    Gets or sets the qualifier.
-		/// </summary>
-		/// <value>
-		///    The qualifier.
-		/// </value>
-		public string Qualifier { get; set; }
-	}
+    /// <summary>
+    ///   Gets or sets the qualifier.
+    /// </summary>
+    public string Qualifier { get; set; }
+
+    /// <summary>
+    ///   Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    public bool Equals(HBaseCellDescriptor other)
+    {
+      return this.CheckedEquals(other,
+        (left, right) => left.Column.EqualsString(other.Column)
+          && left.Qualifier.EqualsString(other.Qualifier));
+    }
+
+    /// <summary>
+    ///   Returns a hash code for this instance.
+    /// </summary>
+    public override int GetHashCode()
+    {
+      return this.GetMutableHashCode();
+    }
+
+    /// <summary>
+    ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+    /// </summary>
+    public override bool Equals(object other)
+    {
+      return Equals(other as HBaseCellDescriptor);
+    }
+
+    /// <summary>
+    ///   Implements the operator ==.
+    /// </summary>
+    public static bool operator ==(HBaseCellDescriptor left, HBaseCellDescriptor right)
+    {
+      return left.CheckedEquals(right);
+    }
+
+    /// <summary>
+    ///   Implements the operator !=.
+    /// </summary>
+    public static bool operator !=(HBaseCellDescriptor left, HBaseCellDescriptor right)
+    {
+      return !(left == right);
+    }
+  }
 }

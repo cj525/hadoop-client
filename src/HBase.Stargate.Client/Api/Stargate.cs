@@ -40,20 +40,43 @@ namespace HBase.Stargate.Client.Api
   public class Stargate : IStargate
   {
     /// <summary>
-    ///   The default false row key
+    ///   The default false row key.
     /// </summary>
     public const string DefaultFalseRowKey = "row";
 
     /// <summary>
-    ///   The default content type
+    ///   The default content type.
     /// </summary>
     public const string DefaultContentType = HBaseMimeTypes.Xml;
 
+    /// <summary>
+    ///   The REST client.
+    /// </summary>
     protected readonly IRestClient Client;
+
+    /// <summary>
+    ///   The MIME converter.
+    /// </summary>
     protected readonly IMimeConverter Converter;
+
+    /// <summary>
+    ///   The error provider.
+    /// </summary>
     protected readonly IErrorProvider ErrorProvider;
+
+    /// <summary>
+    ///   The resource builder.
+    /// </summary>
     protected readonly IResourceBuilder ResourceBuilder;
+
+    /// <summary>
+    ///   The RestSharp factory.
+    /// </summary>
     protected readonly IRestSharpFactory RestSharp;
+
+    /// <summary>
+    ///   The scanner converter.
+    /// </summary>
     protected readonly IScannerOptionsConverter ScannerConverter;
 
     /// <summary>
@@ -425,7 +448,7 @@ namespace HBase.Stargate.Client.Api
     }
 
     /// <summary>
-    /// Gets the validated response.
+    ///   Gets the validated response.
     /// </summary>
     /// <param name="response">The response.</param>
     protected static IRestResponse GetValidatedResponse(IRestResponse response)
@@ -457,7 +480,7 @@ namespace HBase.Stargate.Client.Api
     }
 
     /// <summary>
-    /// Builds the request.
+    ///   Builds the request.
     /// </summary>
     /// <param name="method">The method.</param>
     /// <param name="resource">The resource.</param>
