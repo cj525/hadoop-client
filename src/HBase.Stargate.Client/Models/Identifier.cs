@@ -1,6 +1,6 @@
 #region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,27 +19,65 @@
 
 #endregion
 
+using System;
+
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Defines an identifier in the HBase system.
-	/// </summary>
-	public class Identifier : HBaseDescriptor
-	{
-		/// <summary>
-		/// Gets or sets the cell descriptor.
-		/// </summary>
-		/// <value>
-		/// The cell.
-		/// </value>
-		public HBaseCellDescriptor CellDescriptor { get; set; }
+  /// <summary>
+  ///   Defines an identifier in the HBase system.
+  /// </summary>
+  public class Identifier : HBaseDescriptor, IEquatable<Identifier>
+  {
+    /// <summary>
+    ///   Gets or sets the cell descriptor.
+    /// </summary>
+    public HBaseCellDescriptor CellDescriptor { get; set; }
 
-		/// <summary>
-		///    Gets or sets the timestamp.
-		/// </summary>
-		/// <value>
-		///    The timestamp.
-		/// </value>
-		public long? Timestamp { get; set; }
-	}
+    /// <summary>
+    ///   Gets or sets the timestamp.
+    /// </summary>
+    public long? Timestamp { get; set; }
+
+    /// <summary>
+    ///   Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    public bool Equals(Identifier other)
+    {
+      return base.Equals(other) && this.CheckedEquals(other,
+        (left, right) => left.Timestamp == right.Timestamp
+          && left.CellDescriptor == right.CellDescriptor);
+    }
+
+    /// <summary>
+    ///   Returns a hash code for this instance.
+    /// </summary>
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+    /// <summary>
+    ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+    /// </summary>
+    public override bool Equals(object other)
+    {
+      return Equals(other as Identifier);
+    }
+
+    /// <summary>
+    ///   Implements the operator ==.
+    /// </summary>
+    public static bool operator ==(Identifier left, Identifier right)
+    {
+      return left.CheckedEquals(right);
+    }
+
+    /// <summary>
+    ///   Implements the operator !=.
+    /// </summary>
+    public static bool operator !=(Identifier left, Identifier right)
+    {
+      return !(left == right);
+    }
+  }
 }

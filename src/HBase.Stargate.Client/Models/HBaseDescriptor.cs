@@ -1,6 +1,6 @@
 #region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,27 +19,49 @@
 
 #endregion
 
+using System;
+
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Describes a record or set of records in HBase.
-	/// </summary>
-	public class HBaseDescriptor
-	{
-		/// <summary>
-		///    Gets or sets the table.
-		/// </summary>
-		/// <value>
-		///    The table.
-		/// </value>
-		public string Table { get; set; }
+  /// <summary>
+  ///   Describes a record or set of records in HBase.
+  /// </summary>
+  public class HBaseDescriptor : IEquatable<HBaseDescriptor>
+  {
+    /// <summary>
+    ///   Gets or sets the table.
+    /// </summary>
+    public virtual string Table { get; set; }
 
-		/// <summary>
-		///    Gets or sets the row.
-		/// </summary>
-		/// <value>
-		///    The row.
-		/// </value>
-		public string Row { get; set; }
-	}
+    /// <summary>
+    ///   Gets or sets the row.
+    /// </summary>
+    public virtual string Row { get; set; }
+
+    /// <summary>
+    ///   Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    public virtual bool Equals(HBaseDescriptor other)
+    {
+      return this.CheckedEquals(other,
+        (left, right) => left.Table.EqualsString(right.Table)
+          && left.Row.EqualsString(right.Row));
+    }
+
+    /// <summary>
+    ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+    /// </summary>
+    public override bool Equals(object other)
+    {
+      return Equals(other as HBaseDescriptor);
+    }
+
+    /// <summary>
+    ///   Returns a hash code for this instance.
+    /// </summary>
+    public override int GetHashCode()
+    {
+      return this.GetMutableHashCode();
+    }
+  }
 }

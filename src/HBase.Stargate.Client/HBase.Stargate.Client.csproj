@@ -101,6 +101,7 @@
     <Compile Include="Config\ConfigIdentifier.cs" />
     <Compile Include="Config\StargateConfigOptions.cs" />
     <Compile Include="Api\StargateOptions.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="HBaseMimeTypes.cs" />
     <Compile Include="TypeConversion\Base64Codec.cs" />
     <Compile Include="TypeConversion\ICodec.cs" />
