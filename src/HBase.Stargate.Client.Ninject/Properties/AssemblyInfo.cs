@@ -29,4 +29,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("hbase-client")]
 [assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyVersion("1.1.0")]
