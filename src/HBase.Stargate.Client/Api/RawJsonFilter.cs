@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,14 +19,37 @@
 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using HBase.Stargate.Client.TypeConversion;
 
-[assembly: AssemblyTitle("HBase.Stargate.Client.Autofac")]
-[assembly: AssemblyDescription("Autofac support for HBase.Stargate.Client")]
-[assembly: Guid("e69fda76-eb09-47a7-a198-d4a8b90976d0")]
-[assembly: AssemblyCompany("The Tribe")]
-[assembly: AssemblyProduct("hbase-client")]
-[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0")]
+using Newtonsoft.Json.Linq;
+
+namespace HBase.Stargate.Client.Api
+{
+  /// <summary>
+  ///   Provides a filter that can be used to configure a scanner
+  ///   manually. Note that all value encoding must be done by the
+  ///   caller. Not recommended for normal use.
+  /// </summary>
+  public class RawJsonFilter : IScannerFilter
+  {
+    private readonly JObject _jObject;
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="RawJsonFilter" /> class.
+    /// </summary>
+    /// <param name="filterJson">The filter json.</param>
+    public RawJsonFilter(string filterJson)
+    {
+      _jObject = JObject.Parse(filterJson);
+    }
+
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">Not used</param>
+    public JObject ConvertToJson(ICodec codec)
+    {
+      return _jObject;
+    }
+  }
+}

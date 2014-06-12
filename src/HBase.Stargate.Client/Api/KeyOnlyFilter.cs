@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,14 +19,12 @@
 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("HBase.Stargate.Client.Autofac")]
-[assembly: AssemblyDescription("Autofac support for HBase.Stargate.Client")]
-[assembly: Guid("e69fda76-eb09-47a7-a198-d4a8b90976d0")]
-[assembly: AssemblyCompany("The Tribe")]
-[assembly: AssemblyProduct("hbase-client")]
-[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0")]
+namespace HBase.Stargate.Client.Api
+{
+  /// <summary>
+  ///   A filter that will only return the key component of each KV (the value will be
+  ///   rewritten as empty). This filter can be used to grab all of the keys without
+  ///   having to also grab the values.
+  /// </summary>
+  public class KeyOnlyFilter : ScannerFilterBase {}
+}

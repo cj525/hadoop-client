@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -21,9 +21,9 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    A filter that will only return the first Key/Value from each row. This filter can
-	///    be used to more efficiently perform row count operations.
-	/// </summary>
-	public class FirstKeyOnlyFilter : ScannerFilterBase {}
+  /// <summary>
+  ///   A filter that will only return the first Key/Value from each row. This filter can
+  ///   be used to more efficiently perform row count operations.
+  /// </summary>
+  public class FirstKeyOnlyFilter : ScannerFilterBase {}
 }

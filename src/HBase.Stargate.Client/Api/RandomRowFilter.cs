@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,14 +19,41 @@
 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using HBase.Stargate.Client.TypeConversion;
 
-[assembly: AssemblyTitle("HBase.Stargate.Client.Autofac")]
-[assembly: AssemblyDescription("Autofac support for HBase.Stargate.Client")]
-[assembly: Guid("e69fda76-eb09-47a7-a198-d4a8b90976d0")]
-[assembly: AssemblyCompany("The Tribe")]
-[assembly: AssemblyProduct("hbase-client")]
-[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0")]
+using Newtonsoft.Json.Linq;
+
+namespace HBase.Stargate.Client.Api
+{
+  /// <summary>
+  ///   A filter that includes rows based on a chance. A chance of 1.0 will
+  ///   return all rows, and 0.0 will return zero rows.
+  /// </summary>
+  public class RandomRowFilter : ScannerFilterBase
+  {
+    private const string _chancePropertyName = "chance";
+    private readonly float _chance;
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="RandomRowFilter" /> class.
+    /// </summary>
+    /// <param name="chance">The chance. Set to 1.0 for 100% likelihood; 0.0 for 0% likelihood.</param>
+    public RandomRowFilter(float chance)
+    {
+      _chance = chance;
+    }
+
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+
+      json[_chancePropertyName] = _chance;
+
+      return json;
+    }
+  }
+}

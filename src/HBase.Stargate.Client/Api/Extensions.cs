@@ -19,6 +19,7 @@
 
 #endregion
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace HBase.Stargate.Client.Api
 		/// <param name="column">The column.</param>
 		/// <param name="qualifier">The qualifier.</param>
 		/// <param name="timestamp">The timestamp.</param>
+		[Obsolete("Use Task.Run(() => gate.WriteValue(value,table,row,column,qualifier)) instead")]
 		public static Task WriteValueAsync(this IStargate gate, string value, string table, string row, string column, string qualifier = null,
 			long? timestamp = null)
 		{
@@ -75,7 +77,8 @@ namespace HBase.Stargate.Client.Api
 		/// <param name="column">The column.</param>
 		/// <param name="qualifier">The qualifier.</param>
 		/// <param name="timestamp">The timestamp.</param>
-		public static Task DeleteItemAsync(this IStargate gate, string table, string row, string column = null, string qualifier = null,
+    [Obsolete("Use Task.Run(() => gate.DeleteItem(table,row,column,qualifier,timestamp)) instead")]
+    public static Task DeleteItemAsync(this IStargate gate, string table, string row, string column = null, string qualifier = null,
 			long? timestamp = null)
 		{
 			return gate.DeleteItemAsync(BuildIdentifier(table, row, column, qualifier, timestamp));
@@ -104,7 +107,8 @@ namespace HBase.Stargate.Client.Api
 		/// <param name="column">The column.</param>
 		/// <param name="qualifier">The qualifier.</param>
 		/// <param name="timestamp">The timestamp.</param>
-		public static Task<string> ReadValueAsync(this IStargate gate, string table, string row, string column, string qualifier = null,
+    [Obsolete("Use Task.Run(() => gate.ReadValue(table,row,column,qualifier,timestamp)) instead")]
+    public static Task<string> ReadValueAsync(this IStargate gate, string table, string row, string column, string qualifier = null,
 			long? timestamp = null)
 		{
 			return gate.ReadValueAsync(BuildIdentifier(table, row, column, qualifier, timestamp));
@@ -135,7 +139,8 @@ namespace HBase.Stargate.Client.Api
 		/// <param name="beginTimestamp">The begin timestamp (inclusive).</param>
 		/// <param name="endTimestamp">The end timestamp (exclusive).</param>
 		/// <param name="maxVersions">The maximum number of versions to return.</param>
-		public static Task<CellSet> FindCellsAsync(this IStargate gate, string table, string row = null, string column = null, string qualifier = null,
+    [Obsolete("Use Task.Run(() => gate.FindCells(table,row,column,qualifier,beginTimestamp,endTimestamp,maxVersions)) instead")]
+    public static Task<CellSet> FindCellsAsync(this IStargate gate, string table, string row = null, string column = null, string qualifier = null,
 			long? beginTimestamp = null, long? endTimestamp = null, int? maxVersions = null)
 		{
 			return gate.FindCellsAsync(BuildQuery(table, row, column, qualifier, beginTimestamp, endTimestamp, maxVersions));

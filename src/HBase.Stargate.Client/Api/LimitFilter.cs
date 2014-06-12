@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,14 +19,40 @@
 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using HBase.Stargate.Client.TypeConversion;
 
-[assembly: AssemblyTitle("HBase.Stargate.Client.Autofac")]
-[assembly: AssemblyDescription("Autofac support for HBase.Stargate.Client")]
-[assembly: Guid("e69fda76-eb09-47a7-a198-d4a8b90976d0")]
-[assembly: AssemblyCompany("The Tribe")]
-[assembly: AssemblyProduct("hbase-client")]
-[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0")]
+using Newtonsoft.Json.Linq;
+
+namespace HBase.Stargate.Client.Api
+{
+  /// <summary>
+  ///   Base type for filters that set a numeric "limit" property.
+  /// </summary>
+  public abstract class LimitFilter : ScannerFilterBase
+  {
+    private const string _limitPropertyName = "limit";
+    private readonly int _limit;
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="LimitFilter" /> class.
+    /// </summary>
+    /// <param name="limit">The limit.</param>
+    protected LimitFilter(int limit)
+    {
+      _limit = limit;
+    }
+
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+
+      json[_limitPropertyName] = _limit;
+
+      return json;
+    }
+  }
+}

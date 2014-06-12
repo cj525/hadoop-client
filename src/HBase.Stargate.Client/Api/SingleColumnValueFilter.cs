@@ -1,6 +1,6 @@
 ﻿#region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -25,47 +25,47 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used to filter cells based on value.
-	/// </summary>
-	public class SingleColumnValueFilter : ComparisonScannerFilterBase
-	{
-		private const string _familyPropertyName = "family";
-		private const string _qualifierPropertyName = "qualifier";
-		private const string _latestVersionPropertyName = "latestVersion";
-		private readonly string _family;
-		private readonly bool _latestVersion;
-		private readonly string _qualifier;
+  /// <summary>
+  ///   This filter is used to filter cells based on value.
+  /// </summary>
+  public class SingleColumnValueFilter : ComparisonScannerFilterBase
+  {
+    private const string _familyPropertyName = "family";
+    private const string _qualifierPropertyName = "qualifier";
+    private const string _latestVersionPropertyName = "latestVersion";
+    private readonly string _family;
+    private readonly bool _latestVersion;
+    private readonly string _qualifier;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="SingleColumnValueFilter" /> class.
-		/// </summary>
-		/// <param name="family">The family.</param>
-		/// <param name="qualifier">The qualifier.</param>
-		/// <param name="value">The column.</param>
-		/// <param name="comparison">The comparison.</param>
-		/// <param name="latestVersion">
-		///    if set to <c>true</c>, only return the latest version.
-		/// </param>
-		public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true)
-			: base(value, comparison)
-		{
-			_family = family;
-			_qualifier = qualifier;
-			_latestVersion = latestVersion;
-		}
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="SingleColumnValueFilter" /> class.
+    /// </summary>
+    /// <param name="family">The family.</param>
+    /// <param name="qualifier">The qualifier.</param>
+    /// <param name="value">The column.</param>
+    /// <param name="comparison">The comparison.</param>
+    /// <param name="latestVersion">
+    ///   if set to <c>true</c>, only return the latest version.
+    /// </param>
+    public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true)
+      : base(value, comparison)
+    {
+      _family = family;
+      _qualifier = qualifier;
+      _latestVersion = latestVersion;
+    }
 
-		/// <summary>
-		/// Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
-			json[_familyPropertyName] = new JValue(codec.Encode(_family));
-			json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
-			json[_latestVersionPropertyName] = new JValue(_latestVersion);
-			return json;
-		}
-	}
+    /// <summary>
+    ///   Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+      json[_familyPropertyName] = new JValue(codec.Encode(_family));
+      json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
+      json[_latestVersionPropertyName] = new JValue(_latestVersion);
+      return json;
+    }
+  }
 }

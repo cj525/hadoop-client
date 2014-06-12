@@ -27,3 +27,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("A simple .NET client library for HBase Stargate")]
 [assembly: Guid("56682f38-aaa4-4612-ba6d-6e4d0b64a3fb")]
 [assembly: InternalsVisibleTo("_specs")]
+[assembly: AssemblyCompany("The Tribe")]
+[assembly: AssemblyProduct("hbase-client")]
+[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
+[assembly: ComVisible(false)]
+[assembly: AssemblyVersion("1.0.0")]
