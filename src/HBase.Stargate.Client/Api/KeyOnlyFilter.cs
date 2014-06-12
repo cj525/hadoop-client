@@ -22,8 +22,9 @@
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   A filter that will only return the first Key/Value from each row. This filter can
-  ///   be used to more efficiently perform row count operations.
+  ///   A filter that will only return the key component of each KV (the value will be
+  ///   rewritten as empty). This filter can be used to grab all of the keys without
+  ///   having to also grab the values.
   /// </summary>
-  public class FirstKeyOnlyFilter : ScannerFilterBase {}
+  public class KeyOnlyFilter : ScannerFilterBase {}
 }

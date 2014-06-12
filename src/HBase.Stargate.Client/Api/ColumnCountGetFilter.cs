@@ -22,8 +22,16 @@
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   A filter that will only return the first Key/Value from each row. This filter can
-  ///   be used to more efficiently perform row count operations.
+  ///   Simple filter that returns first N columns on row only. This filter was written to test filters
+  ///   in Get and as soon as it gets its quota of columns, filterAllRemaining() returns true. This makes
+  ///   this filter unsuitable as a Scan filter.
   /// </summary>
-  public class FirstKeyOnlyFilter : ScannerFilterBase {}
+  public class ColumnCountGetFilter : LimitFilter
+  {
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="ColumnCountGetFilter" /> class.
+    /// </summary>
+    /// <param name="limit">The limit.</param>
+    public ColumnCountGetFilter(int limit) : base(limit) {}
+  }
 }

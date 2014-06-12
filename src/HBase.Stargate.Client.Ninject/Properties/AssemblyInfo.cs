@@ -25,3 +25,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HBase.Stargate.Client.Ninject")]
 [assembly: AssemblyDescription("Ninject support for HBase.Stargate.Client")]
 [assembly: Guid("1e5f790e-3064-44c6-ab25-5cca3992fcad")]
+[assembly: AssemblyCompany("The Tribe")]
+[assembly: AssemblyProduct("hbase-client")]
+[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
+[assembly: ComVisible(false)]
+[assembly: AssemblyVersion("1.1.0")]

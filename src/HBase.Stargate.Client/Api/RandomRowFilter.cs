@@ -26,33 +26,21 @@ using Newtonsoft.Json.Linq;
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   This filter is used to filter cells based on value.
+  ///   A filter that includes rows based on a chance. A chance of 1.0 will
+  ///   return all rows, and 0.0 will return zero rows.
   /// </summary>
-  public class SingleColumnValueFilter : ComparisonScannerFilterBase
+  public class RandomRowFilter : ScannerFilterBase
   {
-    private const string _familyPropertyName = "family";
-    private const string _qualifierPropertyName = "qualifier";
-    private const string _latestVersionPropertyName = "latestVersion";
-    private readonly string _family;
-    private readonly bool _latestVersion;
-    private readonly string _qualifier;
+    private const string _chancePropertyName = "chance";
+    private readonly float _chance;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="SingleColumnValueFilter" /> class.
+    ///   Initializes a new instance of the <see cref="RandomRowFilter" /> class.
     /// </summary>
-    /// <param name="family">The family.</param>
-    /// <param name="qualifier">The qualifier.</param>
-    /// <param name="value">The column.</param>
-    /// <param name="comparison">The comparison.</param>
-    /// <param name="latestVersion">
-    ///   if set to <c>true</c>, only return the latest version.
-    /// </param>
-    public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true)
-      : base(value, comparison)
+    /// <param name="chance">The chance. Set to 1.0 for 100% likelihood; 0.0 for 0% likelihood.</param>
+    public RandomRowFilter(float chance)
     {
-      _family = family;
-      _qualifier = qualifier;
-      _latestVersion = latestVersion;
+      _chance = chance;
     }
 
     /// <summary>
@@ -62,9 +50,9 @@ namespace HBase.Stargate.Client.Api
     public override JObject ConvertToJson(ICodec codec)
     {
       JObject json = base.ConvertToJson(codec);
-      json[_familyPropertyName] = new JValue(codec.Encode(_family));
-      json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
-      json[_latestVersionPropertyName] = new JValue(_latestVersion);
+
+      json[_chancePropertyName] = _chance;
+
       return json;
     }
   }

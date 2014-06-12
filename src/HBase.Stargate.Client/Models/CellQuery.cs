@@ -1,6 +1,6 @@
 #region FreeBSD
 
-// Copyright (c) 2013, The Tribe
+// Copyright (c) 2014, The Tribe
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -19,45 +19,78 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Defines a query targeting one or more cells in HBase.
-	/// </summary>
-	public class CellQuery : HBaseDescriptor
-	{
-		/// <summary>
-		///    Gets or sets the additional criteria.
-		/// </summary>
-		/// <value>
-		///    The additional criteria.
-		/// </value>
-		public IEnumerable<HBaseCellDescriptor> Cells { get; set; }
+  /// <summary>
+  ///   Defines a query targeting one or more cells in HBase.
+  /// </summary>
+  public class CellQuery : HBaseDescriptor, IEquatable<CellQuery>
+  {
+    /// <summary>
+    ///   Gets or sets the additional criteria.
+    /// </summary>
+    public IEnumerable<HBaseCellDescriptor> Cells { get; set; }
 
-		/// <summary>
-		///    Gets or sets the begin timestamp (exclusive).
-		/// </summary>
-		/// <value>
-		///    The begin timestamp (exclusive).
-		/// </value>
-		public long? BeginTimestamp { get; set; }
+    /// <summary>
+    ///   Gets or sets the begin timestamp (exclusive).
+    /// </summary>
+    public long? BeginTimestamp { get; set; }
 
-		/// <summary>
-		///    Gets or sets the end timestamp (exclusive).
-		/// </summary>
-		/// <value>
-		///    The end timestamp (exclusive).
-		/// </value>
-		public long? EndTimestamp { get; set; }
+    /// <summary>
+    ///   Gets or sets the end timestamp (exclusive).
+    /// </summary>
+    public long? EndTimestamp { get; set; }
 
-		/// <summary>
-		///    Gets or sets the maximum allowed versions.
-		/// </summary>
-		/// <value>
-		///    The maximum allowed versions.
-		/// </value>
-		public int? MaxVersions { get; set; }
-	}
+    /// <summary>
+    ///   Gets or sets the maximum allowed versions.
+    /// </summary>
+    public int? MaxVersions { get; set; }
+
+    /// <summary>
+    ///   Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    public bool Equals(CellQuery other)
+    {
+      return base.Equals(other) && this.CheckedEquals(other,
+        (left, right) => left.Cells.CheckedSetsEqual(right.Cells)
+          && left.BeginTimestamp == right.BeginTimestamp
+          && left.EndTimestamp == right.EndTimestamp
+          && left.MaxVersions == right.MaxVersions);
+    }
+
+    /// <summary>
+    ///   Returns a hash code for this instance.
+    /// </summary>
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+    /// <summary>
+    ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+    /// </summary>
+    public override bool Equals(object other)
+    {
+      return Equals(other as CellQuery);
+    }
+
+    /// <summary>
+    ///   Implements the operator ==.
+    /// </summary>
+    public static bool operator ==(CellQuery left, CellQuery right)
+    {
+      return left.CheckedEquals(right);
+    }
+
+    /// <summary>
+    ///   Implements the operator !=.
+    /// </summary>
+    public static bool operator !=(CellQuery left, CellQuery right)
+    {
+      return !(left == right);
+    }
+  }
 }

@@ -25,3 +25,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HBase.Stargate.Client.Autofac")]
 [assembly: AssemblyDescription("Autofac support for HBase.Stargate.Client")]
 [assembly: Guid("e69fda76-eb09-47a7-a198-d4a8b90976d0")]
+[assembly: AssemblyCompany("The Tribe")]
+[assembly: AssemblyProduct("hbase-client")]
+[assembly: AssemblyCopyright("Copyright © 2014 The Tribe")]
+[assembly: ComVisible(false)]
+[assembly: AssemblyVersion("1.1.0")]

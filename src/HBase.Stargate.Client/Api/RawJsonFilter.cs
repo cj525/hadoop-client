@@ -26,46 +26,30 @@ using Newtonsoft.Json.Linq;
 namespace HBase.Stargate.Client.Api
 {
   /// <summary>
-  ///   This filter is used to filter cells based on value.
+  ///   Provides a filter that can be used to configure a scanner
+  ///   manually. Note that all value encoding must be done by the
+  ///   caller. Not recommended for normal use.
   /// </summary>
-  public class SingleColumnValueFilter : ComparisonScannerFilterBase
+  public class RawJsonFilter : IScannerFilter
   {
-    private const string _familyPropertyName = "family";
-    private const string _qualifierPropertyName = "qualifier";
-    private const string _latestVersionPropertyName = "latestVersion";
-    private readonly string _family;
-    private readonly bool _latestVersion;
-    private readonly string _qualifier;
+    private readonly JObject _jObject;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="SingleColumnValueFilter" /> class.
+    ///   Initializes a new instance of the <see cref="RawJsonFilter" /> class.
     /// </summary>
-    /// <param name="family">The family.</param>
-    /// <param name="qualifier">The qualifier.</param>
-    /// <param name="value">The column.</param>
-    /// <param name="comparison">The comparison.</param>
-    /// <param name="latestVersion">
-    ///   if set to <c>true</c>, only return the latest version.
-    /// </param>
-    public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true)
-      : base(value, comparison)
+    /// <param name="filterJson">The filter json.</param>
+    public RawJsonFilter(string filterJson)
     {
-      _family = family;
-      _qualifier = qualifier;
-      _latestVersion = latestVersion;
+      _jObject = JObject.Parse(filterJson);
     }
 
     /// <summary>
     ///   Converts the filter to its JSON representation.
     /// </summary>
-    /// <param name="codec">The codec to use for encoding values.</param>
-    public override JObject ConvertToJson(ICodec codec)
+    /// <param name="codec">Not used</param>
+    public JObject ConvertToJson(ICodec codec)
     {
-      JObject json = base.ConvertToJson(codec);
-      json[_familyPropertyName] = new JValue(codec.Encode(_family));
-      json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
-      json[_latestVersionPropertyName] = new JValue(_latestVersion);
-      return json;
+      return _jObject;
     }
   }
 }
