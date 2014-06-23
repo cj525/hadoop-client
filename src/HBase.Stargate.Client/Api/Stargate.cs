@@ -110,15 +110,15 @@ namespace HBase.Stargate.Client.Api
     /// </value>
     protected virtual IStargateOptions Options { get; private set; }
 
+
     /// <summary>
     ///   Writes the value to HBase using the identifier.
     /// </summary>
     /// <param name="identifier">The identifier.</param>
     /// <param name="value">The value.</param>
-    [Obsolete("Use Task.Run(() => gate.WriteValue(identifier,value)) instead")]
     public virtual Task WriteValueAsync(Identifier identifier, string value)
     {
-      return Task.Run(() => WriteValue(identifier, value));
+      return WriteValueInternal(identifier, value, SendRequestAsync);
     }
 
     /// <summary>
@@ -128,21 +128,25 @@ namespace HBase.Stargate.Client.Api
     /// <param name="value">The value.</param>
     public virtual void WriteValue(Identifier identifier, string value)
     {
+      WriteValueInternal(identifier, value, SendRequest);
+    }
+
+    T WriteValueInternal<T>(Identifier identifier, string value, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
       string contentType = Options.ContentType;
       string resource = ResourceBuilder.BuildSingleValueAccess(identifier);
       string content = Converter.ConvertCell(new Cell(identifier, value));
-      IRestResponse response = SendRequest(Method.POST, resource, contentType, contentType, content);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+
+      return action(Method.POST, resource, contentType, contentType, content, new[]{HttpStatusCode.OK});
     }
 
     /// <summary>
     ///   Writes the cells to HBase.
     /// </summary>
     /// <param name="cells">The cells.</param>
-    [Obsolete("Use Task.Run(() => gate.WriteCells(cells)) instead")]
     public virtual Task WriteCellsAsync(CellSet cells)
     {
-      return Task.Run(() => WriteCells(cells));
+      return WriteCellsInternal(cells, SendRequestAsync);
     }
 
     /// <summary>
@@ -151,21 +155,25 @@ namespace HBase.Stargate.Client.Api
     /// <param name="cells">The cells.</param>
     public virtual void WriteCells(CellSet cells)
     {
+      WriteCellsInternal(cells, SendRequest);
+    }
+
+    T WriteCellsInternal<T>(CellSet cells, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
       string contentType = Options.ContentType;
-      var tableIdentifier = new Identifier {Table = cells.Table};
+      var tableIdentifier = new Identifier { Table = cells.Table };
       string resource = ResourceBuilder.BuildBatchInsert(tableIdentifier);
-      IRestResponse response = SendRequest(Method.POST, resource, contentType, contentType, Converter.ConvertCells(cells));
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      
+      return action(Method.POST, resource, contentType, contentType, Converter.ConvertCells(cells), new[] { HttpStatusCode.OK });
     }
 
     /// <summary>
     ///   Deletes the item with the matching identifier from HBase.
     /// </summary>
     /// <param name="identifier">The identifier.</param>
-    [Obsolete("Use Task.Run(() => gate.DeleteItem(identifier)) instead")]
     public virtual Task DeleteItemAsync(Identifier identifier)
     {
-      return Task.Run(() => DeleteItem(identifier));
+      return DeleteItemInternal(identifier, SendRequestAsync);
     }
 
     /// <summary>
@@ -174,19 +182,23 @@ namespace HBase.Stargate.Client.Api
     /// <param name="identifier">The identifier.</param>
     public virtual void DeleteItem(Identifier identifier)
     {
+      DeleteItemInternal(identifier, SendRequest);
+    }
+
+    T DeleteItemInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
       string resource = ResourceBuilder.BuildDeleteItem(identifier);
-      IRestResponse response = SendRequest(Method.DELETE, resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+
+      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
     }
 
     /// <summary>
     ///   Reads the value with the matching identifier.
     /// </summary>
     /// <param name="identifier">The identifier.</param>
-    [Obsolete("Use Task.Run(() => gate.ReadValue(identifier)) instead")]
-    public virtual Task<string> ReadValueAsync(Identifier identifier)
+    public virtual async Task<string> ReadValueAsync(Identifier identifier)
     {
-      return Task.Run(() => ReadValue(identifier));
+      return ProcessReadValueResponse(await ReadValueInternal(identifier, SendRequestAsync), identifier);
     }
 
     /// <summary>
@@ -195,13 +207,20 @@ namespace HBase.Stargate.Client.Api
     /// <param name="identifier">The identifier.</param>
     public virtual string ReadValue(Identifier identifier)
     {
+      return ProcessReadValueResponse(ReadValueInternal(identifier, SendRequest), identifier);
+    }
+
+    T ReadValueInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
       string resource = identifier.Timestamp.HasValue
         ? ResourceBuilder.BuildCellOrRowQuery(identifier.ToQuery())
         : ResourceBuilder.BuildSingleValueAccess(identifier, true);
 
-      IRestResponse response = SendRequest(Method.GET, resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK, HttpStatusCode.NotFound);
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NotFound });
+    }
 
+    string ProcessReadValueResponse(IRestResponse response, Identifier identifier)
+    {
       return response.StatusCode == HttpStatusCode.OK
         ? Converter.ConvertCells(response.Content, identifier.Table).Select(cell => cell.Value).FirstOrDefault()
         : null;
@@ -211,10 +230,9 @@ namespace HBase.Stargate.Client.Api
     ///   Finds the cells matching the query.
     /// </summary>
     /// <param name="query"></param>
-    [Obsolete("Use Task.Run(() => gate.FindCells(query)) instead")]
-    public virtual Task<CellSet> FindCellsAsync(CellQuery query)
+    public virtual async Task<CellSet> FindCellsAsync(CellQuery query)
     {
-      return Task.Run(() => FindCells(query));
+      return ProcessFindCellResponse(await FindCellsInternal(query, SendRequestAsync), query);
     }
 
     /// <summary>
@@ -223,10 +241,18 @@ namespace HBase.Stargate.Client.Api
     /// <param name="query"></param>
     public virtual CellSet FindCells(CellQuery query)
     {
-      string resource = ResourceBuilder.BuildCellOrRowQuery(query);
-      IRestResponse response = SendRequest(Method.GET, resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK, HttpStatusCode.NotFound);
+      return ProcessFindCellResponse(FindCellsInternal(query, SendRequest), query);
+    }
 
+    T FindCellsInternal<T>(CellQuery query, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
+      string resource = ResourceBuilder.BuildCellOrRowQuery(query);
+
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NotFound });
+    }
+
+    CellSet ProcessFindCellResponse(IRestResponse response, CellQuery query)
+    {
       var set = new CellSet
       {
         Table = query.Table
@@ -246,21 +272,25 @@ namespace HBase.Stargate.Client.Api
     /// <param name="tableSchema">The table schema.</param>
     public virtual void CreateTable(TableSchema tableSchema)
     {
-      string resource = ResourceBuilder.BuildTableSchemaAccess(tableSchema);
-      ErrorProvider.ThrowIfSchemaInvalid(tableSchema);
-      string data = Converter.ConvertSchema(tableSchema);
-      IRestResponse response = SendRequest(Method.PUT, resource, Options.ContentType, Options.ContentType, data);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      CreateTableInternal(tableSchema, SendRequest);
     }
 
     /// <summary>
     ///   Creates the table.
     /// </summary>
     /// <param name="tableSchema">The table schema.</param>
-    [Obsolete("Use Task.Run(() => gate.CreateTable(tableSchema)) instead")]
     public virtual Task CreateTableAsync(TableSchema tableSchema)
     {
-      return Task.Run(() => CreateTable(tableSchema));
+      return CreateTableInternal(tableSchema, SendRequestAsync);
+    }
+
+    T CreateTableInternal<T>(TableSchema tableSchema, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
+      string resource = ResourceBuilder.BuildTableSchemaAccess(tableSchema);
+      ErrorProvider.ThrowIfSchemaInvalid(tableSchema);
+      string data = Converter.ConvertSchema(tableSchema);
+
+      return action(Method.PUT, resource, Options.ContentType, Options.ContentType, data, new[] { HttpStatusCode.OK });
     }
 
     /// <summary>
@@ -269,7 +299,7 @@ namespace HBase.Stargate.Client.Api
     public virtual IEnumerable<string> GetTableNames()
     {
       IRestResponse response = SendRequest(Method.GET, string.Empty, HBaseMimeTypes.Text);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+
       return ParseLines(response.Content);
     }
 
@@ -277,10 +307,11 @@ namespace HBase.Stargate.Client.Api
     ///   Gets the table names.
     /// </summary>
     /// <returns></returns>
-    [Obsolete("Use Task.Run(() => gate.GetTableNames()) instead")]
-    public virtual Task<IEnumerable<string>> GetTableNamesAsync()
+    public virtual async Task<IEnumerable<string>> GetTableNamesAsync()
     {
-      return Task.Run(() => GetTableNames());
+      IRestResponse response = await SendRequestAsync(Method.GET, string.Empty, HBaseMimeTypes.Text);
+
+      return ParseLines(response.Content);
     }
 
     /// <summary>
@@ -289,29 +320,32 @@ namespace HBase.Stargate.Client.Api
     /// <param name="tableName">Name of the table.</param>
     public virtual void DeleteTable(string tableName)
     {
-      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema {Name = tableName});
-      IRestResponse response = SendRequest(Method.DELETE, resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      DeleteTableInternal(tableName, SendRequest);
     }
 
     /// <summary>
     ///   Deletes the table.
     /// </summary>
     /// <param name="tableName">Name of the table.</param>
-    [Obsolete("Use Task.Run(() => gate.DeleteTable(tableName)) instead")]
     public virtual Task DeleteTableAsync(string tableName)
     {
-      return Task.Run(() => DeleteTable(tableName));
+      return DeleteTableInternal(tableName, SendRequestAsync);
+    }
+
+    T DeleteTableInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
+      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema { Name = tableName });
+
+      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
     }
 
     /// <summary>
     ///   Gets the table schema async.
     /// </summary>
     /// <param name="tableName">Name of the table.</param>
-    [Obsolete("Use Task.Run(() => gate.GetTableSchema(tableName)) instead")]
-    public virtual Task<TableSchema> GetTableSchemaAsync(string tableName)
+    public virtual async Task<TableSchema> GetTableSchemaAsync(string tableName)
     {
-      return Task.Run(() => GetTableSchema(tableName));
+      return ProcessGetTableSchemaResponse(await GetTableSchemaInternal(tableName, SendRequestAsync));
     }
 
     /// <summary>
@@ -320,9 +354,18 @@ namespace HBase.Stargate.Client.Api
     /// <param name="tableName">Name of the table.</param>
     public virtual TableSchema GetTableSchema(string tableName)
     {
-      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema {Name = tableName});
-      IRestResponse response = SendRequest(Method.GET, resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      return ProcessGetTableSchemaResponse(GetTableSchemaInternal(tableName, SendRequest));
+    }
+
+    T GetTableSchemaInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
+      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema { Name = tableName });
+
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
+    }
+
+    TableSchema ProcessGetTableSchemaResponse(IRestResponse response)
+    {
       return Converter.ConvertSchema(response.Content);
     }
 
@@ -330,10 +373,9 @@ namespace HBase.Stargate.Client.Api
     ///   Creates the scanner.
     /// </summary>
     /// <param name="options">The options.</param>
-    [Obsolete("Use Task.Run(() => gate.CreateScanner(options)) instead")]
-    public virtual Task<IScanner> CreateScannerAsync(ScannerOptions options)
+    public virtual async Task<IScanner> CreateScannerAsync(ScannerOptions options)
     {
-      return Task.Run(() => CreateScanner(options));
+      return ProcessCreateScannerResponse(await CreateScannerInternal(options, SendRequestAsync), options);
     }
 
     /// <summary>
@@ -342,9 +384,18 @@ namespace HBase.Stargate.Client.Api
     /// <param name="options">The options.</param>
     public virtual IScanner CreateScanner(ScannerOptions options)
     {
+      return ProcessCreateScannerResponse(CreateScannerInternal(options, SendRequest), options);
+    }
+
+    T CreateScannerInternal<T>(ScannerOptions options, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
       string resource = ResourceBuilder.BuildScannerCreate(options);
-      IRestResponse response = SendRequest(Method.PUT, resource, HBaseMimeTypes.Xml, content: ScannerConverter.Convert(options));
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.Created);
+
+      return action(Method.PUT, resource, HBaseMimeTypes.Xml, null, ScannerConverter.Convert(options), new[] { HttpStatusCode.Created });
+    }
+
+    IScanner ProcessCreateScannerResponse(IRestResponse response, ScannerOptions options)
+    {
       string scannerLocation =
         response.Headers.Where(header => header.Type == ParameterType.HttpHeader && header.Name == RestConstants.LocationHeader)
           .Select(header => header.Value.ToString())
@@ -359,18 +410,16 @@ namespace HBase.Stargate.Client.Api
     /// <param name="scanner">The scanner.</param>
     public virtual void DeleteScanner(IScanner scanner)
     {
-      IRestResponse response = SendRequest(Method.DELETE, scanner.Resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      SendRequest(Method.DELETE, scanner.Resource, Options.ContentType);
     }
 
     /// <summary>
     ///   Deletes the scanner.
     /// </summary>
     /// <param name="scanner">The scanner.</param>
-    [Obsolete("Use Task.Run(() => gate.DeleteScanner(scanner)) instead")]
     public virtual Task DeleteScannerAsync(IScanner scanner)
     {
-      return Task.Run(() => DeleteScanner(scanner));
+      return SendRequestAsync(Method.DELETE, scanner.Resource, Options.ContentType);
     }
 
     /// <summary>
@@ -379,19 +428,26 @@ namespace HBase.Stargate.Client.Api
     /// <param name="scanner">The scanner.</param>
     public virtual CellSet GetScannerResult(IScanner scanner)
     {
-      IRestResponse response = SendRequest(Method.GET, scanner.Resource, Options.ContentType);
-      ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK, HttpStatusCode.NoContent);
-      return response.StatusCode == HttpStatusCode.NoContent ? null : new CellSet(Converter.ConvertCells(response.Content, scanner.Table));
+      return ProcessScannerResultResponse(GetScannerResultInternal(scanner, SendRequest), scanner);
     }
 
     /// <summary>
     ///   Gets the scanner result.
     /// </summary>
     /// <param name="scanner">The scanner.</param>
-    [Obsolete("Use Task.Run(() => gate.GetScannerResult(scanner)) instead")]
-    public virtual Task<CellSet> GetScannerResultAsync(IScanner scanner)
+    public virtual async Task<CellSet> GetScannerResultAsync(IScanner scanner)
     {
-      return Task.Run(() => GetScannerResult(scanner));
+      return ProcessScannerResultResponse(await GetScannerResultInternal(scanner, SendRequestAsync), scanner);
+    }
+
+    T GetScannerResultInternal<T>(IScanner scanner, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    {
+      return action(Method.GET, scanner.Resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NoContent });
+    }
+
+    CellSet ProcessScannerResultResponse(IRestResponse response, IScanner scanner)
+    {
+      return response.StatusCode == HttpStatusCode.NoContent ? null : new CellSet(Converter.ConvertCells(response.Content, scanner.Table));
     }
 
     /// <summary>
@@ -402,7 +458,7 @@ namespace HBase.Stargate.Client.Api
     /// <param name="falseRowKey">The false row key.</param>
     public static IStargate Create(string serverUrl, string contentType = DefaultContentType, string falseRowKey = DefaultFalseRowKey)
     {
-      return Create(new StargateOptions {ServerUrl = serverUrl, ContentType = contentType, FalseRowKey = falseRowKey});
+      return Create(new StargateOptions { ServerUrl = serverUrl, ContentType = contentType, FalseRowKey = falseRowKey });
     }
 
     /// <summary>
@@ -440,23 +496,26 @@ namespace HBase.Stargate.Client.Api
     /// <param name="acceptType">Type of the accept.</param>
     /// <param name="contentType">Type of the content.</param>
     /// <param name="content">The content.</param>
-    [Obsolete("Use Task.Run(() => SendRequest(method,resource,acceptType,contentType,content)) instead")]
-    protected virtual Task<IRestResponse> SendRequestAsync(Method method, string resource, string acceptType,
-      string contentType = null, string content = null)
+    /// <param name="validStatuses">Acceptable Http status codes.</param>
+    protected virtual async Task<IRestResponse> SendRequestAsync(Method method, string resource, string acceptType,
+      string contentType = null, string content = null, HttpStatusCode[] validStatuses = null)
     {
-      return Task.Run(() => SendRequest(method, resource, acceptType, contentType, content));
+      IRestRequest request = BuildRequest(method, resource, acceptType, contentType, content);
+
+      return GetValidatedResponse(await Client.ExecuteTaskAsync(request), validStatuses);
     }
 
-    /// <summary>
-    ///   Gets the validated response.
-    /// </summary>
-    /// <param name="response">The response.</param>
-    protected static IRestResponse GetValidatedResponse(IRestResponse response)
+    IRestResponse GetValidatedResponse(IRestResponse response, HttpStatusCode[] validStatuses)
     {
       if (response.ResponseStatus == ResponseStatus.Error && response.ErrorException != null)
       {
         throw response.ErrorException;
       }
+
+      if (validStatuses == null)
+        ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      else
+        ErrorProvider.ThrowIfStatusMismatch(response, validStatuses);
 
       return response;
     }
@@ -469,14 +528,15 @@ namespace HBase.Stargate.Client.Api
     /// <param name="acceptType">Type of the accept.</param>
     /// <param name="contentType">Type of the content.</param>
     /// <param name="content">The content.</param>
+    /// <param name="validStatuses">Acceptable Http status codes.</param>
     protected virtual IRestResponse SendRequest(Method method, string resource, string acceptType,
-      string contentType = null, string content = null)
+      string contentType = null, string content = null, HttpStatusCode[] validStatuses = null)
     {
       IRestRequest request = BuildRequest(method, resource, acceptType, contentType, content);
 
       IRestResponse response = Client.Execute(request);
 
-      return GetValidatedResponse(response);
+      return GetValidatedResponse(response, validStatuses);
     }
 
     /// <summary>
