@@ -236,6 +236,15 @@ namespace HBase.Stargate.Client.Models
       return AsEpoch(query.EndTimestamp);
     }
 
+    /// <summary>
+    ///   Gets the specified <see cref="DateTime" /> as a timestamp.
+    /// </summary>
+    /// <param name="dateTime">The <see cref="DateTime" />.</param>
+    public static long AsTimestamp(this DateTime dateTime)
+    {
+      return (long) (dateTime - _epoch).TotalMilliseconds;
+    }
+
     private static DateTime? AsDateTime(long? timestamp)
     {
       if (!timestamp.HasValue)

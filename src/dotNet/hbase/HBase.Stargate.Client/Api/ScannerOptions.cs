@@ -21,49 +21,65 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Encapsulates the options that can be set at scanner creation.
-	/// </summary>
-	public class ScannerOptions
-	{
-		/// <summary>
-		///    Gets or sets the name.
-		/// </summary>
-		/// <value>
-		///    The name.
-		/// </value>
-		public string TableName { get; set; }
+  /// <summary>
+  ///    Encapsulates the options that can be set at scanner creation.
+  /// </summary>
+  public class ScannerOptions
+  {
+    /// <summary>
+    ///    Gets or sets the name.
+    /// </summary>
+    /// <value>
+    ///    The name.
+    /// </value>
+    public string TableName { get; set; }
 
-		/// <summary>
-		///    Gets or sets the start row.
-		/// </summary>
-		/// <value>
-		///    The start row.
-		/// </value>
-		public string StartRow { get; set; }
+    /// <summary>
+    ///    Gets or sets the start row.
+    /// </summary>
+    /// <value>
+    ///    The start row.
+    /// </value>
+    public string StartRow { get; set; }
 
-		/// <summary>
-		///    Gets or sets the end row.
-		/// </summary>
-		/// <value>
-		///    The end row.
-		/// </value>
-		public string StopRow { get; set; }
+    /// <summary>
+    ///    Gets or sets the end row.
+    /// </summary>
+    /// <value>
+    ///    The end row.
+    /// </value>
+    public string StopRow { get; set; }
 
-		/// <summary>
-		///    Gets or sets the batch size.
-		/// </summary>
-		/// <value>
-		///    The batch size.
-		/// </value>
-		public int? BatchSize { get; set; }
+    /// <summary>
+    ///    Gets or sets the start time.
+    /// </summary>
+    /// <value>
+    ///    The start time.
+    /// </value>
+    public long? StartTime { get; set; }
 
-		/// <summary>
-		///    Gets or sets the filter.
-		/// </summary>
-		/// <value>
-		///    The filter.
-		/// </value>
-		public IScannerFilter Filter { get; set; }
-	}
+    /// <summary>
+    ///    Gets or sets the end time.
+    /// </summary>
+    /// <value>
+    ///    The end time.
+    /// </value>
+    public long? StopTime { get; set; }
+
+    /// <summary>
+    ///    Gets or sets the batch size.
+    /// </summary>
+    /// <value>
+    ///    The batch size.
+    /// </value>
+    public int? BatchSize { get; set; }
+
+    /// <summary>
+    ///    Gets or sets the filter.
+    /// </summary>
+    /// <value>
+    ///    The filter.
+    /// </value>
+    public IScannerFilter Filter { get; set; }
+  }
 }
