@@ -25,61 +25,73 @@ using HBase.Stargate.Client.Api;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Provides a standard implementation of the
-	///    <see cref="IScannerOptionsConverter" /> interface.
-	/// </summary>
-	public class ScannerOptionsConverter : IScannerOptionsConverter
-	{
-		private const string _scannerName = "Scanner";
-		private const string _startRowName = "startRow";
-		private const string _stopRowName = "stopRow";
-		private const string _batchSizeName = "batch";
-		private const string _filterName = "filter";
-		private readonly ICodec _codec;
+  /// <summary>
+  ///    Provides a standard implementation of the
+  ///    <see cref="IScannerOptionsConverter" /> interface.
+  /// </summary>
+  public class ScannerOptionsConverter : IScannerOptionsConverter
+  {
+    private const string _scannerName = "Scanner";
+    private const string _startRowName = "startRow";
+    private const string _stopRowName = "stopRow";
+    private const string _startTimeName = "startTime";
+    private const string _stopTimeName = "stopTime";
+    private const string _batchSizeName = "batch";
+    private const string _filterName = "filter";
+    private readonly ICodec _codec;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="ScannerOptionsConverter" /> class.
-		/// </summary>
-		/// <param name="codec">The codec to use while encoding values.</param>
-		public ScannerOptionsConverter(ICodec codec)
-		{
-			_codec = codec;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="ScannerOptionsConverter" /> class.
+    /// </summary>
+    /// <param name="codec">The codec to use while encoding values.</param>
+    public ScannerOptionsConverter(ICodec codec)
+    {
+      _codec = codec;
+    }
 
-		/// <summary>
-		///    Converts the specified options to an XML document with
-		///    filter options as embedded JSON.
-		/// </summary>
-		/// <param name="options">The options.</param>
-		public string Convert(ScannerOptions options)
-		{
-			var xml = new XElement(_scannerName);
+    /// <summary>
+    ///    Converts the specified options to an XML document with
+    ///    filter options as embedded JSON.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    public string Convert(ScannerOptions options)
+    {
+      var xml = new XElement(_scannerName);
 
-			if (!string.IsNullOrEmpty(options.StartRow))
-			{
-				xml.Add(new XAttribute(_startRowName, _codec.Encode(options.StartRow)));
-			}
+      if (!string.IsNullOrEmpty(options.StartRow))
+      {
+        xml.Add(new XAttribute(_startRowName, _codec.Encode(options.StartRow)));
+      }
 
-			if (!string.IsNullOrEmpty(options.StopRow))
-			{
-				xml.Add(new XAttribute(_stopRowName, _codec.Encode(options.StopRow)));
-			}
+      if (!string.IsNullOrEmpty(options.StopRow))
+      {
+        xml.Add(new XAttribute(_stopRowName, _codec.Encode(options.StopRow)));
+      }
 
-			if (options.BatchSize.HasValue)
-			{
-				xml.Add(new XAttribute(_batchSizeName, options.BatchSize));
-			}
+      if (options.StartTime.HasValue)
+      {
+        xml.Add(new XAttribute(_startTimeName, options.StartTime));
+      }
 
-			if (options.Filter != null)
-			{
-				xml.Add(new XElement(_filterName)
-				{
-					Value = options.Filter.ConvertToJson(_codec).ToString()
-				});
-			}
+      if (options.StopTime.HasValue)
+      {
+        xml.Add(new XAttribute(_stopTimeName, options.StopTime));
+      }
 
-			return xml.ToString();
-		}
-	}
+      if (options.BatchSize.HasValue)
+      {
+        xml.Add(new XAttribute(_batchSizeName, options.BatchSize));
+      }
+
+      if (options.Filter != null)
+      {
+        xml.Add(new XElement(_filterName)
+        {
+          Value = options.Filter.ConvertToJson(_codec).ToString()
+        });
+      }
+
+      return xml.ToString();
+    }
+  }
 }
