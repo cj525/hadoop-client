@@ -34,70 +34,70 @@ using RestSharp;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	/// Provides a default <see cref="IErrorProvider"/>.
-	/// </summary>
-	public class ErrorProvider : IErrorProvider
-	{
-		private readonly IDictionary<HttpStatusCode, Func<IRestResponse, Exception>> _cannedErrors
-			= new Dictionary<HttpStatusCode, Func<IRestResponse, Exception>>
-			{
-				{HttpStatusCode.BadRequest, response => new InvalidOperationException()},
-				{HttpStatusCode.NotFound, response => new KeyNotFoundException()},
-				{HttpStatusCode.InternalServerError, response => new ApplicationException(GetResponseContent(response))}
-			};
+  /// <summary>
+  /// Provides a default <see cref="IErrorProvider"/>.
+  /// </summary>
+  public class ErrorProvider : IErrorProvider
+  {
+    private readonly IDictionary<HttpStatusCode, Func<IRestResponse, Exception>> _cannedErrors
+      = new Dictionary<HttpStatusCode, Func<IRestResponse, Exception>>
+      {
+        {HttpStatusCode.BadRequest, response => new InvalidOperationException()},
+        {HttpStatusCode.NotFound, response => new KeyNotFoundException()},
+        {HttpStatusCode.InternalServerError, response => new ApplicationException(GetResponseContent(response))}
+      };
 
-		/// <summary>
-		/// Creates an exception from the response.
-		/// </summary>
-		/// <param name="response">The response.</param>
-		public Exception CreateFromResponse(IRestResponse response)
-		{
-			return !_cannedErrors.ContainsKey(response.StatusCode)
-				? null
-				: _cannedErrors[response.StatusCode](response);
-		}
+    /// <summary>
+    /// Creates an exception from the response.
+    /// </summary>
+    /// <param name="response">The response.</param>
+    public Exception CreateFromResponse(IRestResponse response)
+    {
+      return !_cannedErrors.ContainsKey(response.StatusCode)
+        ? null
+        : _cannedErrors[response.StatusCode](response);
+    }
 
-		/// <summary>
-		/// Throws an exception from the response.
-		/// </summary>
-		/// <param name="response">The response.</param>
-		public void ThrowFromResponse(IRestResponse response)
-		{
-			Exception error = CreateFromResponse(response);
-			if (error != null) throw error;
-		}
+    /// <summary>
+    /// Throws an exception from the response.
+    /// </summary>
+    /// <param name="response">The response.</param>
+    public void ThrowFromResponse(IRestResponse response)
+    {
+      Exception error = CreateFromResponse(response);
+      if (error != null) throw error;
+    }
 
-		/// <summary>
-		/// Throws an exception if the schema is invalid.
-		/// </summary>
-		/// <param name="tableSchema">The table schema.</param>
-		public void ThrowIfSchemaInvalid(TableSchema tableSchema)
-		{
-			if(tableSchema.Columns.Any(column => string.IsNullOrEmpty(column.Name))) throw new ArgumentException(Resources.ErrorProvider_ColumnNameMissing);
-		}
+    /// <summary>
+    /// Throws an exception if the schema is invalid.
+    /// </summary>
+    /// <param name="tableSchema">The table schema.</param>
+    public void ThrowIfSchemaInvalid(TableSchema tableSchema)
+    {
+      if(tableSchema.Columns.Any(column => string.IsNullOrEmpty(column.Name))) throw new ArgumentException(Resources.ErrorProvider_ColumnNameMissing);
+    }
 
-		private static string GetResponseContent(IRestResponse response)
-		{
-			try
-			{
-				if (response.ContentType == MediaTypeNames.Text.Html)
-				{
-					var markup = XDocument.Parse(response.Content);
-					return string.Join(" ", markup.DescendantNodes().Where(node => node.NodeType == XmlNodeType.Text).Select(node => ((XText) node).Value));
-				}
+    private static string GetResponseContent(IRestResponse response)
+    {
+      try
+      {
+        if (response.ContentType == MediaTypeNames.Text.Html)
+        {
+          var markup = XDocument.Parse(response.Content);
+          return string.Join(" ", markup.DescendantNodes().Where(node => node.NodeType == XmlNodeType.Text).Select(node => ((XText) node).Value));
+        }
 
-				return GetRawResponseContent(response);
-			}
-			catch
-			{
-				return GetRawResponseContent(response);
-			}
-		}
+        return GetRawResponseContent(response);
+      }
+      catch
+      {
+        return GetRawResponseContent(response);
+      }
+    }
 
-		private static string GetRawResponseContent(IRestResponse response)
-		{
-			return string.IsNullOrEmpty(response.Content) ? response.StatusDescription : response.Content;
-		}
-	}
+    private static string GetRawResponseContent(IRestResponse response)
+    {
+      return string.IsNullOrEmpty(response.Content) ? response.StatusDescription : response.Content;
+    }
+  }
 }

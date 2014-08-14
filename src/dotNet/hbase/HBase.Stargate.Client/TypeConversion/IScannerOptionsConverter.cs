@@ -23,16 +23,16 @@ using HBase.Stargate.Client.Api;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Defines a converter for scanner options.
-	/// </summary>
-	public interface IScannerOptionsConverter
-	{
-		/// <summary>
-		///    Converts the specified options to an XML document with
-		///    filter options as embedded JSON.
-		/// </summary>
-		/// <param name="options">The options.</param>
-		string Convert(ScannerOptions options);
-	}
+  /// <summary>
+  ///    Defines a converter for scanner options.
+  /// </summary>
+  public interface IScannerOptionsConverter
+  {
+    /// <summary>
+    ///    Converts the specified options to an XML document with
+    ///    filter options as embedded JSON.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    string Convert(ScannerOptions options);
+  }
 }

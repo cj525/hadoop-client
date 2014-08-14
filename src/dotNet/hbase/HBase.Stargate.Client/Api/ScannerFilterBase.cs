@@ -25,32 +25,32 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Provides base functionality for scanner filters.
-	/// </summary>
-	public abstract class ScannerFilterBase : IScannerFilter
-	{
-		private const string _typePropertyName = "type";
+  /// <summary>
+  ///    Provides base functionality for scanner filters.
+  /// </summary>
+  public abstract class ScannerFilterBase : IScannerFilter
+  {
+    private const string _typePropertyName = "type";
 
-		/// <summary>
-		/// Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public virtual JObject ConvertToJson(ICodec codec)
-		{
-			var json = new JObject();
+    /// <summary>
+    /// Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public virtual JObject ConvertToJson(ICodec codec)
+    {
+      var json = new JObject();
 
-			json[_typePropertyName] = new JValue(GetFilterType());
+      json[_typePropertyName] = new JValue(GetFilterType());
 
-			return json;
-		}
+      return json;
+    }
 
-		/// <summary>
-		/// Gets the type of the filter.
-		/// </summary>
-		protected virtual string GetFilterType()
-		{
-			return GetType().Name;
-		}
-	}
+    /// <summary>
+    /// Gets the type of the filter.
+    /// </summary>
+    protected virtual string GetFilterType()
+    {
+      return GetType().Name;
+    }
+  }
 }

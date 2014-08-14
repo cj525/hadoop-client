@@ -21,18 +21,18 @@
 
 namespace _specs.Models
 {
-	public class TestString
-	{
-		private readonly string _value;
+  public class TestString
+  {
+    private readonly string _value;
 
-		public TestString(string value)
-		{
-			_value = value;
-		}
+    public TestString(string value)
+    {
+      _value = value;
+    }
 
-		public static implicit operator string(TestString instance)
-		{
-			return instance == null ? null : instance._value;
-		}
-	}
+    public static implicit operator string(TestString instance)
+    {
+      return instance == null ? null : instance._value;
+    }
+  }
 }

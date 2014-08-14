@@ -29,21 +29,21 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class Transforms
-	{
-		private static readonly CompiledRegex _nullStringPattern = @"(?i)\{null\}";
+  [Binding]
+  public class Transforms
+  {
+    private static readonly CompiledRegex _nullStringPattern = @"(?i)\{null\}";
 
-		[StepArgumentTransformation]
-		public TestString NullSensitiveStringAssignment(string value)
-		{
-			return _nullStringPattern.IsMatch(value) ? null : new TestString(value);
-		}
+    [StepArgumentTransformation]
+    public TestString NullSensitiveStringAssignment(string value)
+    {
+      return _nullStringPattern.IsMatch(value) ? null : new TestString(value);
+    }
 
-		[StepArgumentTransformation(@"(?:should|does|is|will|have|are|has|did)( not)?")]
-		public bool SuccessFlagAssignment(string modifier)
-		{
-			return string.IsNullOrWhiteSpace(modifier);
-		}
-	}
+    [StepArgumentTransformation(@"(?:should|does|is|will|have|are|has|did)( not)?")]
+    public bool SuccessFlagAssignment(string modifier)
+    {
+      return string.IsNullOrWhiteSpace(modifier);
+    }
+  }
 }

@@ -19,8 +19,8 @@ using RestSharp;
 
 namespace _specs.Models
 {
-	public class RestContext
-	{
-		public IRestRequest Request { get; set; }
-	}
+  public class RestContext
+  {
+    public IRestRequest Request { get; set; }
+  }
 }

@@ -23,41 +23,41 @@ using System.Configuration;
 
 namespace HBase.Stargate.Client.Config
 {
-	/// <summary>
-	///    Provides a collection of <see cref="ConfigCellDescriptor" /> elements.
-	/// </summary>
-	public class ConfigCellDescriptorCollection : ConfigurationElementCollection
-	{
-		/// <summary>
-		///    Creates a new <see cref="ConfigCellDescriptor" />.
-		/// </summary>
-		protected override ConfigurationElement CreateNewElement()
-		{
-			return new ConfigCellDescriptor();
-		}
+  /// <summary>
+  ///    Provides a collection of <see cref="ConfigCellDescriptor" /> elements.
+  /// </summary>
+  public class ConfigCellDescriptorCollection : ConfigurationElementCollection
+  {
+    /// <summary>
+    ///    Creates a new <see cref="ConfigCellDescriptor" />.
+    /// </summary>
+    protected override ConfigurationElement CreateNewElement()
+    {
+      return new ConfigCellDescriptor();
+    }
 
-		/// <summary>
-		///    Gets the element key for a specified configuration element.
-		/// </summary>
-		/// <param name="element">
-		///    The <see cref="ConfigurationElement" /> to return the key for.
-		/// </param>
-		protected override object GetElementKey(ConfigurationElement element)
-		{
-			var descriptor = element as ConfigCellDescriptor;
+    /// <summary>
+    ///    Gets the element key for a specified configuration element.
+    /// </summary>
+    /// <param name="element">
+    ///    The <see cref="ConfigurationElement" /> to return the key for.
+    /// </param>
+    protected override object GetElementKey(ConfigurationElement element)
+    {
+      var descriptor = element as ConfigCellDescriptor;
 
-			return descriptor == null ? new object() : string.Format("{0}:{1}", descriptor.Column, descriptor.Qualifier);
-		}
+      return descriptor == null ? new object() : string.Format("{0}:{1}", descriptor.Column, descriptor.Qualifier);
+    }
 
-		/// <summary>
-		///    Indicates whether the <see cref="T:System.Configuration.ConfigurationElementCollection" /> object is read only.
-		/// </summary>
-		/// <returns>
-		///    true if the <see cref="T:System.Configuration.ConfigurationElementCollection" /> object is read only; otherwise, false.
-		/// </returns>
-		public override bool IsReadOnly()
-		{
-			return false;
-		}
-	}
+    /// <summary>
+    ///    Indicates whether the <see cref="T:System.Configuration.ConfigurationElementCollection" /> object is read only.
+    /// </summary>
+    /// <returns>
+    ///    true if the <see cref="T:System.Configuration.ConfigurationElementCollection" /> object is read only; otherwise, false.
+    /// </returns>
+    public override bool IsReadOnly()
+    {
+      return false;
+    }
+  }
 }

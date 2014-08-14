@@ -25,38 +25,38 @@ using System.Text;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Provides a standard base64 codec for HBase.
-	/// </summary>
-	public class Base64Codec : ICodec
-	{
-		/// <summary>
-		///    Encodes the specified text.
-		/// </summary>
-		/// <param name="text">The text.</param>
-		public virtual string Encode(string text)
-		{
-			return Convert.ToBase64String(GetEncoding().GetBytes(text));
-		}
+  /// <summary>
+  ///    Provides a standard base64 codec for HBase.
+  /// </summary>
+  public class Base64Codec : ICodec
+  {
+    /// <summary>
+    ///    Encodes the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    public virtual string Encode(string text)
+    {
+      return Convert.ToBase64String(GetEncoding().GetBytes(text));
+    }
 
-		/// <summary>
-		///    Decodes the specified text.
-		/// </summary>
-		/// <param name="text">The text.</param>
-		public virtual string Decode(string text)
-		{
-			using (var reader = new StreamReader(new MemoryStream(Convert.FromBase64String(text)), GetEncoding()))
-			{
-				return reader.ReadToEnd();
-			}
-		}
+    /// <summary>
+    ///    Decodes the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    public virtual string Decode(string text)
+    {
+      using (var reader = new StreamReader(new MemoryStream(Convert.FromBase64String(text)), GetEncoding()))
+      {
+        return reader.ReadToEnd();
+      }
+    }
 
-		/// <summary>
-		///    Gets the <see cref="Encoding" /> object to use during <see cref="Encode" /> and <see cref="Decode" /> operations.
-		/// </summary>
-		protected virtual Encoding GetEncoding()
-		{
-			return Encoding.UTF8;
-		}
-	}
+    /// <summary>
+    ///    Gets the <see cref="Encoding" /> object to use during <see cref="Encode" /> and <see cref="Decode" /> operations.
+    /// </summary>
+    protected virtual Encoding GetEncoding()
+    {
+      return Encoding.UTF8;
+    }
+  }
 }

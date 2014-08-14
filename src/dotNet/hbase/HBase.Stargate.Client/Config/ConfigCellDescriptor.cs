@@ -25,62 +25,62 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.Config
 {
-	/// <summary>
-	///    Provides an XML configuration-based implementation <see cref="ConfigurationElement" />.
-	/// </summary>
-	public class ConfigCellDescriptor : ConfigurationElement
-	{
-		private const string _columName = "column";
-		private const string _qualifierName = "qualifier";
+  /// <summary>
+  ///    Provides an XML configuration-based implementation <see cref="ConfigurationElement" />.
+  /// </summary>
+  public class ConfigCellDescriptor : ConfigurationElement
+  {
+    private const string _columName = "column";
+    private const string _qualifierName = "qualifier";
 
-		/// <summary>
-		///    Gets or sets the column.
-		/// </summary>
-		/// <value>
-		///    The column.
-		/// </value>
-		[ConfigurationProperty(_columName, IsRequired = true)]
-		public string Column
-		{
-			get { return this[_columName] as string; }
-			set { this[_columName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the column.
+    /// </summary>
+    /// <value>
+    ///    The column.
+    /// </value>
+    [ConfigurationProperty(_columName, IsRequired = true)]
+    public string Column
+    {
+      get { return this[_columName] as string; }
+      set { this[_columName] = value; }
+    }
 
-		/// <summary>
-		///    Gets or sets the qualifier.
-		/// </summary>
-		/// <value>
-		///    The qualifier.
-		/// </value>
-		[ConfigurationProperty(_qualifierName, IsRequired = false)]
-		public string Qualifier
-		{
-			get { return this[_qualifierName] as string; }
-			set { this[_qualifierName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the qualifier.
+    /// </summary>
+    /// <value>
+    ///    The qualifier.
+    /// </value>
+    [ConfigurationProperty(_qualifierName, IsRequired = false)]
+    public string Qualifier
+    {
+      get { return this[_qualifierName] as string; }
+      set { this[_qualifierName] = value; }
+    }
 
-		/// <summary>
-		///    Converts the config-based cell descriptor to a normal one.
-		/// </summary>
-		/// <param name="descriptor">The cell descriptor.</param>
-		public static implicit operator HBaseCellDescriptor(ConfigCellDescriptor descriptor)
-		{
-			return new HBaseCellDescriptor
-			{
-				Column = descriptor.Column,
-				Qualifier = descriptor.Qualifier
-			};
-		}
+    /// <summary>
+    ///    Converts the config-based cell descriptor to a normal one.
+    /// </summary>
+    /// <param name="descriptor">The cell descriptor.</param>
+    public static implicit operator HBaseCellDescriptor(ConfigCellDescriptor descriptor)
+    {
+      return new HBaseCellDescriptor
+      {
+        Column = descriptor.Column,
+        Qualifier = descriptor.Qualifier
+      };
+    }
 
-		/// <summary>
-		///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
-		/// </summary>
-		/// <returns>
-		///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
-		/// </returns>
-		public override bool IsReadOnly()
-		{
-			return false;
-		}
-	}
+    /// <summary>
+    ///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
+    /// </summary>
+    /// <returns>
+    ///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
+    /// </returns>
+    public override bool IsReadOnly()
+    {
+      return false;
+    }
+  }
 }

@@ -24,28 +24,28 @@ using System.Linq;
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Defines a set of cells associated with a table.
-	/// </summary>
-	public class CellSet : List<Cell>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CellSet"/> class.
-		/// </summary>
-		public CellSet() {}
+  /// <summary>
+  ///    Defines a set of cells associated with a table.
+  /// </summary>
+  public class CellSet : List<Cell>
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CellSet"/> class.
+    /// </summary>
+    public CellSet() {}
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="CellSet" /> class.
-		/// </summary>
-		/// <param name="cells">The cells.</param>
-		public CellSet(IEnumerable<Cell> cells) : base(cells) {}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="CellSet" /> class.
+    /// </summary>
+    /// <param name="cells">The cells.</param>
+    public CellSet(IEnumerable<Cell> cells) : base(cells) {}
 
-		/// <summary>
-		///    Gets or sets the name of the table.
-		/// </summary>
-		/// <value>
-		///    The name of the table.
-		/// </value>
-		public string Table { get; set; }
-	}
+    /// <summary>
+    ///    Gets or sets the name of the table.
+    /// </summary>
+    /// <value>
+    ///    The name of the table.
+    /// </value>
+    public string Table { get; set; }
+  }
 }

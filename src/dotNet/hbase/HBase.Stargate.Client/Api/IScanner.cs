@@ -25,25 +25,25 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Defines a scanner for HBase tables.
-	/// </summary>
-	public interface IScanner : IEnumerable<CellSet>, IEnumerator<CellSet>
-	{
-		/// <summary>
-		///    Gets the table name.
-		/// </summary>
-		/// <value>
-		///    The table name.
-		/// </value>
-		string Table { get; }
+  /// <summary>
+  ///    Defines a scanner for HBase tables.
+  /// </summary>
+  public interface IScanner : IEnumerable<CellSet>, IEnumerator<CellSet>
+  {
+    /// <summary>
+    ///    Gets the table name.
+    /// </summary>
+    /// <value>
+    ///    The table name.
+    /// </value>
+    string Table { get; }
 
-		/// <summary>
-		///    Gets the resource.
-		/// </summary>
-		/// <value>
-		///    The resource.
-		/// </value>
-		string Resource { get; }
-	}
+    /// <summary>
+    ///    Gets the resource.
+    /// </summary>
+    /// <value>
+    ///    The resource.
+    /// </value>
+    string Resource { get; }
+  }
 }

@@ -27,28 +27,28 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used for selecting only those keys with columns that matches a particular
-	///    prefix. For example, if prefix is 'an', it will pass keys will columns like 'and'/'anti'
-	///    but not keys with columns like 'ball'/'act'.
-	/// </summary>
-	public class MultipleColumnPrefixFilter : FilterListBase<string>
-	{
-		private const string _prefixesPropertyName = "prefixes";
+  /// <summary>
+  ///    This filter is used for selecting only those keys with columns that matches a particular
+  ///    prefix. For example, if prefix is 'an', it will pass keys will columns like 'and'/'anti'
+  ///    but not keys with columns like 'ball'/'act'.
+  /// </summary>
+  public class MultipleColumnPrefixFilter : FilterListBase<string>
+  {
+    private const string _prefixesPropertyName = "prefixes";
 
-		/// <summary>
-		///    Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
+    /// <summary>
+    ///    Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
 
-			Sort();
+      Sort();
 
-			json[_prefixesPropertyName] = ConvertToJsonArray(prefix => new JValue(codec.Encode(prefix)));
+      json[_prefixesPropertyName] = ConvertToJsonArray(prefix => new JValue(codec.Encode(prefix)));
 
-			return json;
-		}
-	}
+      return json;
+    }
+  }
 }

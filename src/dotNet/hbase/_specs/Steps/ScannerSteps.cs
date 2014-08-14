@@ -29,38 +29,38 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class ScannerSteps
-	{
-		private readonly HBaseContext _hBase;
+  [Binding]
+  public class ScannerSteps
+  {
+    private readonly HBaseContext _hBase;
 
-		public ScannerSteps(HBaseContext hBase)
-		{
-			_hBase = hBase;
-		}
+    public ScannerSteps(HBaseContext hBase)
+    {
+      _hBase = hBase;
+    }
 
-		[Then(@"my scanner should have a resource set to ""(.*)""")]
-		public void CheckScannerResource(string resource)
-		{
-			_hBase.Scanner.Resource.Should().Be(resource);
-		}
+    [Then(@"my scanner should have a resource set to ""(.*)""")]
+    public void CheckScannerResource(string resource)
+    {
+      _hBase.Scanner.Resource.Should().Be(resource);
+    }
 
-		[Given(@"I have a scanner for the ""(.*)"" table named ""(.*)""")]
-		public void ObtainManualScanner(string tableName, string scannerId)
-		{
-			_hBase.Scanner = new Scanner(tableName, string.Format("{0}/scanner/{1}", tableName, scannerId), _hBase.Stargate);
-		}
+    [Given(@"I have a scanner for the ""(.*)"" table named ""(.*)""")]
+    public void ObtainManualScanner(string tableName, string scannerId)
+    {
+      _hBase.Scanner = new Scanner(tableName, string.Format("{0}/scanner/{1}", tableName, scannerId), _hBase.Stargate);
+    }
 
-		[When(@"I delete the scanner")]
-		public void DeleteScanner()
-		{
-			_hBase.Stargate.DeleteScanner(_hBase.Scanner);
-		}
+    [When(@"I delete the scanner")]
+    public void DeleteScanner()
+    {
+      _hBase.Stargate.DeleteScanner(_hBase.Scanner);
+    }
 
-		[When(@"I create a scanner for the ""(.*)"" table")]
-		public void CreateScanner(string tableName)
-		{
-			_hBase.Scanner = _hBase.Stargate.CreateScanner(new ScannerOptions { TableName = tableName });
-		}
-	}
+    [When(@"I create a scanner for the ""(.*)"" table")]
+    public void CreateScanner(string tableName)
+    {
+      _hBase.Scanner = _hBase.Stargate.CreateScanner(new ScannerOptions { TableName = tableName });
+    }
+  }
 }

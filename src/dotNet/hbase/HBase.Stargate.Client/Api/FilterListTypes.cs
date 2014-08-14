@@ -21,19 +21,19 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Describes the types of <see cref="FilterList" /> that can be created.
-	/// </summary>
-	public enum FilterListTypes
-	{
-		/// <summary>
-		///    All filters must meet the specified criteria.
-		/// </summary>
-		All,
+  /// <summary>
+  ///    Describes the types of <see cref="FilterList" /> that can be created.
+  /// </summary>
+  public enum FilterListTypes
+  {
+    /// <summary>
+    ///    All filters must meet the specified criteria.
+    /// </summary>
+    All,
 
-		/// <summary>
-		///    At least one filter must meet the specified criteria.
-		/// </summary>
-		One
-	}
+    /// <summary>
+    ///    At least one filter must meet the specified criteria.
+    /// </summary>
+    One
+  }
 }

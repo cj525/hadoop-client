@@ -19,15 +19,15 @@ using RestSharp;
 
 namespace _specs.Models
 {
-	public class ExpectedRequestProperties
-	{
-		public Method Method { get; set; }
-		public string Resource { get; set; }
-	}
+  public class ExpectedRequestProperties
+  {
+    public Method Method { get; set; }
+    public string Resource { get; set; }
+  }
 
-	public class ExpectedSchemaUpdateRequestProperties : ExpectedRequestProperties
-	{
-		public string Table { get; set; }
-		public string Column { get; set; }
-	}
+  public class ExpectedSchemaUpdateRequestProperties : ExpectedRequestProperties
+  {
+    public string Table { get; set; }
+    public string Column { get; set; }
+  }
 }

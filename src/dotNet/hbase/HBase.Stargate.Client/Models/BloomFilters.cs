@@ -21,24 +21,24 @@
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Describes the possible Bloom Filters that can be used with HBase.
-	/// </summary>
-	public enum BloomFilters
-	{
-		/// <summary>
-		///    No bloom filters (default).
-		/// </summary>
-		None,
+  /// <summary>
+  ///    Describes the possible Bloom Filters that can be used with HBase.
+  /// </summary>
+  public enum BloomFilters
+  {
+    /// <summary>
+    ///    No bloom filters (default).
+    /// </summary>
+    None,
 
-		/// <summary>
-		///    The hash of the row will be added to the bloom on each insert.
-		/// </summary>
-		Row,
+    /// <summary>
+    ///    The hash of the row will be added to the bloom on each insert.
+    /// </summary>
+    Row,
 
-		/// <summary>
-		///    The hash of the row + column family + column family qualifier will be added to the bloom on each key insert.
-		/// </summary>
-		RowColumn
-	}
+    /// <summary>
+    ///    The hash of the row + column family + column family qualifier will be added to the bloom on each key insert.
+    /// </summary>
+    RowColumn
+  }
 }

@@ -25,31 +25,31 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used for selecting only those keys with columns that match a particular prefix.
-	///    For example, if prefix is 'an', it will pass keys with columns like 'and'/'anti' but not keys
-	///    with columns like 'ball'/'act'.
-	/// </summary>
-	public class ColumnPrefixFilter : TypeValueFilterBase
-	{
-		private readonly string _prefix;
+  /// <summary>
+  ///    This filter is used for selecting only those keys with columns that match a particular prefix.
+  ///    For example, if prefix is 'an', it will pass keys with columns like 'and'/'anti' but not keys
+  ///    with columns like 'ball'/'act'.
+  /// </summary>
+  public class ColumnPrefixFilter : TypeValueFilterBase
+  {
+    private readonly string _prefix;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="ColumnPrefixFilter" /> class.
-		/// </summary>
-		/// <param name="prefix">The prefix.</param>
-		public ColumnPrefixFilter(string prefix)
-		{
-			_prefix = prefix;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="ColumnPrefixFilter" /> class.
+    /// </summary>
+    /// <param name="prefix">The prefix.</param>
+    public ColumnPrefixFilter(string prefix)
+    {
+      _prefix = prefix;
+    }
 
-		/// <summary>
-		/// Gets the token to use as the value.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		protected override JToken GetValueJToken(ICodec codec)
-		{
-			return new JValue(codec.Encode(_prefix));
-		}
-	}
+    /// <summary>
+    /// Gets the token to use as the value.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    protected override JToken GetValueJToken(ICodec codec)
+    {
+      return new JValue(codec.Encode(_prefix));
+    }
+  }
 }

@@ -21,24 +21,24 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Defines constants for use in RESTful operations.
-	/// </summary>
-	public static class RestConstants
-	{
-		/// <summary>
-		/// The Location header.
-		/// </summary>
-		public const string LocationHeader = "Location";
+  /// <summary>
+  ///    Defines constants for use in RESTful operations.
+  /// </summary>
+  public static class RestConstants
+  {
+    /// <summary>
+    /// The Location header.
+    /// </summary>
+    public const string LocationHeader = "Location";
 
-		/// <summary>
-		///    The Accept header.
-		/// </summary>
-		public const string AcceptHeader = "Accept";
+    /// <summary>
+    ///    The Accept header.
+    /// </summary>
+    public const string AcceptHeader = "Accept";
 
-		/// <summary>
-		///    The Content-Type header.
-		/// </summary>
-		public const string ContentTypeHeader = "Content-Type";
-	}
+    /// <summary>
+    ///    The Content-Type header.
+    /// </summary>
+    public const string ContentTypeHeader = "Content-Type";
+  }
 }

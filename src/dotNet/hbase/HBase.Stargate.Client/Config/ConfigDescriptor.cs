@@ -25,49 +25,49 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.Config
 {
-	/// <summary>
-	///    Provides a base type for XML configuration-based <see cref="HBaseDescriptor" /> implementations.
-	/// </summary>
-	public abstract class ConfigDescriptor : ConfigurationElement
-	{
-		private const string _tableName = "table";
-		private const string _rowName = "row";
+  /// <summary>
+  ///    Provides a base type for XML configuration-based <see cref="HBaseDescriptor" /> implementations.
+  /// </summary>
+  public abstract class ConfigDescriptor : ConfigurationElement
+  {
+    private const string _tableName = "table";
+    private const string _rowName = "row";
 
-		/// <summary>
-		///    Gets or sets the table.
-		/// </summary>
-		/// <value>
-		///    The table.
-		/// </value>
-		[ConfigurationProperty(_tableName, IsRequired = true)]
-		public string Table
-		{
-			get { return this[_tableName] as string; }
-			set { this[_tableName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the table.
+    /// </summary>
+    /// <value>
+    ///    The table.
+    /// </value>
+    [ConfigurationProperty(_tableName, IsRequired = true)]
+    public string Table
+    {
+      get { return this[_tableName] as string; }
+      set { this[_tableName] = value; }
+    }
 
-		/// <summary>
-		///    Gets or sets the row.
-		/// </summary>
-		/// <value>
-		///    The row.
-		/// </value>
-		[ConfigurationProperty(_rowName, IsRequired = true)]
-		public string Row
-		{
-			get { return this[_rowName] as string; }
-			set { this[_rowName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the row.
+    /// </summary>
+    /// <value>
+    ///    The row.
+    /// </value>
+    [ConfigurationProperty(_rowName, IsRequired = true)]
+    public string Row
+    {
+      get { return this[_rowName] as string; }
+      set { this[_rowName] = value; }
+    }
 
-		/// <summary>
-		///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
-		/// </summary>
-		/// <returns>
-		///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
-		/// </returns>
-		public override bool IsReadOnly()
-		{
-			return false;
-		}
-	}
+    /// <summary>
+    ///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
+    /// </summary>
+    /// <returns>
+    ///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
+    /// </returns>
+    public override bool IsReadOnly()
+    {
+      return false;
+    }
+  }
 }

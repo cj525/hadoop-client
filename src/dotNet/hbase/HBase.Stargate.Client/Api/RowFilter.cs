@@ -21,16 +21,16 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used to filter based on the key.
-	/// </summary>
-	public class RowFilter : ComparisonScannerFilterBase
-	{
-		/// <summary>
-		///    Initializes a new instance of the <see cref="RowFilter" /> class.
-		/// </summary>
-		/// <param name="row">The row.</param>
-		/// <param name="comparison">The comparison.</param>
-		public RowFilter(string row, FilterComparisons comparison) : base(row, comparison) {}
-	}
+  /// <summary>
+  ///    This filter is used to filter based on the key.
+  /// </summary>
+  public class RowFilter : ComparisonScannerFilterBase
+  {
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="RowFilter" /> class.
+    /// </summary>
+    /// <param name="row">The row.</param>
+    /// <param name="comparison">The comparison.</param>
+    public RowFilter(string row, FilterComparisons comparison) : base(row, comparison) {}
+  }
 }

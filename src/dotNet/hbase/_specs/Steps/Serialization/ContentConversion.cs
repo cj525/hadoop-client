@@ -29,42 +29,42 @@ using _specs.Models;
 
 namespace _specs.Steps.Serialization
 {
-	[Binding]
-	public class ContentConversion
-	{
-		private readonly HBaseContext _hBase;
-		private readonly ContentConverter _converter;
+  [Binding]
+  public class ContentConversion
+  {
+    private readonly HBaseContext _hBase;
+    private readonly ContentConverter _converter;
 
-		public ContentConversion(HBaseContext hBase, ContentConverter converter)
-		{
-			_hBase = hBase;
-			_converter = converter;
-		}
+    public ContentConversion(HBaseContext hBase, ContentConverter converter)
+    {
+      _hBase = hBase;
+      _converter = converter;
+    }
 
-		[When(@"I convert my raw content to a set of cells")]
-		public void ConvertRawContentToCellSet()
-		{
-			_hBase.CellSet = new CellSet(_converter.ConvertCells(_hBase.RawContent, string.Empty));
-		}
+    [When(@"I convert my raw content to a set of cells")]
+    public void ConvertRawContentToCellSet()
+    {
+      _hBase.CellSet = new CellSet(_converter.ConvertCells(_hBase.RawContent, string.Empty));
+    }
 
-		[When(@"I convert my raw content to a cell")]
-		public void ConvertRawContentToCell()
-		{
-			IList<Cell> set = _converter.ConvertCells(_hBase.RawContent, string.Empty).ToList();
-			set.Should().HaveCount(1);
-			_hBase.Cell = set[0];
-		}
+    [When(@"I convert my raw content to a cell")]
+    public void ConvertRawContentToCell()
+    {
+      IList<Cell> set = _converter.ConvertCells(_hBase.RawContent, string.Empty).ToList();
+      set.Should().HaveCount(1);
+      _hBase.Cell = set[0];
+    }
 
-		[When(@"I convert my set of cells to raw content")]
-		public void ConvertCellSetToRawContent()
-		{
-			_hBase.RawContent = _converter.ConvertCells(_hBase.CellSet);
-		}
+    [When(@"I convert my set of cells to raw content")]
+    public void ConvertCellSetToRawContent()
+    {
+      _hBase.RawContent = _converter.ConvertCells(_hBase.CellSet);
+    }
 
-		[When(@"I convert my cell to raw content")]
-		public void ConvertCellToRawContent()
-		{
-			_hBase.RawContent = _converter.ConvertCell(_hBase.Cell);
-		}
-	}
+    [When(@"I convert my cell to raw content")]
+    public void ConvertCellToRawContent()
+    {
+      _hBase.RawContent = _converter.ConvertCell(_hBase.Cell);
+    }
+  }
 }

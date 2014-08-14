@@ -27,29 +27,29 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	/// Provides a representation of the BinaryComparator filter value.
-	/// </summary>
-	public class BinaryComparator : TypeValueFilterBase
-	{
-		private readonly string _value;
+  /// <summary>
+  /// Provides a representation of the BinaryComparator filter value.
+  /// </summary>
+  public class BinaryComparator : TypeValueFilterBase
+  {
+    private readonly string _value;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BinaryComparator"/> class.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		public BinaryComparator(string value)
-		{
-			_value = value;
-		}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BinaryComparator"/> class.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    public BinaryComparator(string value)
+    {
+      _value = value;
+    }
 
-		/// <summary>
-		/// Gets the token to use as the value.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		protected override JToken GetValueJToken(ICodec codec)
-		{
-			return new JValue(codec.Encode(_value));
-		}
-	}
+    /// <summary>
+    /// Gets the token to use as the value.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    protected override JToken GetValueJToken(ICodec codec)
+    {
+      return new JValue(codec.Encode(_value));
+    }
+  }
 }

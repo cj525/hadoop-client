@@ -28,59 +28,59 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Represents a list of filters.
-	/// </summary>
-	public class FilterList : FilterListBase<IScannerFilter>
-	{
-		private const string _operationPropertyName = "op";
-		private const string _filtersPropertyName = "filters";
+  /// <summary>
+  ///    Represents a list of filters.
+  /// </summary>
+  public class FilterList : FilterListBase<IScannerFilter>
+  {
+    private const string _operationPropertyName = "op";
+    private const string _filtersPropertyName = "filters";
 
-		private static readonly IDictionary<FilterListTypes, string> _filterTypes
-			= new Dictionary<FilterListTypes, string>
-			{
-				{FilterListTypes.All, "MUST_PASS_ALL"},
-				{FilterListTypes.One, "MUST_PASS_ONE"}
-			};
+    private static readonly IDictionary<FilterListTypes, string> _filterTypes
+      = new Dictionary<FilterListTypes, string>
+      {
+        {FilterListTypes.All, "MUST_PASS_ALL"},
+        {FilterListTypes.One, "MUST_PASS_ONE"}
+      };
 
-		private readonly FilterListTypes _listType;
+    private readonly FilterListTypes _listType;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="FilterList" /> class.
-		/// </summary>
-		/// <param name="listType">Type of the list.</param>
-		public FilterList(FilterListTypes listType = FilterListTypes.All)
-		{
-			_listType = listType;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="FilterList" /> class.
+    /// </summary>
+    /// <param name="listType">Type of the list.</param>
+    public FilterList(FilterListTypes listType = FilterListTypes.All)
+    {
+      _listType = listType;
+    }
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="FilterList" /> class.
-		/// </summary>
-		/// <param name="filters">The filters.</param>
-		/// <param name="listType">Type of the list.</param>
-		public FilterList(IEnumerable<IScannerFilter> filters, FilterListTypes listType = FilterListTypes.All) : base(filters)
-		{
-			_listType = listType;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="FilterList" /> class.
+    /// </summary>
+    /// <param name="filters">The filters.</param>
+    /// <param name="listType">Type of the list.</param>
+    public FilterList(IEnumerable<IScannerFilter> filters, FilterListTypes listType = FilterListTypes.All) : base(filters)
+    {
+      _listType = listType;
+    }
 
-		/// <summary>
-		///    Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
-			json[_operationPropertyName] = new JValue(_filterTypes[_listType]);
+    /// <summary>
+    ///    Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+      json[_operationPropertyName] = new JValue(_filterTypes[_listType]);
 
-			if (!this.Any())
-			{
-				return json;
-			}
+      if (!this.Any())
+      {
+        return json;
+      }
 
-			json[_filtersPropertyName] = ConvertToJsonArray(filter => filter.ConvertToJson(codec));
+      json[_filtersPropertyName] = ConvertToJsonArray(filter => filter.ConvertToJson(codec));
 
-			return json;
-		}
-	}
+      return json;
+    }
+  }
 }

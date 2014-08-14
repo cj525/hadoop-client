@@ -27,155 +27,155 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Provides operations against a Stargate server.
-	/// </summary>
-	public interface IStargate
-	{
-		/// <summary>
-		///    Writes the value to HBase using the identifier.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		/// <param name="value">The value.</param>
-		Task WriteValueAsync(Identifier identifier, string value);
+  /// <summary>
+  ///    Provides operations against a Stargate server.
+  /// </summary>
+  public interface IStargate
+  {
+    /// <summary>
+    ///    Writes the value to HBase using the identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    /// <param name="value">The value.</param>
+    Task WriteValueAsync(Identifier identifier, string value);
 
-		/// <summary>
-		///    Writes the value to HBase using the identifier.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		/// <param name="value">The value.</param>
-		void WriteValue(Identifier identifier, string value);
+    /// <summary>
+    ///    Writes the value to HBase using the identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    /// <param name="value">The value.</param>
+    void WriteValue(Identifier identifier, string value);
 
-		/// <summary>
-		///    Writes the cells to HBase.
-		/// </summary>
-		/// <param name="cells">The cells.</param>
-		Task WriteCellsAsync(CellSet cells);
+    /// <summary>
+    ///    Writes the cells to HBase.
+    /// </summary>
+    /// <param name="cells">The cells.</param>
+    Task WriteCellsAsync(CellSet cells);
 
-		/// <summary>
-		///    Writes the cells to HBase.
-		/// </summary>
-		/// <param name="cells">The cells.</param>
-		void WriteCells(CellSet cells);
+    /// <summary>
+    ///    Writes the cells to HBase.
+    /// </summary>
+    /// <param name="cells">The cells.</param>
+    void WriteCells(CellSet cells);
 
-		/// <summary>
-		///    Deletes the item with the matching identifier from HBase.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		Task DeleteItemAsync(Identifier identifier);
+    /// <summary>
+    ///    Deletes the item with the matching identifier from HBase.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    Task DeleteItemAsync(Identifier identifier);
 
-		/// <summary>
-		///    Deletes the item with the matching identifier from HBase.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		void DeleteItem(Identifier identifier);
+    /// <summary>
+    ///    Deletes the item with the matching identifier from HBase.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    void DeleteItem(Identifier identifier);
 
-		/// <summary>
-		///    Reads the value with the matching identifier.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		Task<string> ReadValueAsync(Identifier identifier);
+    /// <summary>
+    ///    Reads the value with the matching identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    Task<string> ReadValueAsync(Identifier identifier);
 
-		/// <summary>
-		///    Reads the value with the matching identifier.
-		/// </summary>
-		/// <param name="identifier">The identifier.</param>
-		string ReadValue(Identifier identifier);
+    /// <summary>
+    ///    Reads the value with the matching identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier.</param>
+    string ReadValue(Identifier identifier);
 
-		/// <summary>
-		///    Finds the cells matching the query.
-		/// </summary>
-		/// <param name="query"></param>
-		Task<CellSet> FindCellsAsync(CellQuery query);
+    /// <summary>
+    ///    Finds the cells matching the query.
+    /// </summary>
+    /// <param name="query"></param>
+    Task<CellSet> FindCellsAsync(CellQuery query);
 
-		/// <summary>
-		///    Finds the cells matching the query.
-		/// </summary>
-		/// <param name="query"></param>
-		CellSet FindCells(CellQuery query);
+    /// <summary>
+    ///    Finds the cells matching the query.
+    /// </summary>
+    /// <param name="query"></param>
+    CellSet FindCells(CellQuery query);
 
-		/// <summary>
-		///    Creates the table.
-		/// </summary>
-		/// <param name="tableSchema">The table schema.</param>
-		void CreateTable(TableSchema tableSchema);
+    /// <summary>
+    ///    Creates the table.
+    /// </summary>
+    /// <param name="tableSchema">The table schema.</param>
+    void CreateTable(TableSchema tableSchema);
 
-		/// <summary>
-		///    Creates the table.
-		/// </summary>
-		/// <param name="tableSchema">The table schema.</param>
-		Task CreateTableAsync(TableSchema tableSchema);
+    /// <summary>
+    ///    Creates the table.
+    /// </summary>
+    /// <param name="tableSchema">The table schema.</param>
+    Task CreateTableAsync(TableSchema tableSchema);
 
-		/// <summary>
-		///    Gets the table names.
-		/// </summary>
-		/// <returns></returns>
-		IEnumerable<string> GetTableNames();
+    /// <summary>
+    ///    Gets the table names.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerable<string> GetTableNames();
 
-		/// <summary>
-		///    Gets the table names.
-		/// </summary>
-		/// <returns></returns>
-		Task<IEnumerable<string>> GetTableNamesAsync();
+    /// <summary>
+    ///    Gets the table names.
+    /// </summary>
+    /// <returns></returns>
+    Task<IEnumerable<string>> GetTableNamesAsync();
 
-		/// <summary>
-		/// Deletes the table.
-		/// </summary>
-		/// <param name="tableName">Name of the table.</param>
-		void DeleteTable(string tableName);
+    /// <summary>
+    /// Deletes the table.
+    /// </summary>
+    /// <param name="tableName">Name of the table.</param>
+    void DeleteTable(string tableName);
 
-		/// <summary>
-		/// Deletes the table.
-		/// </summary>
-		/// <param name="tableName">Name of the table.</param>
-		Task DeleteTableAsync(string tableName);
+    /// <summary>
+    /// Deletes the table.
+    /// </summary>
+    /// <param name="tableName">Name of the table.</param>
+    Task DeleteTableAsync(string tableName);
 
-		/// <summary>
-		/// Gets the table schema.
-		/// </summary>
-		/// <param name="tableName">Name of the table.</param>
-		Task<TableSchema> GetTableSchemaAsync(string tableName);
+    /// <summary>
+    /// Gets the table schema.
+    /// </summary>
+    /// <param name="tableName">Name of the table.</param>
+    Task<TableSchema> GetTableSchemaAsync(string tableName);
 
-		/// <summary>
-		/// Gets the table schema.
-		/// </summary>
-		/// <param name="tableName">Name of the table.</param>
-		TableSchema GetTableSchema(string tableName);
+    /// <summary>
+    /// Gets the table schema.
+    /// </summary>
+    /// <param name="tableName">Name of the table.</param>
+    TableSchema GetTableSchema(string tableName);
 
-		/// <summary>
-		/// Creates the scanner.
-		/// </summary>
-		/// <param name="options">The options.</param>
-		Task<IScanner> CreateScannerAsync(ScannerOptions options);
+    /// <summary>
+    /// Creates the scanner.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    Task<IScanner> CreateScannerAsync(ScannerOptions options);
 
-		/// <summary>
-		/// Creates the scanner.
-		/// </summary>
-		/// <param name="options">The options.</param>
-		IScanner CreateScanner(ScannerOptions options);
+    /// <summary>
+    /// Creates the scanner.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    IScanner CreateScanner(ScannerOptions options);
 
-		/// <summary>
-		/// Deletes the scanner.
-		/// </summary>
-		/// <param name="scanner">The scanner.</param>
-		void DeleteScanner(IScanner scanner);
+    /// <summary>
+    /// Deletes the scanner.
+    /// </summary>
+    /// <param name="scanner">The scanner.</param>
+    void DeleteScanner(IScanner scanner);
 
-		/// <summary>
-		/// Deletes the scanner.
-		/// </summary>
-		/// <param name="scanner">The scanner.</param>
-		Task DeleteScannerAsync(IScanner scanner);
+    /// <summary>
+    /// Deletes the scanner.
+    /// </summary>
+    /// <param name="scanner">The scanner.</param>
+    Task DeleteScannerAsync(IScanner scanner);
 
-		/// <summary>
-		/// Gets the scanner result.
-		/// </summary>
-		/// <param name="scanner">The scanner.</param>
-		CellSet GetScannerResult(IScanner scanner);
+    /// <summary>
+    /// Gets the scanner result.
+    /// </summary>
+    /// <param name="scanner">The scanner.</param>
+    CellSet GetScannerResult(IScanner scanner);
 
-		/// <summary>
-		/// Gets the scanner result.
-		/// </summary>
-		/// <param name="scanner">The scanner.</param>
-		Task<CellSet> GetScannerResultAsync(IScanner scanner);
-	}
+    /// <summary>
+    /// Gets the scanner result.
+    /// </summary>
+    /// <param name="scanner">The scanner.</param>
+    Task<CellSet> GetScannerResultAsync(IScanner scanner);
+  }
 }

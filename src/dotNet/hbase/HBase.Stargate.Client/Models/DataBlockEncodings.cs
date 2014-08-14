@@ -21,29 +21,29 @@
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Describes the data block encoding (key compression) algorithms that can be used with HBase.
-	/// </summary>
-	public enum DataBlockEncodings
-	{
-		/// <summary>
-		///    Data block encoding is disabled (default).
-		/// </summary>
-		None,
+  /// <summary>
+  ///    Describes the data block encoding (key compression) algorithms that can be used with HBase.
+  /// </summary>
+  public enum DataBlockEncodings
+  {
+    /// <summary>
+    ///    Data block encoding is disabled (default).
+    /// </summary>
+    None,
 
-		/// <summary>
-		///    The "DIFF" algorithm.
-		/// </summary>
-		Diff,
+    /// <summary>
+    ///    The "DIFF" algorithm.
+    /// </summary>
+    Diff,
 
-		/// <summary>
-		///    The "FASTDIFF" algorithm.
-		/// </summary>
-		FastDiff,
+    /// <summary>
+    ///    The "FASTDIFF" algorithm.
+    /// </summary>
+    FastDiff,
 
-		/// <summary>
-		///    The "PREFIX" algorithm.
-		/// </summary>
-		Prefix
-	}
+    /// <summary>
+    ///    The "PREFIX" algorithm.
+    /// </summary>
+    Prefix
+  }
 }

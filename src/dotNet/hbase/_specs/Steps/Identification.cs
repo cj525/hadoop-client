@@ -30,93 +30,93 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class Identification
-	{
-		private readonly HBaseContext _hBase;
+  [Binding]
+  public class Identification
+  {
+    private readonly HBaseContext _hBase;
 
-		public Identification(HBaseContext hBase)
-		{
-			_hBase = hBase;
-		}
+    public Identification(HBaseContext hBase)
+    {
+      _hBase = hBase;
+    }
 
-		[Given(@"I have an identifier consisting of a ([^,]*)")]
-		public void SetIdentifier(string table)
-		{
-			_hBase.Identifier = new Identifier {Table = table};
-		}
+    [Given(@"I have an identifier consisting of a ([^,]*)")]
+    public void SetIdentifier(string table)
+    {
+      _hBase.Identifier = new Identifier {Table = table};
+    }
 
-		[Given(@"I have an identifier consisting of a ([^,]*), a ([^,]*), a ([^,]*), a ([^,]*), and a ([^,]*)")]
-		public void SetIdentifier(string table, string row, string column, string qualifier, string timestamp)
-		{
-			_hBase.Identifier = new Identifier
-			{
-				Table = table,
-				Row = row,
-				CellDescriptor = new HBaseCellDescriptor
-				{
-					Column = column,
-					Qualifier = qualifier
-				},
-				Timestamp = timestamp.ToNullableInt64()
-			};
-		}
+    [Given(@"I have an identifier consisting of a ([^,]*), a ([^,]*), a ([^,]*), a ([^,]*), and a ([^,]*)")]
+    public void SetIdentifier(string table, string row, string column, string qualifier, string timestamp)
+    {
+      _hBase.Identifier = new Identifier
+      {
+        Table = table,
+        Row = row,
+        CellDescriptor = new HBaseCellDescriptor
+        {
+          Column = column,
+          Qualifier = qualifier
+        },
+        Timestamp = timestamp.ToNullableInt64()
+      };
+    }
 
-		[Given(@"I have an identifier consisting of a ([^,]*), a ([^,]*), a ([^,]*), and a ([^,]*)")]
-		public void SetIdentifier(string table, string row, string column, string qualifier)
-		{
-			_hBase.Identifier = new Identifier
-			{
-				Table = table,
-				Row = row,
-				CellDescriptor = new HBaseCellDescriptor
-				{
-					Column = column,
-					Qualifier = qualifier
-				}
-			};
-		}
+    [Given(@"I have an identifier consisting of a ([^,]*), a ([^,]*), a ([^,]*), and a ([^,]*)")]
+    public void SetIdentifier(string table, string row, string column, string qualifier)
+    {
+      _hBase.Identifier = new Identifier
+      {
+        Table = table,
+        Row = row,
+        CellDescriptor = new HBaseCellDescriptor
+        {
+          Column = column,
+          Qualifier = qualifier
+        }
+      };
+    }
 
-		[Given(@"I have an identifier consisting of the following values:")]
-		public void SetIdentifier(Table options)
-		{
-			_hBase.Identifier = GetIdentifier(options);
-		}
+    [Given(@"I have an identifier consisting of the following values:")]
+    public void SetIdentifier(Table options)
+    {
+      _hBase.Identifier = GetIdentifier(options);
+    }
 
-		[Given(@"I have a second identifier consisting of the following values:")]
-		public void SetSecondIdentifier(Table options)
-		{
-			_hBase.SecondIdentifier = GetIdentifier(options);
-		}
+    [Given(@"I have a second identifier consisting of the following values:")]
+    public void SetSecondIdentifier(Table options)
+    {
+      _hBase.SecondIdentifier = GetIdentifier(options);
+    }
 
-		[When(@"I match the second identifier to the first one")]
-		public void MatchIdentifiers()
-		{
-			_hBase.IdentifierMatchResult = _hBase.Identifier.Matches(_hBase.SecondIdentifier);
-		}
+    [When(@"I match the second identifier to the first one")]
+    public void MatchIdentifiers()
+    {
+      _hBase.IdentifierMatchResult = _hBase.Identifier.Matches(_hBase.SecondIdentifier);
+    }
 
-		[Then(@"the identifier match should( not)? have succeeded")]
-		public void AssertMatchResults(string negativeModifier)
-		{
-			_hBase.IdentifierMatchResult.Should().Be(string.IsNullOrEmpty(negativeModifier));
-		}
+    [Then(@"the identifier match should( not)? have succeeded")]
+    public void AssertMatchResults(string negativeModifier)
+    {
+      _hBase.IdentifierMatchResult.Should().Be(string.IsNullOrEmpty(negativeModifier));
+    }
 
-		private static Identifier GetIdentifier(Table options)
-		{
-			var descriptor = options.CreateInstance<TestDescriptor>();
+    private static Identifier GetIdentifier(Table options)
+    {
+      var descriptor = options.CreateInstance<TestDescriptor>();
 
-			var identifier = new Identifier
-			{
-				Table = descriptor.Table,
-				Row = descriptor.Row,
-				CellDescriptor = new HBaseCellDescriptor
-				{
-					Column = descriptor.Column,
-					Qualifier = descriptor.Qualifier
-				},
-				Timestamp = descriptor.Timestamp
-			};
-			return identifier;
-		}
-	}
+      var identifier = new Identifier
+      {
+        Table = descriptor.Table,
+        Row = descriptor.Row,
+        CellDescriptor = new HBaseCellDescriptor
+        {
+          Column = descriptor.Column,
+          Qualifier = descriptor.Qualifier
+        },
+        Timestamp = descriptor.Timestamp
+      };
+      return identifier;
+    }
+  }
 }

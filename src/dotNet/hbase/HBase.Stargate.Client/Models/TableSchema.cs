@@ -23,41 +23,41 @@ using System.Collections.Generic;
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Encapsulates the options available for new table creation.
-	/// </summary>
-	public class TableSchema
-	{
-		/// <summary>
-		///    Gets or sets the name.
-		/// </summary>
-		/// <value>
-		///    The name.
-		/// </value>
-		public string Name { get; set; }
+  /// <summary>
+  ///    Encapsulates the options available for new table creation.
+  /// </summary>
+  public class TableSchema
+  {
+    /// <summary>
+    ///    Gets or sets the name.
+    /// </summary>
+    /// <value>
+    ///    The name.
+    /// </value>
+    public string Name { get; set; }
 
-		/// <summary>
-		///    Gets or sets a value indicating whether this instance describes a meta-table.
-		/// </summary>
-		/// <value>
-		///    <c>true</c> if this instance describes a meta-table; otherwise, <c>false</c>.
-		/// </value>
-		public bool? IsMeta { get; set; }
+    /// <summary>
+    ///    Gets or sets a value indicating whether this instance describes a meta-table.
+    /// </summary>
+    /// <value>
+    ///    <c>true</c> if this instance describes a meta-table; otherwise, <c>false</c>.
+    /// </value>
+    public bool? IsMeta { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether this instance is a root table.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance is a root table; otherwise, <c>false</c>.
-		/// </value>
-		public bool? IsRoot { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is a root table.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if this instance is a root table; otherwise, <c>false</c>.
+    /// </value>
+    public bool? IsRoot { get; set; }
 
-		/// <summary>
-		///    Gets or sets the columns.
-		/// </summary>
-		/// <value>
-		///    The columns.
-		/// </value>
-		public List<ColumnSchema> Columns { get; set; }
-	}
+    /// <summary>
+    ///    Gets or sets the columns.
+    /// </summary>
+    /// <value>
+    ///    The columns.
+    /// </value>
+    public List<ColumnSchema> Columns { get; set; }
+  }
 }

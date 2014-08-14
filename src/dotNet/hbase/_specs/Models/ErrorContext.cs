@@ -25,17 +25,17 @@ using System.Linq;
 
 namespace _specs.Models
 {
-	public class ErrorContext
-	{
-		public ErrorContext()
-		{
-			CaughtErrors = Enumerable.Empty<Exception>();
-		}
+  public class ErrorContext
+  {
+    public ErrorContext()
+    {
+      CaughtErrors = Enumerable.Empty<Exception>();
+    }
 
-		public bool HasErrors { get { return CaughtErrors != null && CaughtErrors.Any(); } }
+    public bool HasErrors { get { return CaughtErrors != null && CaughtErrors.Any(); } }
 
-		public IEnumerable<Exception> CaughtErrors { get; set; }
+    public IEnumerable<Exception> CaughtErrors { get; set; }
 
-		public bool OutcomeViewedAsSuccessful { get; set; }
-	}
+    public bool OutcomeViewedAsSuccessful { get; set; }
+  }
 }

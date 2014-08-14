@@ -25,29 +25,29 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Pass results that have same row prefix.
-	/// </summary>
-	public class PrefixFilter : TypeValueFilterBase
-	{
-		private readonly string _rowPrefix;
+  /// <summary>
+  ///    Pass results that have same row prefix.
+  /// </summary>
+  public class PrefixFilter : TypeValueFilterBase
+  {
+    private readonly string _rowPrefix;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="PrefixFilter" /> class.
-		/// </summary>
-		/// <param name="rowPrefix">The row prefix.</param>
-		public PrefixFilter(string rowPrefix)
-		{
-			_rowPrefix = rowPrefix;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="PrefixFilter" /> class.
+    /// </summary>
+    /// <param name="rowPrefix">The row prefix.</param>
+    public PrefixFilter(string rowPrefix)
+    {
+      _rowPrefix = rowPrefix;
+    }
 
-		/// <summary>
-		///    Gets the token to use as the value.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		protected override JToken GetValueJToken(ICodec codec)
-		{
-			return new JValue(codec.Encode(_rowPrefix));
-		}
-	}
+    /// <summary>
+    ///    Gets the token to use as the value.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    protected override JToken GetValueJToken(ICodec codec)
+    {
+      return new JValue(codec.Encode(_rowPrefix));
+    }
+  }
 }

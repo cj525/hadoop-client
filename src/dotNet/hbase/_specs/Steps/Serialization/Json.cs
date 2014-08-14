@@ -21,29 +21,29 @@ using _specs.Models;
 
 namespace _specs.Steps.Serialization
 {
-	[Binding]
-	public class Json
-	{
-		private readonly ContentConverter _converter;
+  [Binding]
+  public class Json
+  {
+    private readonly ContentConverter _converter;
 
-		public Json(ContentConverter converter)
-		{
-			_converter = converter;
-		}
+    public Json(ContentConverter converter)
+    {
+      _converter = converter;
+    }
 
-		[Then(@"my raw JSON content should be equivalent to the resource called ""(.*)""")]
-		public void CompareJsonToResource(string resourceName)
-		{
-			ScenarioContext.Current.Pending();
-		}
+    [Then(@"my raw JSON content should be equivalent to the resource called ""(.*)""")]
+    public void CompareJsonToResource(string resourceName)
+    {
+      ScenarioContext.Current.Pending();
+    }
 
-		[Given(@"I have everything I need to test a content converter for JSON")]
-		public void SetConversionToJson()
-		{
-			_converter.SetConversionToJson();
+    [Given(@"I have everything I need to test a content converter for JSON")]
+    public void SetConversionToJson()
+    {
+      _converter.SetConversionToJson();
 
-			//TODO: remove the next line once JSON is plugged in
-			ScenarioContext.Current.Pending();
-		}
-	}
+      //TODO: remove the next line once JSON is plugged in
+      ScenarioContext.Current.Pending();
+    }
+  }
 }

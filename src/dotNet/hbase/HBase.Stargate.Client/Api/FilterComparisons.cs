@@ -21,44 +21,44 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Describes the possible comparisons a scanner filter can make.
-	/// </summary>
-	public enum FilterComparisons
-	{
-		/// <summary>
-		///    No comparison should be made.
-		/// </summary>
-		None,
+  /// <summary>
+  ///    Describes the possible comparisons a scanner filter can make.
+  /// </summary>
+  public enum FilterComparisons
+  {
+    /// <summary>
+    ///    No comparison should be made.
+    /// </summary>
+    None,
 
-		/// <summary>
-		///    Values must be equal.
-		/// </summary>
-		Equal,
+    /// <summary>
+    ///    Values must be equal.
+    /// </summary>
+    Equal,
 
-		/// <summary>
-		///    Values must not be equal.
-		/// </summary>
-		NotEqual,
+    /// <summary>
+    ///    Values must not be equal.
+    /// </summary>
+    NotEqual,
 
-		/// <summary>
-		///    Value must be greater than the one specified.
-		/// </summary>
-		GreaterThan,
+    /// <summary>
+    ///    Value must be greater than the one specified.
+    /// </summary>
+    GreaterThan,
 
-		/// <summary>
-		///    Value must be greater than or equal to the one specified.
-		/// </summary>
-		GreaterThanOrEqual,
+    /// <summary>
+    ///    Value must be greater than or equal to the one specified.
+    /// </summary>
+    GreaterThanOrEqual,
 
-		/// <summary>
-		///    Value must be less than the one specified.
-		/// </summary>
-		LessThan,
+    /// <summary>
+    ///    Value must be less than the one specified.
+    /// </summary>
+    LessThan,
 
-		/// <summary>
-		///    Value must be less than or equal to the one specified.
-		/// </summary>
-		LessThanOrEqual
-	}
+    /// <summary>
+    ///    Value must be less than or equal to the one specified.
+    /// </summary>
+    LessThanOrEqual
+  }
 }

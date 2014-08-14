@@ -35,155 +35,155 @@ using RestSharp.Injection.Autofac;
 
 namespace HBase.Stargate.Client.Autofac
 {
-	/// <summary>
-	///    Provides Autofac registrations for <see cref="IStargate" /> and surrounding services.
-	/// </summary>
-	public class StargateModule : Module
-	{
-		private readonly Func<IConfigurationSource, IStargateOptions> _configOptionsAccessor;
-		private readonly IStargateOptions _options;
+  /// <summary>
+  ///    Provides Autofac registrations for <see cref="IStargate" /> and surrounding services.
+  /// </summary>
+  public class StargateModule : Module
+  {
+    private readonly Func<IConfigurationSource, IStargateOptions> _configOptionsAccessor;
+    private readonly IStargateOptions _options;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="StargateModule" /> class.
-		/// </summary>
-		public StargateModule() {}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="StargateModule" /> class.
+    /// </summary>
+    public StargateModule() {}
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="StargateModule" /> class.
-		/// </summary>
-		/// <param name="options">The options.</param>
-		public StargateModule(IStargateOptions options)
-		{
-			_options = options;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="StargateModule" /> class.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    public StargateModule(IStargateOptions options)
+    {
+      _options = options;
+    }
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="StargateModule" /> class.
-		/// </summary>
-		/// <param name="configOptionsAccessor">The config options accessor.</param>
-		public StargateModule(Func<IConfigurationSource, IStargateOptions> configOptionsAccessor)
-		{
-			_configOptionsAccessor = configOptionsAccessor;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="StargateModule" /> class.
+    /// </summary>
+    /// <param name="configOptionsAccessor">The config options accessor.</param>
+    public StargateModule(Func<IConfigurationSource, IStargateOptions> configOptionsAccessor)
+    {
+      _configOptionsAccessor = configOptionsAccessor;
+    }
 
-		/// <summary>
-		///    Overridden to add <see cref="IStargate" />-related registrations to the container.
-		/// </summary>
-		/// <param name="builder">
-		///    The builder through which components can be
-		///    registered.
-		/// </param>
-		/// <remarks>
-		///    Note that this module registers the <see cref="RestSharpModule" /> from RestSharp.Injection.Autofac,
-		///    and optionally the <see cref="ConfigurationModule" /> from Patterns.
-		/// </remarks>
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterModule(new RestSharpModule());
+    /// <summary>
+    ///    Overridden to add <see cref="IStargate" />-related registrations to the container.
+    /// </summary>
+    /// <param name="builder">
+    ///    The builder through which components can be
+    ///    registered.
+    /// </param>
+    /// <remarks>
+    ///    Note that this module registers the <see cref="RestSharpModule" /> from RestSharp.Injection.Autofac,
+    ///    and optionally the <see cref="ConfigurationModule" /> from Patterns.
+    /// </remarks>
+    protected override void Load(ContainerBuilder builder)
+    {
+      builder.RegisterModule(new RestSharpModule());
 
-			RegisterOptions(builder);
-			RegisterResourceBuilder(builder);
-			RegisterMimeConverterFactory(builder);
-			RegisterErrorProvider(builder);
-			RegisterSimpleValueConverter(builder);
-			RegisterStargate(builder);
-			RegisterMimeConverters(builder);
-			RegisterScannerOptionsConverter(builder);
-			RegisterCodec(builder);
-		}
+      RegisterOptions(builder);
+      RegisterResourceBuilder(builder);
+      RegisterMimeConverterFactory(builder);
+      RegisterErrorProvider(builder);
+      RegisterSimpleValueConverter(builder);
+      RegisterStargate(builder);
+      RegisterMimeConverters(builder);
+      RegisterScannerOptionsConverter(builder);
+      RegisterCodec(builder);
+    }
 
-		/// <summary>
-		/// Registers the codec.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterCodec(ContainerBuilder builder)
-		{
-			return builder.RegisterType<Base64Codec>().As<ICodec>();
-		}
+    /// <summary>
+    /// Registers the codec.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterCodec(ContainerBuilder builder)
+    {
+      return builder.RegisterType<Base64Codec>().As<ICodec>();
+    }
 
-		/// <summary>
-		/// Registers the scanner options converter.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterScannerOptionsConverter(ContainerBuilder builder)
-		{
-			return builder.RegisterType<ScannerOptionsConverter>().As<IScannerOptionsConverter>();
-		}
+    /// <summary>
+    /// Registers the scanner options converter.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterScannerOptionsConverter(ContainerBuilder builder)
+    {
+      return builder.RegisterType<ScannerOptionsConverter>().As<IScannerOptionsConverter>();
+    }
 
-		/// <summary>
-		/// Registers the MIME converters.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle> RegisterMimeConverters(ContainerBuilder builder)
-		{
-			return builder.RegisterAssemblyTypes(typeof (IMimeConverter).Assembly)
-				.Where(type => typeof (IMimeConverter).IsAssignableFrom(type))
-				.As<IMimeConverter>();
-		}
+    /// <summary>
+    /// Registers the MIME converters.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle> RegisterMimeConverters(ContainerBuilder builder)
+    {
+      return builder.RegisterAssemblyTypes(typeof (IMimeConverter).Assembly)
+        .Where(type => typeof (IMimeConverter).IsAssignableFrom(type))
+        .As<IMimeConverter>();
+    }
 
-		/// <summary>
-		/// Registers the stargate.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterStargate(ContainerBuilder builder)
-		{
-			return builder.RegisterType<Api.Stargate>().As<IStargate>();
-		}
+    /// <summary>
+    /// Registers the stargate.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterStargate(ContainerBuilder builder)
+    {
+      return builder.RegisterType<Api.Stargate>().As<IStargate>();
+    }
 
-		/// <summary>
-		/// Registers the simple value converter.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterSimpleValueConverter(ContainerBuilder builder)
-		{
-			return builder.RegisterType<SimpleValueConverter>().As<ISimpleValueConverter>();
-		}
+    /// <summary>
+    /// Registers the simple value converter.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterSimpleValueConverter(ContainerBuilder builder)
+    {
+      return builder.RegisterType<SimpleValueConverter>().As<ISimpleValueConverter>();
+    }
 
-		/// <summary>
-		/// Registers the error provider.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterErrorProvider(ContainerBuilder builder)
-		{
-			return builder.RegisterType<ErrorProvider>().As<IErrorProvider>();
-		}
+    /// <summary>
+    /// Registers the error provider.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterErrorProvider(ContainerBuilder builder)
+    {
+      return builder.RegisterType<ErrorProvider>().As<IErrorProvider>();
+    }
 
-		/// <summary>
-		/// Registers the MIME converter factory.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterMimeConverterFactory(ContainerBuilder builder)
-		{
-			return builder.RegisterType<MimeConverterFactory>().As<IMimeConverterFactory>();
-		}
+    /// <summary>
+    /// Registers the MIME converter factory.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterMimeConverterFactory(ContainerBuilder builder)
+    {
+      return builder.RegisterType<MimeConverterFactory>().As<IMimeConverterFactory>();
+    }
 
-		/// <summary>
-		/// Registers the resource builder.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterResourceBuilder(ContainerBuilder builder)
-		{
-			return builder.RegisterType<ResourceBuilder>().As<IResourceBuilder>();
-		}
+    /// <summary>
+    /// Registers the resource builder.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterResourceBuilder(ContainerBuilder builder)
+    {
+      return builder.RegisterType<ResourceBuilder>().As<IResourceBuilder>();
+    }
 
-		/// <summary>
-		/// Registers the options.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		protected virtual IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> RegisterOptions(ContainerBuilder builder)
-		{
-			if (_options != null)
-			{
-				return builder.RegisterInstance(_options);
-			}
-			
-			if (_configOptionsAccessor != null)
-			{
-				builder.RegisterModule(new ConfigurationModule());
-				return builder.Register(context => _configOptionsAccessor(context.Resolve<IConfigurationSource>()));
-			}
+    /// <summary>
+    /// Registers the options.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    protected virtual IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> RegisterOptions(ContainerBuilder builder)
+    {
+      if (_options != null)
+      {
+        return builder.RegisterInstance(_options);
+      }
+      
+      if (_configOptionsAccessor != null)
+      {
+        builder.RegisterModule(new ConfigurationModule());
+        return builder.Register(context => _configOptionsAccessor(context.Resolve<IConfigurationSource>()));
+      }
 
-			return null;
-		}
-	}
+      return null;
+    }
+  }
 }

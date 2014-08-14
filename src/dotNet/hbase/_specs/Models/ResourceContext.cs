@@ -23,15 +23,15 @@ using _specs.Properties;
 
 namespace _specs.Models
 {
-	public class ResourceContext : IResourceContext
-	{
-		private static readonly ResourceManager _resources = new ResourceManager(typeof (Resources));
-		private static readonly ResourceManager _appResources = new ResourceManager(typeof(HBase.Stargate.Client.Properties.Resources));
+  public class ResourceContext : IResourceContext
+  {
+    private static readonly ResourceManager _resources = new ResourceManager(typeof (Resources));
+    private static readonly ResourceManager _appResources = new ResourceManager(typeof(HBase.Stargate.Client.Properties.Resources));
 
-		public string GetString(string name)
-		{
-			return Try.Get(() => _resources.GetString(name))
-				?? Try.Get(() => _appResources.GetString(name));
-		}
-	}
+    public string GetString(string name)
+    {
+      return Try.Get(() => _resources.GetString(name))
+        ?? Try.Get(() => _appResources.GetString(name));
+    }
+  }
 }

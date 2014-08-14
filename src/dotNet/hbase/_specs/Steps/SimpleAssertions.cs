@@ -32,40 +32,40 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class SimpleAssertions
-	{
-		private readonly HBaseContext _cells;
+  [Binding]
+  public class SimpleAssertions
+  {
+    private readonly HBaseContext _cells;
 
-		public SimpleAssertions(HBaseContext cells)
-		{
-			_cells = cells;
-		}
+    public SimpleAssertions(HBaseContext cells)
+    {
+      _cells = cells;
+    }
 
-		[Then(@"my cell should have a (.+), (.+), (.*), (.*), and (.*)")]
-		public void CheckCellContents(string row, string column, string qualifier, string timestamp, string value)
-		{
-			CellMatchesTestValue(_cells.Cell, new TestCell
-			{
-				Row = row,
-				Column = column,
-				Qualifier = qualifier,
-				Timestamp = timestamp.ToNullableInt64(),
-				Value = value
-			}).Should().BeTrue();
-		}
+    [Then(@"my cell should have a (.+), (.+), (.*), (.*), and (.*)")]
+    public void CheckCellContents(string row, string column, string qualifier, string timestamp, string value)
+    {
+      CellMatchesTestValue(_cells.Cell, new TestCell
+      {
+        Row = row,
+        Column = column,
+        Qualifier = qualifier,
+        Timestamp = timestamp.ToNullableInt64(),
+        Value = value
+      }).Should().BeTrue();
+    }
 
-		[Then(@"my set should contain (\d+) cells?")]
-		public void CheckCellSetCount(int count)
-		{
-			_cells.CellSet.Should().HaveCount(count);
-		}
+    [Then(@"my set should contain (\d+) cells?")]
+    public void CheckCellSetCount(int count)
+    {
+      _cells.CellSet.Should().HaveCount(count);
+    }
 
-		[Then(@"(?:one of )?the cells in my set should have the following properties:")]
-		public void CheckAnyCellInSet(Table values)
-		{
-			values.CompareToSet(_cells.CellSet.Select(cell => (TestCell) cell));
-		}
+    [Then(@"(?:one of )?the cells in my set should have the following properties:")]
+    public void CheckAnyCellInSet(Table values)
+    {
+      values.CompareToSet(_cells.CellSet.Select(cell => (TestCell) cell));
+    }
 
         [Then(@"the result should be ""(.+)""")]
         public void CheckResulValue(TestString value)
@@ -73,14 +73,14 @@ namespace _specs.Steps
             _cells.CellValue.Should().Be(value);
         }
 
-		private static bool CellMatchesTestValue(Cell cell, TestCell testCell)
-		{
-			return cell.Identifier.Row == testCell.Row
-				&& cell.Identifier.CellDescriptor != null
-				&& cell.Identifier.CellDescriptor.Column == testCell.Column
-				&& cell.Identifier.CellDescriptor.Qualifier == testCell.Qualifier
-				&& cell.Identifier.Timestamp == testCell.Timestamp
-				&& cell.Value == testCell.Value;
-		}
-	}
+    private static bool CellMatchesTestValue(Cell cell, TestCell testCell)
+    {
+      return cell.Identifier.Row == testCell.Row
+        && cell.Identifier.CellDescriptor != null
+        && cell.Identifier.CellDescriptor.Column == testCell.Column
+        && cell.Identifier.CellDescriptor.Qualifier == testCell.Qualifier
+        && cell.Identifier.Timestamp == testCell.Timestamp
+        && cell.Value == testCell.Value;
+    }
+  }
 }

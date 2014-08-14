@@ -27,30 +27,30 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    A Filter that stops after the given row. There is no "RowStopFilter" because
-	///    <see cref="ScannerOptions" /> allows you to specify a stop row.
-	/// </summary>
-	public class InclusiveStopFilter : TypeValueFilterBase
-	{
-		private readonly string _row;
+  /// <summary>
+  ///    A Filter that stops after the given row. There is no "RowStopFilter" because
+  ///    <see cref="ScannerOptions" /> allows you to specify a stop row.
+  /// </summary>
+  public class InclusiveStopFilter : TypeValueFilterBase
+  {
+    private readonly string _row;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="InclusiveStopFilter" /> class.
-		/// </summary>
-		/// <param name="row">The row.</param>
-		public InclusiveStopFilter(string row)
-		{
-			_row = row;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="InclusiveStopFilter" /> class.
+    /// </summary>
+    /// <param name="row">The row.</param>
+    public InclusiveStopFilter(string row)
+    {
+      _row = row;
+    }
 
-		/// <summary>
-		/// Gets the token to use as the value.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		protected override JToken GetValueJToken(ICodec codec)
-		{
-			return new JValue(codec.Encode(_row));
-		}
-	}
+    /// <summary>
+    /// Gets the token to use as the value.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    protected override JToken GetValueJToken(ICodec codec)
+    {
+      return new JValue(codec.Encode(_row));
+    }
+  }
 }

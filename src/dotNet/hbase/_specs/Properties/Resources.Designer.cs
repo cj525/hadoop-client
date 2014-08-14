@@ -152,9 +152,9 @@ namespace _specs.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;CellSet&gt;
-        ///	&lt;Row key=&quot;MQ==&quot;&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///	&lt;/Row&gt;
+        ///  &lt;Row key=&quot;MQ==&quot;&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///  &lt;/Row&gt;
         ///&lt;/CellSet&gt;.
         /// </summary>
         internal static string HBaseXml_1Alpha_HelloWorld {
@@ -165,9 +165,9 @@ namespace _specs.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;CellSet&gt;
-        ///	&lt;Row key=&quot;MQ==&quot;&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///	&lt;/Row&gt;
+        ///  &lt;Row key=&quot;MQ==&quot;&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///  &lt;/Row&gt;
         ///&lt;/CellSet&gt;.
         /// </summary>
         internal static string HBaseXml_1Alpha4_HelloWorld {
@@ -178,9 +178,9 @@ namespace _specs.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;CellSet&gt;
-        ///	&lt;Row key=&quot;MQ==&quot;&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6eA==&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///	&lt;/Row&gt;
+        ///  &lt;Row key=&quot;MQ==&quot;&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6eA==&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///  &lt;/Row&gt;
         ///&lt;/CellSet&gt;.
         /// </summary>
         internal static string HBaseXml_1AlphaX_HelloWorld {
@@ -191,9 +191,9 @@ namespace _specs.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;CellSet&gt;
-        ///	&lt;Row key=&quot;MQ==&quot;&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6eA==&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///	&lt;/Row&gt;
+        ///  &lt;Row key=&quot;MQ==&quot;&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6eA==&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///  &lt;/Row&gt;
         ///&lt;/CellSet&gt;.
         /// </summary>
         internal static string HBaseXml_1AlphaX4_HelloWorld {
@@ -204,12 +204,12 @@ namespace _specs.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;CellSet&gt;
-        ///	&lt;Row key=&quot;MQ==&quot;&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6eA==&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///		&lt;Cell column=&quot;YWxwaGE6eA==&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
-        ///	&lt;/Row&gt;
+        ///  &lt;Row key=&quot;MQ==&quot;&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6eA==&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///    &lt;Cell column=&quot;YWxwaGE6eA==&quot; timestamp=&quot;4&quot;&gt;aGVsbG8gd29ybGQ=&lt;/Cell&gt;
+        ///  &lt;/Row&gt;
         ///&lt;/CellSet&gt;.
         /// </summary>
         internal static string HBaseXml_Set_HelloWorld {
@@ -222,9 +222,9 @@ namespace _specs.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
         ///
         ///&lt;TableSchema name=&quot;jb-test&quot; IS_META=&quot;false&quot; IS_ROOT=&quot;false&quot;&gt;
-        ///	&lt;ColumnSchema name=&quot;d&quot; BLOCKSIZE=&quot;65536&quot; BLOOMFILTER=&quot;NONE&quot; MIN_VERSIONS=&quot;0&quot; KEEP_DELETED_CELLS=&quot;false&quot;
-        ///	              ENCODE_ON_DISK=&quot;true&quot; BLOCKCACHE=&quot;true&quot; COMPRESSION=&quot;NONE&quot; VERSIONS=&quot;3&quot; REPLICATION_SCOPE=&quot;0&quot;
-        ///	              TTL=&quot;2147483647&quot; DATA_BLOCK_ENCODING=&quot;NONE&quot; IN_MEMORY=&quot;false&quot; /&gt;
+        ///  &lt;ColumnSchema name=&quot;d&quot; BLOCKSIZE=&quot;65536&quot; BLOOMFILTER=&quot;NONE&quot; MIN_VERSIONS=&quot;0&quot; KEEP_DELETED_CELLS=&quot;false&quot;
+        ///                ENCODE_ON_DISK=&quot;true&quot; BLOCKCACHE=&quot;true&quot; COMPRESSION=&quot;NONE&quot; VERSIONS=&quot;3&quot; REPLICATION_SCOPE=&quot;0&quot;
+        ///                TTL=&quot;2147483647&quot; DATA_BLOCK_ENCODING=&quot;NONE&quot; IN_MEMORY=&quot;false&quot; /&gt;
         ///&lt;/TableSchema&gt;.
         /// </summary>
         internal static string HBaseXml_TableSchema1 {

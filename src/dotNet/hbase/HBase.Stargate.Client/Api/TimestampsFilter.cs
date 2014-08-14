@@ -25,22 +25,22 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Filter that returns only cells whose timestamp (version) is in the specified list of timestamps (versions).
-	/// </summary>
-	public class TimestampsFilter : FilterListBase<long>
-	{
-		private const string _timestampsPropertyName = "timestamps";
+  /// <summary>
+  ///    Filter that returns only cells whose timestamp (version) is in the specified list of timestamps (versions).
+  /// </summary>
+  public class TimestampsFilter : FilterListBase<long>
+  {
+    private const string _timestampsPropertyName = "timestamps";
 
-		/// <summary>
-		///    Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
-			json[_timestampsPropertyName] = ConvertToJsonArray(timestamp => new JValue(timestamp));
-			return json;
-		}
-	}
+    /// <summary>
+    ///    Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
+      json[_timestampsPropertyName] = ConvertToJsonArray(timestamp => new JValue(timestamp));
+      return json;
+    }
+  }
 }

@@ -21,34 +21,34 @@
 
 namespace HBase.Stargate.Client
 {
-	/// <summary>
-	///    Describes the MIME types supported by HBase Stargate.
-	/// </summary>
-	public static class HBaseMimeTypes
-	{
-		/// <summary>
-		///    The plain text MIME type.
-		/// </summary>
-		public const string Text = "text/plain";
+  /// <summary>
+  ///    Describes the MIME types supported by HBase Stargate.
+  /// </summary>
+  public static class HBaseMimeTypes
+  {
+    /// <summary>
+    ///    The plain text MIME type.
+    /// </summary>
+    public const string Text = "text/plain";
 
-		/// <summary>
-		///    The XML MIME type.
-		/// </summary>
-		public const string Xml = "text/xml";
+    /// <summary>
+    ///    The XML MIME type.
+    /// </summary>
+    public const string Xml = "text/xml";
 
-		/// <summary>
-		///    The json MIME type.
-		/// </summary>
-		public const string Json = "application/json";
+    /// <summary>
+    ///    The json MIME type.
+    /// </summary>
+    public const string Json = "application/json";
 
-		/// <summary>
-		///    The protobuf MIME type.
-		/// </summary>
-		public const string Protobuf = "application/x-protobuf";
+    /// <summary>
+    ///    The protobuf MIME type.
+    /// </summary>
+    public const string Protobuf = "application/x-protobuf";
 
-		/// <summary>
-		///    The binary stream MIME type.
-		/// </summary>
-		public const string Stream = "application/octet-stream";
-	}
+    /// <summary>
+    ///    The binary stream MIME type.
+    /// </summary>
+    public const string Stream = "application/octet-stream";
+  }
 }

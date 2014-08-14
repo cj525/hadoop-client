@@ -25,15 +25,15 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Defines a filter for use during scanner creation.
-	/// </summary>
-	public interface IScannerFilter
-	{
-		/// <summary>
-		/// Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		JObject ConvertToJson(ICodec codec);
-	}
+  /// <summary>
+  ///    Defines a filter for use during scanner creation.
+  /// </summary>
+  public interface IScannerFilter
+  {
+    /// <summary>
+    /// Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    JObject ConvertToJson(ICodec codec);
+  }
 }

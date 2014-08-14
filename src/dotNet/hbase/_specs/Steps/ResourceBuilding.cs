@@ -29,88 +29,88 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class ResourceBuilding
-	{
-		private readonly ResourceBuilderContext _builderContext;
-		private readonly HBaseContext _hBase;
-		private readonly ErrorContext _errors;
-		private readonly IMoqContainer _container;
+  [Binding]
+  public class ResourceBuilding
+  {
+    private readonly ResourceBuilderContext _builderContext;
+    private readonly HBaseContext _hBase;
+    private readonly ErrorContext _errors;
+    private readonly IMoqContainer _container;
 
-		public ResourceBuilding(ResourceBuilderContext builderContext, HBaseContext hBase, ErrorContext errors, IMoqContainer container)
-		{
-			_builderContext = builderContext;
-			_hBase = hBase;
-			_errors = errors;
-			_container = container;
-		}
+    public ResourceBuilding(ResourceBuilderContext builderContext, HBaseContext hBase, ErrorContext errors, IMoqContainer container)
+    {
+      _builderContext = builderContext;
+      _hBase = hBase;
+      _errors = errors;
+      _container = container;
+    }
 
-		[Given(@"I have everything I need to test a resource builder in isolation, assuming a false-row-key of ""(.+)""")]
-		public void SetupResourceBuilder(string falseRowKey)
-		{
-			_container.Update<IStargateOptions>(new StargateOptions {FalseRowKey = falseRowKey});
-			_container.Update<IResourceBuilder, ResourceBuilder>();
-		}
+    [Given(@"I have everything I need to test a resource builder in isolation, assuming a false-row-key of ""(.+)""")]
+    public void SetupResourceBuilder(string falseRowKey)
+    {
+      _container.Update<IStargateOptions>(new StargateOptions {FalseRowKey = falseRowKey});
+      _container.Update<IResourceBuilder, ResourceBuilder>();
+    }
 
-		[When(@"I build a resource name for Cell or Row queries using my query")]
-		public void BuildCellOrRowQuery()
-		{
-			try
-			{
-				_builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildCellOrRowQuery(_hBase.Query);
-			}
-			catch (Exception error)
-			{
-				_errors.CaughtErrors = new[] {error};
-			}
-		}
+    [When(@"I build a resource name for Cell or Row queries using my query")]
+    public void BuildCellOrRowQuery()
+    {
+      try
+      {
+        _builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildCellOrRowQuery(_hBase.Query);
+      }
+      catch (Exception error)
+      {
+        _errors.CaughtErrors = new[] {error};
+      }
+    }
 
-		[When(@"I build a resource name for storing single values using my identifier")]
-		public void BuildSingleValueStorage()
-		{
-			try
-			{
-				_builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildSingleValueAccess(_hBase.Identifier);
-			}
-			catch (Exception error)
-			{
-				_errors.CaughtErrors = new[] {error};
-			}
-		}
+    [When(@"I build a resource name for storing single values using my identifier")]
+    public void BuildSingleValueStorage()
+    {
+      try
+      {
+        _builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildSingleValueAccess(_hBase.Identifier);
+      }
+      catch (Exception error)
+      {
+        _errors.CaughtErrors = new[] {error};
+      }
+    }
 
-		[When(@"I build a resource name for storing multiple values using my identifier")]
-		public void BuildMultipleValueStorage()
-		{
-			try
-			{
-				_builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildBatchInsert(_hBase.Identifier);
-			}
-			catch (Exception error)
-			{
-				_errors.CaughtErrors = new[] { error };
-			}
-		}
+    [When(@"I build a resource name for storing multiple values using my identifier")]
+    public void BuildMultipleValueStorage()
+    {
+      try
+      {
+        _builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildBatchInsert(_hBase.Identifier);
+      }
+      catch (Exception error)
+      {
+        _errors.CaughtErrors = new[] { error };
+      }
+    }
 
-		[When(@"I build a resource name for deleting items using my identifier")]
-		public void BuildDeleteItem()
-		{
-			try
-			{
-				_builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildDeleteItem(_hBase.Identifier);
-			}
-			catch (Exception error)
-			{
-				_errors.CaughtErrors = new[] { error };
-			}
-		}
+    [When(@"I build a resource name for deleting items using my identifier")]
+    public void BuildDeleteItem()
+    {
+      try
+      {
+        _builderContext.ResourceUri = _container.Create<IResourceBuilder>().BuildDeleteItem(_hBase.Identifier);
+      }
+      catch (Exception error)
+      {
+        _errors.CaughtErrors = new[] { error };
+      }
+    }
 
-		[Then(@"the resulting resource name should match the expected (.*)")]
-		public void CheckBuiltResourceMatches(string value)
-		{
-			var left = string.IsNullOrEmpty(_builderContext.ResourceUri) ? null : _builderContext.ResourceUri;
-			var right = string.IsNullOrEmpty(value) ? null : value;
+    [Then(@"the resulting resource name should match the expected (.*)")]
+    public void CheckBuiltResourceMatches(string value)
+    {
+      var left = string.IsNullOrEmpty(_builderContext.ResourceUri) ? null : _builderContext.ResourceUri;
+      var right = string.IsNullOrEmpty(value) ? null : value;
 
-			left.Should().Be(right);
-		}
-	}
+      left.Should().Be(right);
+    }
+  }
 }
