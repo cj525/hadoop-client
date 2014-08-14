@@ -25,49 +25,49 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Provides HBase data conversion to a specific MIME type.
-	/// </summary>
-	public interface IMimeConverter
-	{
-		/// <summary>
-		///    Gets the current MIME type.
-		/// </summary>
-		/// <value>
-		///    The MIME type.
-		/// </value>
-		string MimeType { get; }
+  /// <summary>
+  ///    Provides HBase data conversion to a specific MIME type.
+  /// </summary>
+  public interface IMimeConverter
+  {
+    /// <summary>
+    ///    Gets the current MIME type.
+    /// </summary>
+    /// <value>
+    ///    The MIME type.
+    /// </value>
+    string MimeType { get; }
 
-		/// <summary>
-		///    Converts the specified cells to text according to the current MIME type.
-		/// </summary>
-		/// <param name="cells">The cells.</param>
-		string ConvertCells(IEnumerable<Cell> cells);
+    /// <summary>
+    ///    Converts the specified cells to text according to the current MIME type.
+    /// </summary>
+    /// <param name="cells">The cells.</param>
+    string ConvertCells(IEnumerable<Cell> cells);
 
-		/// <summary>
-		///    Converts the specified cell to text according to the current MIME type.
-		/// </summary>
-		/// <param name="cell"></param>
-		string ConvertCell(Cell cell);
+    /// <summary>
+    ///    Converts the specified cell to text according to the current MIME type.
+    /// </summary>
+    /// <param name="cell"></param>
+    string ConvertCell(Cell cell);
 
-		/// <summary>
-		///    Converts the specified data to a set of cells according to the current MIME type.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		/// <param name="tableName">The HBase table name.</param>
-		IEnumerable<Cell> ConvertCells(string data, string tableName);
+    /// <summary>
+    ///    Converts the specified data to a set of cells according to the current MIME type.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    /// <param name="tableName">The HBase table name.</param>
+    CellSet ConvertCells(string data, string tableName);
 
-		/// <summary>
-		///    Converts the specified data to a table schema according to the current MIME type.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		TableSchema ConvertSchema(string data);
+    /// <summary>
+    ///    Converts the specified data to a table schema according to the current MIME type.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    TableSchema ConvertSchema(string data);
 
-		/// <summary>
-		/// Converts the specified table schema to text according to the current MIME type.
-		/// </summary>
-		/// <param name="schema">The schema.</param>
-		/// <returns></returns>
-		string ConvertSchema(TableSchema schema);
-	}
+    /// <summary>
+    /// Converts the specified table schema to text according to the current MIME type.
+    /// </summary>
+    /// <param name="schema">The schema.</param>
+    /// <returns></returns>
+    string ConvertSchema(TableSchema schema);
+  }
 }

@@ -29,304 +29,311 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Defines an XML implementation of <see cref="IMimeConverter" />.
-	/// </summary>
-	public class XmlMimeConverter : IMimeConverter
-	{
-		private const string _cellSetName = "CellSet";
-		private const string _rowName = "Row";
-		private const string _keyName = "key";
-		private const string _columnFormat = "{0}:{1}";
-		private const string _columnName = "column";
-		private const string _qualifierName = "qualifier";
-		private const string _timestampName = "timestamp";
-		private const string _cellName = "Cell";
-		private const string _tableSchemaName = "TableSchema";
-		private const string _nameName = "name";
-		private const string _isMetaName = "IS_META";
-		private const string _isRootName = "IS_ROOT";
-		private const string _columnSchemaName = "ColumnSchema";
-		private const string _blockSizeName = "BLOCKSIZE";
-		private const string _bloomFilterName = "BLOOMFILTER";
-		private const string _blockCacheName = "BLOCKCACHE";
-		private const string _compressionName = "COMPRESSION";
-		private const string _versionsName = "VERSIONS";
-		private const string _ttlName = "TTL";
-		private const string _inMemoryName = "IN_MEMORY";
-		private const string _columnParserFormat = "(?<{0}>[^:]+):(?<{1}>.+)?";
-		private const string _keepDeletedCellsName = "KEEP_DELETED_CELLS";
-		private const string _minVersionsName = "MIN_VERSIONS";
-		private const string _dataBlockEncodingName = "DATA_BLOCK_ENCODING";
-		private const string _replicationScopeName = "REPLICATION_SCOPE";
-		private const string _encodeOnDiskName = "ENCODE_ON_DISK";
-		private static readonly Regex _columnParser = new Regex(string.Format(_columnParserFormat, _columnName, _qualifierName));
-		private readonly ISimpleValueConverter _valueConverter;
-		private readonly ICodec _codec;
+  /// <summary>
+  ///    Defines an XML implementation of <see cref="IMimeConverter" />.
+  /// </summary>
+  public class XmlMimeConverter : IMimeConverter
+  {
+    private const string _cellSetName = "CellSet";
+    private const string _rowName = "Row";
+    private const string _keyName = "key";
+    private const string _columnFormat = "{0}:{1}";
+    private const string _columnName = "column";
+    private const string _qualifierName = "qualifier";
+    private const string _timestampName = "timestamp";
+    private const string _cellName = "Cell";
+    private const string _tableSchemaName = "TableSchema";
+    private const string _nameName = "name";
+    private const string _isMetaName = "IS_META";
+    private const string _isRootName = "IS_ROOT";
+    private const string _columnSchemaName = "ColumnSchema";
+    private const string _blockSizeName = "BLOCKSIZE";
+    private const string _bloomFilterName = "BLOOMFILTER";
+    private const string _blockCacheName = "BLOCKCACHE";
+    private const string _compressionName = "COMPRESSION";
+    private const string _versionsName = "VERSIONS";
+    private const string _ttlName = "TTL";
+    private const string _inMemoryName = "IN_MEMORY";
+    private const string _columnParserFormat = "(?<{0}>[^:]+):(?<{1}>.+)?";
+    private const string _keepDeletedCellsName = "KEEP_DELETED_CELLS";
+    private const string _minVersionsName = "MIN_VERSIONS";
+    private const string _dataBlockEncodingName = "DATA_BLOCK_ENCODING";
+    private const string _replicationScopeName = "REPLICATION_SCOPE";
+    private const string _encodeOnDiskName = "ENCODE_ON_DISK";
+    private static readonly Regex _columnParser = new Regex(string.Format(_columnParserFormat, _columnName, _qualifierName));
+    private readonly ISimpleValueConverter _valueConverter;
+    private readonly ICodec _codec;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="XmlMimeConverter" /> class.
-		/// </summary>
-		/// <param name="valueConverter">The value converter.</param>
-		/// <param name="codec">The codec.</param>
-		public XmlMimeConverter(ISimpleValueConverter valueConverter, ICodec codec)
-		{
-			_valueConverter = valueConverter;
-			_codec = codec;
-		}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XmlMimeConverter" /> class.
+    /// </summary>
+    /// <param name="valueConverter">The value converter.</param>
+    /// <param name="codec">The codec.</param>
+    public XmlMimeConverter(ISimpleValueConverter valueConverter, ICodec codec)
+    {
+      _valueConverter = valueConverter;
+      _codec = codec;
+    }
 
-		/// <summary>
-		///    Gets the current MIME type.
-		/// </summary>
-		/// <value>
-		///    The MIME type.
-		/// </value>
-		public virtual string MimeType
-		{
-			get { return HBaseMimeTypes.Xml; }
-		}
+    /// <summary>
+    ///    Gets the current MIME type.
+    /// </summary>
+    /// <value>
+    ///    The MIME type.
+    /// </value>
+    public virtual string MimeType
+    {
+      get { return HBaseMimeTypes.Xml; }
+    }
 
-		/// <summary>
-		///    Converts the specified cells to text according to the current MIME type.
-		/// </summary>
-		/// <param name="cells">The cells.</param>
-		public virtual string ConvertCells(IEnumerable<Cell> cells)
-		{
-			IDictionary<string, Cell[]> rows = cells
-				.GroupBy(cell => cell.Identifier != null ? cell.Identifier.Row : string.Empty)
-				.ToDictionary(group => group.Key, group => group.ToArray());
+    /// <summary>
+    ///    Converts the specified cells to text according to the current MIME type.
+    /// </summary>
+    /// <param name="cells">The cells.</param>
+    public virtual string ConvertCells(IEnumerable<Cell> cells)
+    {
+      IDictionary<string, Cell[]> rows = cells
+        .GroupBy(cell => cell.Identifier != null ? cell.Identifier.Row : string.Empty)
+        .ToDictionary(group => group.Key, group => group.ToArray());
 
-			XElement xml = XmlForCellSet(rows.Keys.Select(row => XmlForRow(row, rows[row].Select(XmlForCell))));
+      XElement xml = XmlForCellSet(rows.Keys.Select(row => XmlForRow(row, rows[row].Select(XmlForCell))));
 
-			return xml.ToString();
-		}
+      return xml.ToString();
+    }
 
-		/// <summary>
-		///    Converts the specified cell to text according to the current MIME type.
-		/// </summary>
-		/// <param name="cell"></param>
-		public virtual string ConvertCell(Cell cell)
-		{
-			string row = cell.Identifier != null ? cell.Identifier.Row : null;
-			XElement xml = XmlForCellSet(new[]
-			{
-				XmlForRow(row, new[]
-				{
-					XmlForCell(cell)
-				})
-			});
+    /// <summary>
+    ///    Converts the specified cell to text according to the current MIME type.
+    /// </summary>
+    /// <param name="cell"></param>
+    public virtual string ConvertCell(Cell cell)
+    {
+      string row = cell.Identifier != null ? cell.Identifier.Row : null;
+      XElement xml = XmlForCellSet(new[]
+      {
+        XmlForRow(row, new[]
+        {
+          XmlForCell(cell)
+        })
+      });
 
-			return xml.ToString();
-		}
+      return xml.ToString();
+    }
 
-		/// <summary>
-		///    Converts the specified data to a set of cells according to the current MIME type.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		/// <param name="tableName">The HBase table name.</param>
-		public virtual IEnumerable<Cell> ConvertCells(string data, string tableName)
-		{
-			return string.IsNullOrEmpty(data)
-				? Enumerable.Empty<Cell>()
-				: XElement.Parse(data).Elements(_rowName)
-					.SelectMany(row => row.Elements(_cellName))
-					.Select(cell => CellForXml(cell, tableName));
-		}
+    /// <summary>
+    ///    Converts the specified data to a set of cells according to the current MIME type.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    /// <param name="tableName">The HBase table name.</param>
+    public virtual CellSet ConvertCells(string data, string tableName)
+    {
+      var set = new CellSet {Table = tableName};
 
-		/// <summary>
-		///    Converts the specified data to a table schema according to the current MIME type.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		public virtual TableSchema ConvertSchema(string data)
-		{
-			return string.IsNullOrEmpty(data) ? null : SchemaForXml(XElement.Parse(data));
-		}
+      if (!string.IsNullOrEmpty(data))
+      {
+        set.AddRange(
+          XElement.Parse(data).Elements(_rowName)
+            .SelectMany(row => row.Elements(_cellName))
+            .Select(cell => CellForXml(cell, tableName))
+          );
+      }
 
-		/// <summary>
-		///    Converts the specified table schema to text according to the current MIME type.
-		/// </summary>
-		/// <param name="schema">The schema.</param>
-		public virtual string ConvertSchema(TableSchema schema)
-		{
-			var xml = new XElement(_tableSchemaName,
-				new XAttribute(_nameName, schema.Name),
-				schema.Columns.Select(XmlForColumnSchema));
+      return set;
+    }
 
-			AddConditionalAttribute(xml, _isMetaName, schema.IsMeta);
-			AddConditionalAttribute(xml, _isRootName, schema.IsRoot);
+    /// <summary>
+    ///    Converts the specified data to a table schema according to the current MIME type.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    public virtual TableSchema ConvertSchema(string data)
+    {
+      return string.IsNullOrEmpty(data) ? null : SchemaForXml(XElement.Parse(data));
+    }
 
-			return xml.ToString();
-		}
+    /// <summary>
+    ///    Converts the specified table schema to text according to the current MIME type.
+    /// </summary>
+    /// <param name="schema">The schema.</param>
+    public virtual string ConvertSchema(TableSchema schema)
+    {
+      var xml = new XElement(_tableSchemaName,
+        new XAttribute(_nameName, schema.Name),
+        schema.Columns.Select(XmlForColumnSchema));
 
-		private TableSchema SchemaForXml(XElement xml)
-		{
-			var schema = new TableSchema
-			{
-				Name = xml.Attribute(_nameName).Value,
-				IsMeta = ParseAttributeValue(xml.Attribute(_isMetaName), bool.Parse),
-				IsRoot = ParseAttributeValue(xml.Attribute(_isRootName), bool.Parse),
-				Columns = new List<ColumnSchema>(xml.Elements(_columnSchemaName).Select(ColumnSchemaForXml))
-			};
+      AddConditionalAttribute(xml, _isMetaName, schema.IsMeta);
+      AddConditionalAttribute(xml, _isRootName, schema.IsRoot);
 
-			return schema;
-		}
+      return xml.ToString();
+    }
 
-		private XElement XmlForColumnSchema(ColumnSchema schema)
-		{
-			var xml = new XElement(_columnSchemaName, new XAttribute(_nameName, schema.Name));
-			AddConditionalAttribute(xml, _blockSizeName, schema.BlockSize);
-			AddConditionalAttribute(xml, _bloomFilterName, schema.BloomFilter, _valueConverter.ConvertBloomFilter);
-			AddConditionalAttribute(xml, _minVersionsName, schema.MinVersions);
-			AddConditionalAttribute(xml, _keepDeletedCellsName, schema.KeepDeletedCells);
-			AddConditionalAttribute(xml, _encodeOnDiskName, schema.EncodeOnDisk);
-			AddConditionalAttribute(xml, _blockCacheName, schema.BlockCache);
-			AddConditionalAttribute(xml, _compressionName, schema.Compression, _valueConverter.ConvertCompressionType);
-			AddConditionalAttribute(xml, _versionsName, schema.Versions);
-			AddConditionalAttribute(xml, _replicationScopeName, schema.ReplicationScope);
-			AddConditionalAttribute(xml, _ttlName, schema.TimeToLive);
-			AddConditionalAttribute(xml, _dataBlockEncodingName, schema.DataBlockEncoding, _valueConverter.ConvertDataBlockEncoding);
-			AddConditionalAttribute(xml, _inMemoryName, schema.InMemory);
-			return xml;
-		}
+    private TableSchema SchemaForXml(XElement xml)
+    {
+      var schema = new TableSchema
+      {
+        Name = xml.Attribute(_nameName).Value,
+        IsMeta = ParseAttributeValue(xml.Attribute(_isMetaName), bool.Parse),
+        IsRoot = ParseAttributeValue(xml.Attribute(_isRootName), bool.Parse),
+        Columns = new List<ColumnSchema>(xml.Elements(_columnSchemaName).Select(ColumnSchemaForXml))
+      };
 
-		private ColumnSchema ColumnSchemaForXml(XElement xml)
-		{
-			return new ColumnSchema
-			{
-				Name = xml.Attribute(_nameName).Value,
-				BlockSize = ParseAttributeValue(xml.Attribute(_blockSizeName), int.Parse),
-				BloomFilter = ParseAttributeValue(xml.Attribute(_bloomFilterName), _valueConverter.ConvertBloomFilter),
-				MinVersions = ParseAttributeValue(xml.Attribute(_minVersionsName), int.Parse),
-				KeepDeletedCells = ParseAttributeValue(xml.Attribute(_keepDeletedCellsName), bool.Parse),
-				EncodeOnDisk = ParseAttributeValue(xml.Attribute(_encodeOnDiskName), bool.Parse),
-				BlockCache = ParseAttributeValue(xml.Attribute(_blockCacheName), bool.Parse),
-				Compression = ParseAttributeValue(xml.Attribute(_compressionName), _valueConverter.ConvertCompressionType),
-				Versions = ParseAttributeValue(xml.Attribute(_versionsName), int.Parse),
-				ReplicationScope = ParseAttributeValue(xml.Attribute(_replicationScopeName), int.Parse),
-				TimeToLive = ParseAttributeValue(xml.Attribute(_ttlName), int.Parse),
-				DataBlockEncoding = ParseAttributeValue(xml.Attribute(_dataBlockEncodingName), _valueConverter.ConvertDataBlockEncoding),
-				InMemory = ParseAttributeValue(xml.Attribute(_inMemoryName), bool.Parse)
-			};
-		}
+      return schema;
+    }
 
-		private static TValue? ParseAttributeValue<TValue>(XAttribute attribute, Func<string, TValue> converter) where TValue : struct
-		{
-			return attribute == null ? (TValue?) null : converter(attribute.Value);
-		}
+    private XElement XmlForColumnSchema(ColumnSchema schema)
+    {
+      var xml = new XElement(_columnSchemaName, new XAttribute(_nameName, schema.Name));
+      AddConditionalAttribute(xml, _blockSizeName, schema.BlockSize);
+      AddConditionalAttribute(xml, _bloomFilterName, schema.BloomFilter, _valueConverter.ConvertBloomFilter);
+      AddConditionalAttribute(xml, _minVersionsName, schema.MinVersions);
+      AddConditionalAttribute(xml, _keepDeletedCellsName, schema.KeepDeletedCells);
+      AddConditionalAttribute(xml, _encodeOnDiskName, schema.EncodeOnDisk);
+      AddConditionalAttribute(xml, _blockCacheName, schema.BlockCache);
+      AddConditionalAttribute(xml, _compressionName, schema.Compression, _valueConverter.ConvertCompressionType);
+      AddConditionalAttribute(xml, _versionsName, schema.Versions);
+      AddConditionalAttribute(xml, _replicationScopeName, schema.ReplicationScope);
+      AddConditionalAttribute(xml, _ttlName, schema.TimeToLive);
+      AddConditionalAttribute(xml, _dataBlockEncodingName, schema.DataBlockEncoding, _valueConverter.ConvertDataBlockEncoding);
+      AddConditionalAttribute(xml, _inMemoryName, schema.InMemory);
+      return xml;
+    }
 
-		private static void AddConditionalAttribute<TValue>(XContainer xml, string name, TValue value, Func<TValue, string> valueExtractor = null)
-		{
-			if(ReferenceEquals(null, value))
-			{
-				return;
-			}
+    private ColumnSchema ColumnSchemaForXml(XElement xml)
+    {
+      return new ColumnSchema
+      {
+        Name = xml.Attribute(_nameName).Value,
+        BlockSize = ParseAttributeValue(xml.Attribute(_blockSizeName), int.Parse),
+        BloomFilter = ParseAttributeValue(xml.Attribute(_bloomFilterName), _valueConverter.ConvertBloomFilter),
+        MinVersions = ParseAttributeValue(xml.Attribute(_minVersionsName), int.Parse),
+        KeepDeletedCells = ParseAttributeValue(xml.Attribute(_keepDeletedCellsName), bool.Parse),
+        EncodeOnDisk = ParseAttributeValue(xml.Attribute(_encodeOnDiskName), bool.Parse),
+        BlockCache = ParseAttributeValue(xml.Attribute(_blockCacheName), bool.Parse),
+        Compression = ParseAttributeValue(xml.Attribute(_compressionName), _valueConverter.ConvertCompressionType),
+        Versions = ParseAttributeValue(xml.Attribute(_versionsName), int.Parse),
+        ReplicationScope = ParseAttributeValue(xml.Attribute(_replicationScopeName), int.Parse),
+        TimeToLive = ParseAttributeValue(xml.Attribute(_ttlName), int.Parse),
+        DataBlockEncoding = ParseAttributeValue(xml.Attribute(_dataBlockEncodingName), _valueConverter.ConvertDataBlockEncoding),
+        InMemory = ParseAttributeValue(xml.Attribute(_inMemoryName), bool.Parse)
+      };
+    }
 
-			valueExtractor = valueExtractor ?? (current => ((object)current) != null ? current.ToString() : null);
-			xml.Add(new XAttribute(name, valueExtractor(value)));
-		}
+    private static TValue? ParseAttributeValue<TValue>(XAttribute attribute, Func<string, TValue> converter) where TValue : struct
+    {
+      return attribute == null ? (TValue?) null : converter(attribute.Value);
+    }
 
-		private Cell CellForXml(XElement cell, string tableName)
-		{
-			XElement parent = cell.Parent;
-			if (parent == null)
-			{
-				return null;
-			}
+    private static void AddConditionalAttribute<TValue>(XContainer xml, string name, TValue value, Func<TValue, string> valueExtractor = null)
+    {
+      if (ReferenceEquals(null, value))
+      {
+        return;
+      }
 
-			XAttribute keyAttribute = parent.Attribute(_keyName);
-			if (keyAttribute == null)
-			{
-				return null;
-			}
+      valueExtractor = valueExtractor ?? (current => ((object) current) != null ? current.ToString() : null);
+      xml.Add(new XAttribute(name, valueExtractor(value)));
+    }
 
-			string row = _codec.Decode(keyAttribute.Value);
-			ParsedColumn parsedColumn = ParseColumn(cell);
+    private Cell CellForXml(XElement cell, string tableName)
+    {
+      XElement parent = cell.Parent;
+      if (parent == null)
+      {
+        return null;
+      }
 
-			XAttribute timestampAttribute = cell.Attribute(_timestampName);
-			long? timestamp = timestampAttribute != null ? timestampAttribute.Value.ToNullableInt64() : null;
-			string value = _codec.Decode(cell.Value);
+      XAttribute keyAttribute = parent.Attribute(_keyName);
+      if (keyAttribute == null)
+      {
+        return null;
+      }
 
-			return new Cell(new Identifier
-			{
-				Table = tableName,
-				Row = row,
-				CellDescriptor = new HBaseCellDescriptor
-				{
-					Column = parsedColumn.Column,
-					Qualifier = parsedColumn.Qualifier
-				},
-				Timestamp = timestamp
-			}, value);
-		}
+      string row = _codec.Decode(keyAttribute.Value);
+      ParsedColumn parsedColumn = ParseColumn(cell);
 
-		private ParsedColumn ParseColumn(XElement cell)
-		{
-			XAttribute columnAttribute = cell.Attribute(_columnName);
-			if (columnAttribute == null)
-			{
-				return new ParsedColumn();
-			}
+      XAttribute timestampAttribute = cell.Attribute(_timestampName);
+      long? timestamp = timestampAttribute != null ? timestampAttribute.Value.ToNullableInt64() : null;
+      string value = _codec.Decode(cell.Value);
 
-			string columnValue = _codec.Decode(columnAttribute.Value);
-			Match match = _columnParser.Match(columnValue);
-			if (!match.Success)
-			{
-				return new ParsedColumn();
-			}
+      return new Cell(new Identifier
+      {
+        Table = tableName,
+        Row = row,
+        CellDescriptor = new HBaseCellDescriptor
+        {
+          Column = parsedColumn.Column,
+          Qualifier = parsedColumn.Qualifier
+        },
+        Timestamp = timestamp
+      }, value);
+    }
 
-			string column = match.Groups[_columnName].Value;
-			string qualifier = match.Groups[_qualifierName].Value;
+    private ParsedColumn ParseColumn(XElement cell)
+    {
+      XAttribute columnAttribute = cell.Attribute(_columnName);
+      if (columnAttribute == null)
+      {
+        return new ParsedColumn();
+      }
 
-			return new ParsedColumn(column, qualifier);
-		}
+      string columnValue = _codec.Decode(columnAttribute.Value);
+      Match match = _columnParser.Match(columnValue);
+      if (!match.Success)
+      {
+        return new ParsedColumn();
+      }
 
-		private static XElement XmlForCellSet(IEnumerable<XElement> rows)
-		{
-			return new XElement(_cellSetName, rows);
-		}
+      string column = match.Groups[_columnName].Value;
+      string qualifier = match.Groups[_qualifierName].Value;
 
-		private  XElement XmlForRow(string row, IEnumerable<XElement> cells)
-		{
-			var xml = new XElement(_rowName, cells);
-			if (!string.IsNullOrEmpty(row))
-			{
-				xml.Add(new XAttribute(_keyName, _codec.Encode(row)));
-			}
-			return xml;
-		}
+      return new ParsedColumn(column, qualifier);
+    }
 
-		private XElement XmlForCell(Cell cell)
-		{
-			Identifier identifier = cell.Identifier;
-			HBaseCellDescriptor cellDescriptor = identifier != null ? identifier.CellDescriptor : null;
-			string column = cellDescriptor != null ? cellDescriptor.Column : null;
-			string qualifier = cellDescriptor != null ? cellDescriptor.Qualifier : null;
-			long? timestamp = identifier != null ? identifier.Timestamp : null;
+    private static XElement XmlForCellSet(IEnumerable<XElement> rows)
+    {
+      return new XElement(_cellSetName, rows);
+    }
 
-			var cellXml = new XElement(_cellName, new XText(_codec.Encode(cell.Value)));
+    private XElement XmlForRow(string row, IEnumerable<XElement> cells)
+    {
+      var xml = new XElement(_rowName, cells);
+      if (!string.IsNullOrEmpty(row))
+      {
+        xml.Add(new XAttribute(_keyName, _codec.Encode(row)));
+      }
+      return xml;
+    }
 
-			if (!string.IsNullOrEmpty(column))
-			{
-				cellXml.Add(new XAttribute(_columnName, _codec.Encode(string.Format(_columnFormat, column, qualifier))));
-			}
-			if (timestamp.HasValue)
-			{
-				cellXml.Add(new XAttribute(_timestampName, timestamp.Value));
-			}
+    private XElement XmlForCell(Cell cell)
+    {
+      Identifier identifier = cell.Identifier;
+      HBaseCellDescriptor cellDescriptor = identifier != null ? identifier.CellDescriptor : null;
+      string column = cellDescriptor != null ? cellDescriptor.Column : null;
+      string qualifier = cellDescriptor != null ? cellDescriptor.Qualifier : null;
+      long? timestamp = identifier != null ? identifier.Timestamp : null;
 
-			return cellXml;
-		}
+      var cellXml = new XElement(_cellName, new XText(_codec.Encode(cell.Value)));
 
-		private struct ParsedColumn
-		{
-			public ParsedColumn(string column, string qualifier) : this()
-			{
-				Column = column;
-				Qualifier = qualifier;
-			}
+      if (!string.IsNullOrEmpty(column))
+      {
+        cellXml.Add(new XAttribute(_columnName, _codec.Encode(string.Format(_columnFormat, column, qualifier))));
+      }
+      if (timestamp.HasValue)
+      {
+        cellXml.Add(new XAttribute(_timestampName, timestamp.Value));
+      }
 
-			public string Column { get; private set; }
-			public string Qualifier { get; private set; }
-		}
-	}
+      return cellXml;
+    }
+
+    private struct ParsedColumn
+    {
+      public ParsedColumn(string column, string qualifier) : this()
+      {
+        Column = column;
+        Qualifier = qualifier;
+      }
+
+      public string Column { get; private set; }
+      public string Qualifier { get; private set; }
+    }
+  }
 }
