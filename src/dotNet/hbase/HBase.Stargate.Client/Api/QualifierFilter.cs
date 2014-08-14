@@ -21,16 +21,16 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used to filter based on the column qualifier.
-	/// </summary>
-	public class QualifierFilter : ComparisonScannerFilterBase
-	{
-		/// <summary>
-		///    Initializes a new instance of the <see cref="QualifierFilter" /> class.
-		/// </summary>
-		/// <param name="columnQualifier">The column qualifier.</param>
-		/// <param name="comparison">The comparison.</param>
-		public QualifierFilter(string columnQualifier, FilterComparisons comparison) : base(columnQualifier, comparison) {}
-	}
+  /// <summary>
+  ///    This filter is used to filter based on the column qualifier.
+  /// </summary>
+  public class QualifierFilter : ComparisonScannerFilterBase
+  {
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="QualifierFilter" /> class.
+    /// </summary>
+    /// <param name="columnQualifier">The column qualifier.</param>
+    /// <param name="comparison">The comparison.</param>
+    public QualifierFilter(string columnQualifier, FilterComparisons comparison) : base(columnQualifier, comparison) {}
+  }
 }

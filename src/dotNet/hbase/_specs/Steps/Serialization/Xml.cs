@@ -25,33 +25,33 @@ using _specs.Models;
 
 namespace _specs.Steps.Serialization
 {
-	[Binding]
-	public class Xml
-	{
-		private readonly HBaseContext _hBase;
-		private readonly ResourceContext _resources;
-		private readonly ContentConverter _converter;
+  [Binding]
+  public class Xml
+  {
+    private readonly HBaseContext _hBase;
+    private readonly ResourceContext _resources;
+    private readonly ContentConverter _converter;
 
-		public Xml(HBaseContext hBase, ResourceContext resources, ContentConverter converter)
-		{
-			_hBase = hBase;
-			_resources = resources;
-			_converter = converter;
-		}
+    public Xml(HBaseContext hBase, ResourceContext resources, ContentConverter converter)
+    {
+      _hBase = hBase;
+      _resources = resources;
+      _converter = converter;
+    }
 
-		[Given(@"I have everything I need to test a content converter for XML")]
-		public void SetConversionToXml()
-		{
-			_converter.SetConversionToXml();
-		}
+    [Given(@"I have everything I need to test a content converter for XML")]
+    public void SetConversionToXml()
+    {
+      _converter.SetConversionToXml();
+    }
 
-		[Then(@"my raw XML content should be equivalent to the resource called ""(.*)""")]
-		public void CompareRawXmlToResource(string resourceName)
-		{
-			var left = XElement.Parse(_hBase.RawContent);
-			var right = XElement.Parse(_resources.GetString(resourceName));
+    [Then(@"my raw XML content should be equivalent to the resource called ""(.*)""")]
+    public void CompareRawXmlToResource(string resourceName)
+    {
+      var left = XElement.Parse(_hBase.RawContent);
+      var right = XElement.Parse(_resources.GetString(resourceName));
 
-			left.ToString().Should().Be(right.ToString());
-		}
-	}
+      left.ToString().Should().Be(right.ToString());
+    }
+  }
 }

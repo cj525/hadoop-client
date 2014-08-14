@@ -21,23 +21,23 @@
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Defines a codec for encryption and decryption in HBase.
-	/// </summary>
-	public interface ICodec
-	{
-		/// <summary>
-		///    Encodes the specified text.
-		/// </summary>
-		/// <param name="text">The text.</param>
-		/// <returns></returns>
-		string Encode(string text);
+  /// <summary>
+  ///    Defines a codec for encryption and decryption in HBase.
+  /// </summary>
+  public interface ICodec
+  {
+    /// <summary>
+    ///    Encodes the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns></returns>
+    string Encode(string text);
 
-		/// <summary>
-		///    Decodes the specified text.
-		/// </summary>
-		/// <param name="text">The text.</param>
-		/// <returns></returns>
-		string Decode(string text);
-	}
+    /// <summary>
+    ///    Decodes the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns></returns>
+    string Decode(string text);
+  }
 }

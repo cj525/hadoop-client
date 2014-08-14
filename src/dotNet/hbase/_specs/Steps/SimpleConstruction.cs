@@ -26,46 +26,46 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class SimpleConstruction
-	{
-		private readonly HBaseContext _hBase;
-		private readonly ResourceContext _resources;
+  [Binding]
+  public class SimpleConstruction
+  {
+    private readonly HBaseContext _hBase;
+    private readonly ResourceContext _resources;
 
-		public SimpleConstruction(HBaseContext hBase, ResourceContext resources)
-		{
-			_hBase = hBase;
-			_resources = resources;
-		}
+    public SimpleConstruction(HBaseContext hBase, ResourceContext resources)
+    {
+      _hBase = hBase;
+      _resources = resources;
+    }
 
-		[Given(@"I have created a set of cells")]
-		public void CreateCellSet()
-		{
-			_hBase.CellSet = new CellSet();
-		}
+    [Given(@"I have created a set of cells")]
+    public void CreateCellSet()
+    {
+      _hBase.CellSet = new CellSet();
+    }
 
-		[Given(@"I have created a set of cells for the ""(.+)"" table")]
-		public void CreateCellSet(string table)
-		{
-			_hBase.CellSet = new CellSet {Table = table};
-		}
+    [Given(@"I have created a set of cells for the ""(.+)"" table")]
+    public void CreateCellSet(string table)
+    {
+      _hBase.CellSet = new CellSet {Table = table};
+    }
 
-		[Given(@"I have added (?:a cell|cells) to my set with the following properties:")]
-		public void AddToCellSet(Table values)
-		{
-			_hBase.CellSet.AddRange(values.CreateSet<TestCell>().Select(cell => (Cell) cell));
-		}
+    [Given(@"I have added (?:a cell|cells) to my set with the following properties:")]
+    public void AddToCellSet(Table values)
+    {
+      _hBase.CellSet.AddRange(values.CreateSet<TestCell>().Select(cell => (Cell) cell));
+    }
 
-		[Given(@"I have raw content equal to the resource called ""(.*)""")]
-		public void SetRawContentToResource(string resourceName)
-		{
-			_hBase.RawContent = _resources.GetString(resourceName);
-		}
+    [Given(@"I have raw content equal to the resource called ""(.*)""")]
+    public void SetRawContentToResource(string resourceName)
+    {
+      _hBase.RawContent = _resources.GetString(resourceName);
+    }
 
-		[Given(@"I have a cell with a (.+), (.+), (.*), (.*), and (.*)")]
-		public void CreateCell(string row, string column, string qualifier, string timestamp, string value)
-		{
-			_hBase.Cell = new TestCell(row, column, qualifier, timestamp, value);
-		}
-	}
+    [Given(@"I have a cell with a (.+), (.+), (.*), (.*), and (.*)")]
+    public void CreateCell(string row, string column, string qualifier, string timestamp, string value)
+    {
+      _hBase.Cell = new TestCell(row, column, qualifier, timestamp, value);
+    }
+  }
 }

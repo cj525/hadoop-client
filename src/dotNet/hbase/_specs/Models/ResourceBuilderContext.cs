@@ -17,8 +17,8 @@
 
 namespace _specs.Models
 {
-	public class ResourceBuilderContext
-	{
-		public string ResourceUri { get; set; }
-	}
+  public class ResourceBuilderContext
+  {
+    public string ResourceUri { get; set; }
+  }
 }

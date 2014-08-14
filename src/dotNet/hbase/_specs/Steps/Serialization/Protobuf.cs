@@ -21,29 +21,29 @@ using _specs.Models;
 
 namespace _specs.Steps.Serialization
 {
-	[Binding]
-	public class Protobuf
-	{
-		private readonly ContentConverter _converter;
+  [Binding]
+  public class Protobuf
+  {
+    private readonly ContentConverter _converter;
 
-		public Protobuf(ContentConverter converter)
-		{
-			_converter = converter;
-		}
+    public Protobuf(ContentConverter converter)
+    {
+      _converter = converter;
+    }
 
-		[Then(@"my raw protobuf content should be equivalent to the resource called ""(.*)""")]
-		public void CompareProtobufToResource(string resourceName)
-		{
-			ScenarioContext.Current.Pending();
-		}
+    [Then(@"my raw protobuf content should be equivalent to the resource called ""(.*)""")]
+    public void CompareProtobufToResource(string resourceName)
+    {
+      ScenarioContext.Current.Pending();
+    }
 
-		[Given(@"I have everything I need to test a content converter for protobuf")]
-		public void SetConversionToProtobuf()
-		{
-			_converter.SetConversionToProtobuf();
+    [Given(@"I have everything I need to test a content converter for protobuf")]
+    public void SetConversionToProtobuf()
+    {
+      _converter.SetConversionToProtobuf();
 
-			//TODO: remove the next line once protobuf is plugged in
-			ScenarioContext.Current.Pending();
-		}
-	}
+      //TODO: remove the next line once protobuf is plugged in
+      ScenarioContext.Current.Pending();
+    }
+  }
 }

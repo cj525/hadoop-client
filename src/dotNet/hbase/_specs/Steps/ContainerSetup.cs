@@ -24,22 +24,22 @@ using TechTalk.SpecFlow;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class ContainerSetup
-	{
-		private readonly IObjectContainer _container;
+  [Binding]
+  public class ContainerSetup
+  {
+    private readonly IObjectContainer _container;
 
-		public ContainerSetup(IObjectContainer container)
-		{
-			_container = container;
-		}
+    public ContainerSetup(IObjectContainer container)
+    {
+      _container = container;
+    }
 
-		[BeforeScenario]
-		public void InitializeMoqContainer()
-		{
-			var container = new AutofacMoqContainer();
-			_container.RegisterInstanceAs(container, typeof (IMoqContainer));
-			_container.RegisterInstanceAs(container, typeof (IAutofacMoqContainer));
-		}
-	}
+    [BeforeScenario]
+    public void InitializeMoqContainer()
+    {
+      var container = new AutofacMoqContainer();
+      _container.RegisterInstanceAs(container, typeof (IMoqContainer));
+      _container.RegisterInstanceAs(container, typeof (IAutofacMoqContainer));
+    }
+  }
 }

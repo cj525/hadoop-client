@@ -23,47 +23,47 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Defines a converter for simple HBase-related values.
-	/// </summary>
-	public interface ISimpleValueConverter
-	{
-		/// <summary>
-		///    Converts the bloom filter.
-		/// </summary>
-		/// <param name="filter">The filter.</param>
-		/// <returns></returns>
-		string ConvertBloomFilter(BloomFilters? filter);
+  /// <summary>
+  ///    Defines a converter for simple HBase-related values.
+  /// </summary>
+  public interface ISimpleValueConverter
+  {
+    /// <summary>
+    ///    Converts the bloom filter.
+    /// </summary>
+    /// <param name="filter">The filter.</param>
+    /// <returns></returns>
+    string ConvertBloomFilter(BloomFilters? filter);
 
-		/// <summary>
-		///    Converts the bloom filter.
-		/// </summary>
-		/// <param name="filter">The filter.</param>
-		/// <returns></returns>
-		BloomFilters ConvertBloomFilter(string filter);
+    /// <summary>
+    ///    Converts the bloom filter.
+    /// </summary>
+    /// <param name="filter">The filter.</param>
+    /// <returns></returns>
+    BloomFilters ConvertBloomFilter(string filter);
 
-		/// <summary>
-		///    Converts the type of the compression.
-		/// </summary>
-		/// <param name="compressionType">Type of the compression.</param>
-		string ConvertCompressionType(CompressionTypes? compressionType);
+    /// <summary>
+    ///    Converts the type of the compression.
+    /// </summary>
+    /// <param name="compressionType">Type of the compression.</param>
+    string ConvertCompressionType(CompressionTypes? compressionType);
 
-		/// <summary>
-		///    Converts the type of the compression.
-		/// </summary>
-		/// <param name="compressionType">Type of the compression.</param>
-		CompressionTypes ConvertCompressionType(string compressionType);
+    /// <summary>
+    ///    Converts the type of the compression.
+    /// </summary>
+    /// <param name="compressionType">Type of the compression.</param>
+    CompressionTypes ConvertCompressionType(string compressionType);
 
-		/// <summary>
-		///    Converts the data block encoding.
-		/// </summary>
-		/// <param name="encoding">The encoding.</param>
-		string ConvertDataBlockEncoding(DataBlockEncodings? encoding);
+    /// <summary>
+    ///    Converts the data block encoding.
+    /// </summary>
+    /// <param name="encoding">The encoding.</param>
+    string ConvertDataBlockEncoding(DataBlockEncodings? encoding);
 
-		/// <summary>
-		///    Converts the data block encoding.
-		/// </summary>
-		/// <param name="encoding">The encoding.</param>
-		DataBlockEncodings ConvertDataBlockEncoding(string encoding);
-	}
+    /// <summary>
+    ///    Converts the data block encoding.
+    /// </summary>
+    /// <param name="encoding">The encoding.</param>
+    DataBlockEncodings ConvertDataBlockEncoding(string encoding);
+  }
 }

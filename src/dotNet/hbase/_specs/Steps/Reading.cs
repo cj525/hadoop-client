@@ -29,47 +29,47 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class Reading
-	{
-		private readonly HBaseContext _context;
+  [Binding]
+  public class Reading
+  {
+    private readonly HBaseContext _context;
 
-		public Reading(HBaseContext context)
-		{
-			_context = context;
-		}
+    public Reading(HBaseContext context)
+    {
+      _context = context;
+    }
 
-		[When(@"I read a single value using my identifier")]
-		public void ReadSingleValue()
-		{
-			_context.CellValue = _context.Stargate.ReadValue(_context.Identifier);
-		}
+    [When(@"I read a single value using my identifier")]
+    public void ReadSingleValue()
+    {
+      _context.CellValue = _context.Stargate.ReadValue(_context.Identifier);
+    }
 
-		[When(@"I read a row using my query")]
-		public void ReadRow()
-		{
-			_context.CellSet = _context.Stargate.FindCells(_context.Query);
-		}
+    [When(@"I read a row using my query")]
+    public void ReadRow()
+    {
+      _context.CellSet = _context.Stargate.FindCells(_context.Query);
+    }
 
-		[When(@"I read all cells from the ""(.*?)"" table")]
-		public void ReadTable(string tableName)
-		{
-			_context.CellSet = _context.Stargate.FindCells(new CellQuery { Table = tableName });
-		}
-		
-		[When(@"I read a result from the scanner")]
-		public void ReadScanner()
-		{
-			bool success = _context.Scanner.MoveNext();
-			success.Should().Be(true);
+    [When(@"I read all cells from the ""(.*?)"" table")]
+    public void ReadTable(string tableName)
+    {
+      _context.CellSet = _context.Stargate.FindCells(new CellQuery { Table = tableName });
+    }
+    
+    [When(@"I read a result from the scanner")]
+    public void ReadScanner()
+    {
+      bool success = _context.Scanner.MoveNext();
+      success.Should().Be(true);
 
-			_context.CellSet = _context.Scanner.Current;
-		}
+      _context.CellSet = _context.Scanner.Current;
+    }
 
-		[When(@"I read the names of all tables")]
-		public void ReadTableNames()
-		{
-			_context.TableNames = _context.Stargate.GetTableNames();
-		}
-	}
+    [When(@"I read the names of all tables")]
+    public void ReadTableNames()
+    {
+      _context.TableNames = _context.Stargate.GetTableNames();
+    }
+  }
 }

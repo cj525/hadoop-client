@@ -39,82 +39,82 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class ClientInteraction
-	{
-		private readonly IMoqContainer _container;
-		private readonly HBaseContext _hBase;
-		private readonly RestContext _rest;
+  [Binding]
+  public class ClientInteraction
+  {
+    private readonly IMoqContainer _container;
+    private readonly HBaseContext _hBase;
+    private readonly RestContext _rest;
 
-		public ClientInteraction(HBaseContext hBase, RestContext rest, IMoqContainer container)
-		{
-			_hBase = hBase;
-			_rest = rest;
-			_container = container;
-		}
+    public ClientInteraction(HBaseContext hBase, RestContext rest, IMoqContainer container)
+    {
+      _hBase = hBase;
+      _rest = rest;
+      _container = container;
+    }
 
-		[Given(@"I have everything I need to test a disconnected HBase client, with the following options:")]
-		public void SetupClient(Table options)
-		{
-			Mock<IRestSharpFactory> factoryMock = _container.Mock<IRestSharpFactory>();
+    [Given(@"I have everything I need to test a disconnected HBase client, with the following options:")]
+    public void SetupClient(Table options)
+    {
+      Mock<IRestSharpFactory> factoryMock = _container.Mock<IRestSharpFactory>();
 
-			factoryMock.Setup(factory => factory.CreateRequest(It.IsAny<string>(), It.IsAny<Method>()))
-				.Returns<string, Method>((resource, method) => (_rest.Request = new RestRequest(resource, method)));
+      factoryMock.Setup(factory => factory.CreateRequest(It.IsAny<string>(), It.IsAny<Method>()))
+        .Returns<string, Method>((resource, method) => (_rest.Request = new RestRequest(resource, method)));
 
-			IRestResponse response = _container.Mock<IRestResponse>().Object;
+      IRestResponse response = _container.Mock<IRestResponse>().Object;
 
-			var clientMock = _container.Mock<IRestClient>(MockBehavior.Strict);
+      var clientMock = _container.Mock<IRestClient>(MockBehavior.Strict);
 
-			clientMock.Setup(client => client.Execute(It.IsAny<IRestRequest>()))
-				.Returns(() => response);
+      clientMock.Setup(client => client.Execute(It.IsAny<IRestRequest>()))
+        .Returns(() => response);
 
-			clientMock.Setup(client => client.ExecuteAsync(It.IsAny<IRestRequest>(), It.IsAny<Action<IRestResponse, RestRequestAsyncHandle>>()))
-				.Returns<IRestRequest, Action<IRestResponse, RestRequestAsyncHandle>>((request, action) =>
-				{
-					var handle = new RestRequestAsyncHandle();
-					action(response, handle);
-					return handle;
-				});
+      clientMock.Setup(client => client.ExecuteAsync(It.IsAny<IRestRequest>(), It.IsAny<Action<IRestResponse, RestRequestAsyncHandle>>()))
+        .Returns<IRestRequest, Action<IRestResponse, RestRequestAsyncHandle>>((request, action) =>
+        {
+          var handle = new RestRequestAsyncHandle();
+          action(response, handle);
+          return handle;
+        });
 
-			factoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>()))
-				.Returns(() => clientMock.Object);
+      factoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>()))
+        .Returns(() => clientMock.Object);
 
-			_container.Update<IStargateOptions>(options.CreateInstance<StargateOptions>());
+      _container.Update<IStargateOptions>(options.CreateInstance<StargateOptions>());
 
-			_container.Update<IMimeConverter, XmlMimeConverter>();
-			_container.Update<IMimeConverterFactory, MimeConverterFactory>();
-			_container.Update<IResourceBuilder, ResourceBuilder>();
-			_container.Update<ISimpleValueConverter, SimpleValueConverter>();
-			_container.Update<ICodec, Base64Codec>();
-			_container.Update<IErrorProvider, ErrorProvider>();
-			_container.Update<IStargate, Stargate>();
-		}
+      _container.Update<IMimeConverter, XmlMimeConverter>();
+      _container.Update<IMimeConverterFactory, MimeConverterFactory>();
+      _container.Update<IResourceBuilder, ResourceBuilder>();
+      _container.Update<ISimpleValueConverter, SimpleValueConverter>();
+      _container.Update<ICodec, Base64Codec>();
+      _container.Update<IErrorProvider, ErrorProvider>();
+      _container.Update<IStargate, Stargate>();
+    }
 
-		[Given(@"I have an HBase client")]
-		public void CreateClient()
-		{
-			_hBase.Stargate = _container.Create<IStargate>();
-		}
+    [Given(@"I have an HBase client")]
+    public void CreateClient()
+    {
+      _hBase.Stargate = _container.Create<IStargate>();
+    }
 
-		[Given(@"I have a cell query consisting of a (.*), a (.*), a (.*), a (.*), a (.*) timestamp, a (.*) timestamp, and a (.*) number of versions")]
-		public void SetQuery(string table, string row, string column, string qualifier, string beginTimestamp, string endTimestamp, string maxVersions)
-		{
-			_hBase.Query = new CellQuery
-			{
-				Table = table,
-				Row = row,
-				Cells = new[]
-				{
-					new HBaseCellDescriptor
-					{
-						Column = column,
-						Qualifier = qualifier
-					}
-				},
-				BeginTimestamp = beginTimestamp.ToNullableInt64(),
-				EndTimestamp = endTimestamp.ToNullableInt64(),
-				MaxVersions = maxVersions.ToNullableInt32()
-			};
-		}
-	}
+    [Given(@"I have a cell query consisting of a (.*), a (.*), a (.*), a (.*), a (.*) timestamp, a (.*) timestamp, and a (.*) number of versions")]
+    public void SetQuery(string table, string row, string column, string qualifier, string beginTimestamp, string endTimestamp, string maxVersions)
+    {
+      _hBase.Query = new CellQuery
+      {
+        Table = table,
+        Row = row,
+        Cells = new[]
+        {
+          new HBaseCellDescriptor
+          {
+            Column = column,
+            Qualifier = qualifier
+          }
+        },
+        BeginTimestamp = beginTimestamp.ToNullableInt64(),
+        EndTimestamp = endTimestamp.ToNullableInt64(),
+        MaxVersions = maxVersions.ToNullableInt32()
+      };
+    }
+  }
 }

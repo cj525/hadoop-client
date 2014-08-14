@@ -26,54 +26,54 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class ErrorChecking
-	{
-		private readonly ErrorContext _errors;
-		private readonly ResourceContext _resources;
+  [Binding]
+  public class ErrorChecking
+  {
+    private readonly ErrorContext _errors;
+    private readonly ResourceContext _resources;
 
-		public ErrorChecking(ErrorContext errors, ResourceContext resources)
-		{
-			_errors = errors;
-			_resources = resources;
-		}
+    public ErrorChecking(ErrorContext errors, ResourceContext resources)
+    {
+      _errors = errors;
+      _resources = resources;
+    }
 
-		[Then(@"the operation (should|should not) have succeeded")]
-		public void CheckExceptionExists(bool success)
-		{
-			if (success) _errors.CaughtErrors.Should().BeEmpty();
-			else _errors.CaughtErrors.Should().NotBeEmpty();
+    [Then(@"the operation (should|should not) have succeeded")]
+    public void CheckExceptionExists(bool success)
+    {
+      if (success) _errors.CaughtErrors.Should().BeEmpty();
+      else _errors.CaughtErrors.Should().NotBeEmpty();
 
-			_errors.OutcomeViewedAsSuccessful = success;
-		}
+      _errors.OutcomeViewedAsSuccessful = success;
+    }
 
-		[Then(@"if there was an exception, it should have been the expected (.*) type")]
-		public void CheckExceptionType(string type)
-		{
-			if (_errors.CaughtErrors == null || !_errors.HasErrors) return;
+    [Then(@"if there was an exception, it should have been the expected (.*) type")]
+    public void CheckExceptionType(string type)
+    {
+      if (_errors.CaughtErrors == null || !_errors.HasErrors) return;
 
-			_errors.CaughtErrors.Should().HaveCount(1);
-			_errors.CaughtErrors.ElementAt(0).GetType().Name.Should().Be(type);
-		}
+      _errors.CaughtErrors.Should().HaveCount(1);
+      _errors.CaughtErrors.ElementAt(0).GetType().Name.Should().Be(type);
+    }
 
-		[Then(@"if there was an exception, it should have had the expected exception (.*)")]
-		public void CheckExceptionMessage(string messageResource)
-		{
-			if (_errors.CaughtErrors == null || !_errors.HasErrors) return;
+    [Then(@"if there was an exception, it should have had the expected exception (.*)")]
+    public void CheckExceptionMessage(string messageResource)
+    {
+      if (_errors.CaughtErrors == null || !_errors.HasErrors) return;
 
-			_errors.CaughtErrors.Should().HaveCount(1);
-			_errors.CaughtErrors.ElementAt(0).Message.Should().Be(_resources.GetString(messageResource));
-		}
+      _errors.CaughtErrors.Should().HaveCount(1);
+      _errors.CaughtErrors.ElementAt(0).Message.Should().Be(_resources.GetString(messageResource));
+    }
 
-		[Then(@"there should have been an? (.*)Exception with a message equivalent to the resource called ""(.+)""")]
-		public void CheckAssumedExceptionType(string modifier, string resource)
-		{
-			string expectedTypeName = string.Format("{0}Exception", modifier);
-			_errors.HasErrors.Should().BeTrue("I expected an error to be thrown");
-			_errors.CaughtErrors.Count().Should().Be(1);
-			Exception exception = _errors.CaughtErrors.Single();
-			exception.GetType().Name.Should().Be(expectedTypeName);
-			exception.Message.Should().Be(_resources.GetString(resource));
-		}
-	}
+    [Then(@"there should have been an? (.*)Exception with a message equivalent to the resource called ""(.+)""")]
+    public void CheckAssumedExceptionType(string modifier, string resource)
+    {
+      string expectedTypeName = string.Format("{0}Exception", modifier);
+      _errors.HasErrors.Should().BeTrue("I expected an error to be thrown");
+      _errors.CaughtErrors.Count().Should().Be(1);
+      Exception exception = _errors.CaughtErrors.Single();
+      exception.GetType().Name.Should().Be(expectedTypeName);
+      exception.Message.Should().Be(_resources.GetString(resource));
+    }
+  }
 }

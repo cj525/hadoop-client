@@ -39,132 +39,132 @@ using _specs.Models;
 
 namespace _specs.Steps
 {
-	[Binding]
-	public class RequestVerification
-	{
-		private readonly IMimeConverterFactory _converterFactory;
-		private readonly RestContext _rest;
-		private readonly ErrorContext _errors;
+  [Binding]
+  public class RequestVerification
+  {
+    private readonly IMimeConverterFactory _converterFactory;
+    private readonly RestContext _rest;
+    private readonly ErrorContext _errors;
 
-		public RequestVerification(RestContext rest, ErrorContext errors, IMoqContainer container)
-		{
-			_rest = rest;
-			_errors = errors;
-			_converterFactory = container.Create<IMimeConverterFactory>();
-		}
+    public RequestVerification(RestContext rest, ErrorContext errors, IMoqContainer container)
+    {
+      _rest = rest;
+      _errors = errors;
+      _converterFactory = container.Create<IMimeConverterFactory>();
+    }
 
-		[Then(@"a REST request should have been submitted with the following values:")]
-		public void CheckRequest(Table values)
-		{
-			AssertRequestValuesMatch(_rest.Request, values.CreateInstance<ExpectedRequestProperties>());
-		}
+    [Then(@"a REST request should have been submitted with the following values:")]
+    public void CheckRequest(Table values)
+    {
+      AssertRequestValuesMatch(_rest.Request, values.CreateInstance<ExpectedRequestProperties>());
+    }
 
-		[Then(@"a REST request for schema updates should have been submitted with the following values:")]
-		public void CheckSchemaUpdateRequest(Table values)
-		{
-			CheckSchemaUpdateProperties(values.CreateInstance<ExpectedSchemaUpdateRequestProperties>());
-		}
+    [Then(@"a REST request for schema updates should have been submitted with the following values:")]
+    public void CheckSchemaUpdateRequest(Table values)
+    {
+      CheckSchemaUpdateProperties(values.CreateInstance<ExpectedSchemaUpdateRequestProperties>());
+    }
 
-		[Then(@"if the operation succeeded, a REST request for schema updates should have been submitted with the correct (.*), (.*), (.*), and (.*)")]
-		public void CheckSchemaUpdateRequest(Method method, string resource, string table, string column)
-		{
-			if (!_errors.OutcomeViewedAsSuccessful) return;
+    [Then(@"if the operation succeeded, a REST request for schema updates should have been submitted with the correct (.*), (.*), (.*), and (.*)")]
+    public void CheckSchemaUpdateRequest(Method method, string resource, string table, string column)
+    {
+      if (!_errors.OutcomeViewedAsSuccessful) return;
 
-			CheckSchemaUpdateProperties(new ExpectedSchemaUpdateRequestProperties
-			{
-				Column = column,
-				Method = method,
-				Resource = resource,
-				Table = table
-			});
-		}
+      CheckSchemaUpdateProperties(new ExpectedSchemaUpdateRequestProperties
+      {
+        Column = column,
+        Method = method,
+        Resource = resource,
+        Table = table
+      });
+    }
 
-		[Then(@"a REST request should have been submitted with the correct (.+) and (.+)")]
-		public void CheckRequest(Method method, string resource)
-		{
-			AssertRequestValuesMatch(_rest.Request, new ExpectedRequestProperties {Method = method, Resource = resource});
-		}
+    [Then(@"a REST request should have been submitted with the correct (.+) and (.+)")]
+    public void CheckRequest(Method method, string resource)
+    {
+      AssertRequestValuesMatch(_rest.Request, new ExpectedRequestProperties {Method = method, Resource = resource});
+    }
 
-		[Then(@"the REST request should have contained (.*) cells?")]
-		public void CheckRequestCellCount(int count)
-		{
-			IEnumerable<Cell> row = GetRowFromRequest();
-			row.Should().HaveCount(count);
-		}
+    [Then(@"the REST request should have contained (.*) cells?")]
+    public void CheckRequestCellCount(int count)
+    {
+      IEnumerable<Cell> row = GetRowFromRequest();
+      row.Should().HaveCount(count);
+    }
 
-		[Then(@"one of the cells in the REST request should have had the value ""(.*)""")]
-		public void CheckAnyCellValue(string value)
-		{
-			IEnumerable<Cell> row = GetRowFromRequest();
-			row.SingleOrDefault(cell => cell.Value == value).Should().NotBeNull();
-		}
+    [Then(@"one of the cells in the REST request should have had the value ""(.*)""")]
+    public void CheckAnyCellValue(string value)
+    {
+      IEnumerable<Cell> row = GetRowFromRequest();
+      row.SingleOrDefault(cell => cell.Value == value).Should().NotBeNull();
+    }
 
-		[Then(@"(?:one of )?the cells in the REST request should have had the following values:")]
-		public void CheckAnyCellValues(Table values)
-		{
-			values.CompareToSet(GetRowFromRequest().Select(cell => (TestCell) cell));
-		}
+    [Then(@"(?:one of )?the cells in the REST request should have had the following values:")]
+    public void CheckAnyCellValues(Table values)
+    {
+      values.CompareToSet(GetRowFromRequest().Select(cell => (TestCell) cell));
+    }
 
-		private IEnumerable<Cell> GetRowFromRequest()
-		{
-			string content = _rest.Request.Parameters
-				.Where(cell => cell.Type == ParameterType.RequestBody)
-				.Select(cell => cell.Value.ToString())
-				.FirstOrDefault();
-			IEnumerable<Cell> row = CreateRequestConverter(_rest.Request, _converterFactory).ConvertCells(content, string.Empty).ToArray();
-			row.Should().NotBeNull();
-			return row;
-		}
+    private IEnumerable<Cell> GetRowFromRequest()
+    {
+      string content = _rest.Request.Parameters
+        .Where(cell => cell.Type == ParameterType.RequestBody)
+        .Select(cell => cell.Value.ToString())
+        .FirstOrDefault();
+      IEnumerable<Cell> row = CreateRequestConverter(_rest.Request, _converterFactory).ConvertCells(content, string.Empty).ToArray();
+      row.Should().NotBeNull();
+      return row;
+    }
 
-		private static IMimeConverter CreateRequestConverter(IRestRequest request, IMimeConverterFactory mimeConverterFactory)
-		{
-			string mimeType = request.Parameters
-				.Where(parameter => parameter.Type == ParameterType.HttpHeader && IsAcceptOrContentType(parameter.Name))
-				.Select(parameter => parameter.Value.ToString())
-				.FirstOrDefault();
+    private static IMimeConverter CreateRequestConverter(IRestRequest request, IMimeConverterFactory mimeConverterFactory)
+    {
+      string mimeType = request.Parameters
+        .Where(parameter => parameter.Type == ParameterType.HttpHeader && IsAcceptOrContentType(parameter.Name))
+        .Select(parameter => parameter.Value.ToString())
+        .FirstOrDefault();
 
-			mimeType.Should().NotBeEmpty();
+      mimeType.Should().NotBeEmpty();
 
-			IMimeConverter converter = mimeConverterFactory.CreateConverter(mimeType);
-			converter.Should().NotBeNull();
+      IMimeConverter converter = mimeConverterFactory.CreateConverter(mimeType);
+      converter.Should().NotBeNull();
 
-			return converter;
-		}
+      return converter;
+    }
 
-		private static bool IsAcceptOrContentType(string name)
-		{
-			return name == RestConstants.ContentTypeHeader
-				|| name == RestConstants.AcceptHeader;
-		}
+    private static bool IsAcceptOrContentType(string name)
+    {
+      return name == RestConstants.ContentTypeHeader
+        || name == RestConstants.AcceptHeader;
+    }
 
-		private static void AssertRequestValuesMatch(IRestRequest request, ExpectedRequestProperties properties)
-		{
-			request.Method.Should().Be(properties.Method);
-			request.Resource.Should().Be(properties.Resource);
-		}
+    private static void AssertRequestValuesMatch(IRestRequest request, ExpectedRequestProperties properties)
+    {
+      request.Method.Should().Be(properties.Method);
+      request.Resource.Should().Be(properties.Resource);
+    }
 
-		private static void AssertSchemaValuesMatch(TableSchema requestedSchema, ExpectedSchemaUpdateRequestProperties properties)
-		{
-			requestedSchema.Name.Should().Be(properties.Table);
-			requestedSchema.Columns.Should().HaveCount(1);
-			requestedSchema.Columns[0].Name.Should().Be(properties.Column);
-		}
+    private static void AssertSchemaValuesMatch(TableSchema requestedSchema, ExpectedSchemaUpdateRequestProperties properties)
+    {
+      requestedSchema.Name.Should().Be(properties.Table);
+      requestedSchema.Columns.Should().HaveCount(1);
+      requestedSchema.Columns[0].Name.Should().Be(properties.Column);
+    }
 
-		private TableSchema GetTableSchemaFromRequest()
-		{
-			string content = _rest.Request.Parameters
-				.Where(cell => cell.Type == ParameterType.RequestBody)
-				.Select(cell => cell.Value.ToString())
-				.FirstOrDefault();
-			TableSchema schema = CreateRequestConverter(_rest.Request, _converterFactory).ConvertSchema(content);
-			schema.Should().NotBeNull();
-			return schema;
-		}
+    private TableSchema GetTableSchemaFromRequest()
+    {
+      string content = _rest.Request.Parameters
+        .Where(cell => cell.Type == ParameterType.RequestBody)
+        .Select(cell => cell.Value.ToString())
+        .FirstOrDefault();
+      TableSchema schema = CreateRequestConverter(_rest.Request, _converterFactory).ConvertSchema(content);
+      schema.Should().NotBeNull();
+      return schema;
+    }
 
-		private void CheckSchemaUpdateProperties(ExpectedSchemaUpdateRequestProperties properties)
-		{
-			AssertRequestValuesMatch(_rest.Request, properties);
-			AssertSchemaValuesMatch(GetTableSchemaFromRequest(), properties);
-		}
-	}
+    private void CheckSchemaUpdateProperties(ExpectedSchemaUpdateRequestProperties properties)
+    {
+      AssertRequestValuesMatch(_rest.Request, properties);
+      AssertSchemaValuesMatch(GetTableSchemaFromRequest(), properties);
+    }
+  }
 }

@@ -27,105 +27,105 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Provides a standard implementation of <see cref="ISimpleValueConverter" />.
-	/// </summary>
-	public class SimpleValueConverter : ISimpleValueConverter
-	{
-		private static readonly IList<Tuple<string, BloomFilters>> _bloomFilters
-			= new List<Tuple<string, BloomFilters>>
-			{
-				new Tuple<string, BloomFilters>("NONE", BloomFilters.None),
-				new Tuple<string, BloomFilters>("ROW", BloomFilters.Row),
-				new Tuple<string, BloomFilters>("ROWCOL", BloomFilters.RowColumn)
-			};
+  /// <summary>
+  ///    Provides a standard implementation of <see cref="ISimpleValueConverter" />.
+  /// </summary>
+  public class SimpleValueConverter : ISimpleValueConverter
+  {
+    private static readonly IList<Tuple<string, BloomFilters>> _bloomFilters
+      = new List<Tuple<string, BloomFilters>>
+      {
+        new Tuple<string, BloomFilters>("NONE", BloomFilters.None),
+        new Tuple<string, BloomFilters>("ROW", BloomFilters.Row),
+        new Tuple<string, BloomFilters>("ROWCOL", BloomFilters.RowColumn)
+      };
 
-		private static readonly IList<Tuple<string, CompressionTypes>> _compressionTypes
-			= new List<Tuple<string, CompressionTypes>>
-			{
-				new Tuple<string, CompressionTypes>("NONE", CompressionTypes.None),
-				new Tuple<string, CompressionTypes>("GZ", CompressionTypes.GZip),
-				new Tuple<string, CompressionTypes>("LZ4", CompressionTypes.Lz4),
-				new Tuple<string, CompressionTypes>("LZO", CompressionTypes.Lzo),
-				new Tuple<string, CompressionTypes>("SNAPPY", CompressionTypes.Snappy)
-			};
+    private static readonly IList<Tuple<string, CompressionTypes>> _compressionTypes
+      = new List<Tuple<string, CompressionTypes>>
+      {
+        new Tuple<string, CompressionTypes>("NONE", CompressionTypes.None),
+        new Tuple<string, CompressionTypes>("GZ", CompressionTypes.GZip),
+        new Tuple<string, CompressionTypes>("LZ4", CompressionTypes.Lz4),
+        new Tuple<string, CompressionTypes>("LZO", CompressionTypes.Lzo),
+        new Tuple<string, CompressionTypes>("SNAPPY", CompressionTypes.Snappy)
+      };
 
-		private static readonly IList<Tuple<string, DataBlockEncodings>> _encodings
-			= new List<Tuple<string, DataBlockEncodings>>
-			{
-				new Tuple<string, DataBlockEncodings>("NONE", DataBlockEncodings.None),
-				new Tuple<string, DataBlockEncodings>("PREFIX", DataBlockEncodings.Prefix),
-				new Tuple<string, DataBlockEncodings>("DIFF", DataBlockEncodings.Diff),
-				new Tuple<string, DataBlockEncodings>("FAST_DIFF", DataBlockEncodings.FastDiff)
-			};
+    private static readonly IList<Tuple<string, DataBlockEncodings>> _encodings
+      = new List<Tuple<string, DataBlockEncodings>>
+      {
+        new Tuple<string, DataBlockEncodings>("NONE", DataBlockEncodings.None),
+        new Tuple<string, DataBlockEncodings>("PREFIX", DataBlockEncodings.Prefix),
+        new Tuple<string, DataBlockEncodings>("DIFF", DataBlockEncodings.Diff),
+        new Tuple<string, DataBlockEncodings>("FAST_DIFF", DataBlockEncodings.FastDiff)
+      };
 
-		/// <summary>
-		///    Converts the bloom filter.
-		/// </summary>
-		/// <param name="filter">The filter.</param>
-		public string ConvertBloomFilter(BloomFilters? filter)
-		{
-			filter = filter ?? default(BloomFilters);
-			return _bloomFilters.Where(item => item.Item2 == filter)
-				.Select(item => item.Item1)
-				.FirstOrDefault();
-		}
+    /// <summary>
+    ///    Converts the bloom filter.
+    /// </summary>
+    /// <param name="filter">The filter.</param>
+    public string ConvertBloomFilter(BloomFilters? filter)
+    {
+      filter = filter ?? default(BloomFilters);
+      return _bloomFilters.Where(item => item.Item2 == filter)
+        .Select(item => item.Item1)
+        .FirstOrDefault();
+    }
 
-		/// <summary>
-		///    Converts the bloom filter.
-		/// </summary>
-		/// <param name="filter">The filter.</param>
-		public BloomFilters ConvertBloomFilter(string filter)
-		{
-			return _bloomFilters.Where(item => item.Item1 == filter)
-				.Select(item => item.Item2)
-				.FirstOrDefault();
-		}
+    /// <summary>
+    ///    Converts the bloom filter.
+    /// </summary>
+    /// <param name="filter">The filter.</param>
+    public BloomFilters ConvertBloomFilter(string filter)
+    {
+      return _bloomFilters.Where(item => item.Item1 == filter)
+        .Select(item => item.Item2)
+        .FirstOrDefault();
+    }
 
-		/// <summary>
-		///    Converts the type of the compression.
-		/// </summary>
-		/// <param name="compressionType">Type of the compression.</param>
-		public string ConvertCompressionType(CompressionTypes? compressionType)
-		{
-			compressionType = compressionType ?? default(CompressionTypes);
-			return _compressionTypes.Where(item => item.Item2 == compressionType)
-				.Select(item => item.Item1)
-				.FirstOrDefault();
-		}
+    /// <summary>
+    ///    Converts the type of the compression.
+    /// </summary>
+    /// <param name="compressionType">Type of the compression.</param>
+    public string ConvertCompressionType(CompressionTypes? compressionType)
+    {
+      compressionType = compressionType ?? default(CompressionTypes);
+      return _compressionTypes.Where(item => item.Item2 == compressionType)
+        .Select(item => item.Item1)
+        .FirstOrDefault();
+    }
 
-		/// <summary>
-		///    Converts the type of the compression.
-		/// </summary>
-		/// <param name="compressionType">Type of the compression.</param>
-		public CompressionTypes ConvertCompressionType(string compressionType)
-		{
-			return _compressionTypes.Where(item => item.Item1 == compressionType)
-				.Select(item => item.Item2)
-				.FirstOrDefault();
-		}
+    /// <summary>
+    ///    Converts the type of the compression.
+    /// </summary>
+    /// <param name="compressionType">Type of the compression.</param>
+    public CompressionTypes ConvertCompressionType(string compressionType)
+    {
+      return _compressionTypes.Where(item => item.Item1 == compressionType)
+        .Select(item => item.Item2)
+        .FirstOrDefault();
+    }
 
-		/// <summary>
-		///    Converts the data block encoding.
-		/// </summary>
-		/// <param name="encoding">The encoding.</param>
-		public string ConvertDataBlockEncoding(DataBlockEncodings? encoding)
-		{
-			encoding = encoding ?? default(DataBlockEncodings);
-			return _encodings.Where(item => item.Item2 == encoding)
-				.Select(item => item.Item1)
-				.FirstOrDefault();
-		}
+    /// <summary>
+    ///    Converts the data block encoding.
+    /// </summary>
+    /// <param name="encoding">The encoding.</param>
+    public string ConvertDataBlockEncoding(DataBlockEncodings? encoding)
+    {
+      encoding = encoding ?? default(DataBlockEncodings);
+      return _encodings.Where(item => item.Item2 == encoding)
+        .Select(item => item.Item1)
+        .FirstOrDefault();
+    }
 
-		/// <summary>
-		///    Converts the data block encoding.
-		/// </summary>
-		/// <param name="encoding">The encoding.</param>
-		public DataBlockEncodings ConvertDataBlockEncoding(string encoding)
-		{
-			return _encodings.Where(item => item.Item1 == encoding)
-				.Select(item => item.Item2)
-				.FirstOrDefault();
-		}
-	}
+    /// <summary>
+    ///    Converts the data block encoding.
+    /// </summary>
+    /// <param name="encoding">The encoding.</param>
+    public DataBlockEncodings ConvertDataBlockEncoding(string encoding)
+    {
+      return _encodings.Where(item => item.Item1 == encoding)
+        .Select(item => item.Item2)
+        .FirstOrDefault();
+    }
+  }
 }

@@ -21,34 +21,34 @@
 
 namespace HBase.Stargate.Client.Models
 {
-	/// <summary>
-	///    Describes the possible compression types that can be used with HBase.
-	/// </summary>
-	public enum CompressionTypes
-	{
-		/// <summary>
-		///    No compression (default).
-		/// </summary>
-		None,
+  /// <summary>
+  ///    Describes the possible compression types that can be used with HBase.
+  /// </summary>
+  public enum CompressionTypes
+  {
+    /// <summary>
+    ///    No compression (default).
+    /// </summary>
+    None,
 
-		/// <summary>
-		///    Snappy compression.
-		/// </summary>
-		Snappy,
+    /// <summary>
+    ///    Snappy compression.
+    /// </summary>
+    Snappy,
 
-		/// <summary>
-		///    Lempel–Ziv–Oberhumer compression.
-		/// </summary>
-		Lzo,
+    /// <summary>
+    ///    Lempel–Ziv–Oberhumer compression.
+    /// </summary>
+    Lzo,
 
-		/// <summary>
-		///    gzip compression.
-		/// </summary>
-		GZip,
+    /// <summary>
+    ///    gzip compression.
+    /// </summary>
+    GZip,
 
-		/// <summary>
-		///    LZ4 compression.
-		/// </summary>
-		Lz4
-	}
+    /// <summary>
+    ///    LZ4 compression.
+    /// </summary>
+    Lz4
+  }
 }

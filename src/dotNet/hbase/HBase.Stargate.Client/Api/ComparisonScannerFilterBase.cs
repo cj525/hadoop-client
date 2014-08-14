@@ -27,50 +27,50 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Provides base functionality for scanner filters that represent comparisons.
-	/// </summary>
-	public abstract class ComparisonScannerFilterBase : ScannerFilterBase
-	{
-		private const string _operationPropertyName = "op";
-		private const string _comparatorPropertyName = "comparator";
+  /// <summary>
+  ///    Provides base functionality for scanner filters that represent comparisons.
+  /// </summary>
+  public abstract class ComparisonScannerFilterBase : ScannerFilterBase
+  {
+    private const string _operationPropertyName = "op";
+    private const string _comparatorPropertyName = "comparator";
 
-		private static readonly IDictionary<FilterComparisons, string> _comparisonTypes
-			= new Dictionary<FilterComparisons, string>
-			{
-				{FilterComparisons.Equal, "EQUAL"},
-				{FilterComparisons.NotEqual, "NOT_EQUAL"},
-				{FilterComparisons.GreaterThan, "GREATER"},
-				{FilterComparisons.GreaterThanOrEqual, "GREATER_OR_EQUAL"},
-				{FilterComparisons.LessThan, "LESS"},
-				{FilterComparisons.LessThanOrEqual, "LESS_OR_EQUAL"},
-				{FilterComparisons.None, "NO_OP"}
-			};
+    private static readonly IDictionary<FilterComparisons, string> _comparisonTypes
+      = new Dictionary<FilterComparisons, string>
+      {
+        {FilterComparisons.Equal, "EQUAL"},
+        {FilterComparisons.NotEqual, "NOT_EQUAL"},
+        {FilterComparisons.GreaterThan, "GREATER"},
+        {FilterComparisons.GreaterThanOrEqual, "GREATER_OR_EQUAL"},
+        {FilterComparisons.LessThan, "LESS"},
+        {FilterComparisons.LessThanOrEqual, "LESS_OR_EQUAL"},
+        {FilterComparisons.None, "NO_OP"}
+      };
 
-		private readonly FilterComparisons _comparison;
-		private readonly string _value;
+    private readonly FilterComparisons _comparison;
+    private readonly string _value;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="ComparisonScannerFilterBase" /> class.
-		/// </summary>
-		protected ComparisonScannerFilterBase(string value, FilterComparisons comparison)
-		{
-			_comparison = comparison;
-			_value = value;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="ComparisonScannerFilterBase" /> class.
+    /// </summary>
+    protected ComparisonScannerFilterBase(string value, FilterComparisons comparison)
+    {
+      _comparison = comparison;
+      _value = value;
+    }
 
-		/// <summary>
-		///    Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
+    /// <summary>
+    ///    Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
 
-			json[_operationPropertyName] = new JValue(_comparisonTypes[_comparison]);
-			json[_comparatorPropertyName] = new BinaryComparator(_value).ConvertToJson(codec);
+      json[_operationPropertyName] = new JValue(_comparisonTypes[_comparison]);
+      json[_comparatorPropertyName] = new BinaryComparator(_value).ConvertToJson(codec);
 
-			return json;
-		}
-	}
+      return json;
+    }
+  }
 }

@@ -21,12 +21,12 @@
 
 namespace _specs.Models
 {
-	public class TestDescriptor
-	{
-		public string Table { get; set; }
-		public string Row { get; set; }
-		public string Column { get; set; }
-		public string Qualifier { get; set; }
-		public long? Timestamp { get; set; }
-	}
+  public class TestDescriptor
+  {
+    public string Table { get; set; }
+    public string Row { get; set; }
+    public string Column { get; set; }
+    public string Qualifier { get; set; }
+    public long? Timestamp { get; set; }
+  }
 }

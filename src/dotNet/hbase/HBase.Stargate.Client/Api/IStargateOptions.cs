@@ -17,33 +17,33 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Defines options for communicating with a Stargate instance.
-	/// </summary>
-	public interface IStargateOptions
-	{
-		/// <summary>
-		///    Gets or sets the server URL.
-		/// </summary>
-		/// <value>
-		///    The server URL.
-		/// </value>
-		string ServerUrl { get; set; }
+  /// <summary>
+  ///    Defines options for communicating with a Stargate instance.
+  /// </summary>
+  public interface IStargateOptions
+  {
+    /// <summary>
+    ///    Gets or sets the server URL.
+    /// </summary>
+    /// <value>
+    ///    The server URL.
+    /// </value>
+    string ServerUrl { get; set; }
 
-		/// <summary>
-		///    Gets or sets the type of the content.
-		/// </summary>
-		/// <value>
-		///    The type of the content.
-		/// </value>
-		string ContentType { get; set; }
+    /// <summary>
+    ///    Gets or sets the type of the content.
+    /// </summary>
+    /// <value>
+    ///    The type of the content.
+    /// </value>
+    string ContentType { get; set; }
 
-		/// <summary>
-		///    Gets or sets the false row key.
-		/// </summary>
-		/// <value>
-		///    The false row key.
-		/// </value>
-		string FalseRowKey { get; set; }
-	}
+    /// <summary>
+    ///    Gets or sets the false row key.
+    /// </summary>
+    /// <value>
+    ///    The false row key.
+    /// </value>
+    string FalseRowKey { get; set; }
+  }
 }

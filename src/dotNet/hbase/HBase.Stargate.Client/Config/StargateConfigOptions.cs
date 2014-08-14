@@ -25,63 +25,63 @@ using HBase.Stargate.Client.Api;
 
 namespace HBase.Stargate.Client.Config
 {
-	/// <summary>
-	///    Provides an XML configuration-based implementation of <see cref="IStargateOptions" />.
-	/// </summary>
-	public class StargateConfigOptions : ConfigurationElement, IStargateOptions
-	{
-		private const string _serverUrlName = "serverUrl";
-		private const string _contentTypeName = "contentType";
-		private const string _falseRowKeyName = "falseRowKey";
+  /// <summary>
+  ///    Provides an XML configuration-based implementation of <see cref="IStargateOptions" />.
+  /// </summary>
+  public class StargateConfigOptions : ConfigurationElement, IStargateOptions
+  {
+    private const string _serverUrlName = "serverUrl";
+    private const string _contentTypeName = "contentType";
+    private const string _falseRowKeyName = "falseRowKey";
 
-		/// <summary>
-		///    Gets or sets the server URL.
-		/// </summary>
-		/// <value>
-		///    The server URL.
-		/// </value>
-		[ConfigurationProperty(_serverUrlName, IsRequired = true)]
-		public string ServerUrl
-		{
-			get { return this[_serverUrlName] as string; }
-			set { this[_serverUrlName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the server URL.
+    /// </summary>
+    /// <value>
+    ///    The server URL.
+    /// </value>
+    [ConfigurationProperty(_serverUrlName, IsRequired = true)]
+    public string ServerUrl
+    {
+      get { return this[_serverUrlName] as string; }
+      set { this[_serverUrlName] = value; }
+    }
 
-		/// <summary>
-		///    Gets or sets the type of the content.
-		/// </summary>
-		/// <value>
-		///    The type of the content.
-		/// </value>
-		[ConfigurationProperty(_contentTypeName, IsRequired = false, DefaultValue = Api.Stargate.DefaultContentType)]
-		public string ContentType
-		{
-			get { return this[_contentTypeName] as string; }
-			set { this[_contentTypeName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the type of the content.
+    /// </summary>
+    /// <value>
+    ///    The type of the content.
+    /// </value>
+    [ConfigurationProperty(_contentTypeName, IsRequired = false, DefaultValue = Api.Stargate.DefaultContentType)]
+    public string ContentType
+    {
+      get { return this[_contentTypeName] as string; }
+      set { this[_contentTypeName] = value; }
+    }
 
-		/// <summary>
-		///    Gets or sets the false row key.
-		/// </summary>
-		/// <value>
-		///    The false row key.
-		/// </value>
-		[ConfigurationProperty(_falseRowKeyName, IsRequired = false, DefaultValue = Api.Stargate.DefaultFalseRowKey)]
-		public string FalseRowKey
-		{
-			get { return this[_falseRowKeyName] as string; }
-			set { this[_falseRowKeyName] = value; }
-		}
+    /// <summary>
+    ///    Gets or sets the false row key.
+    /// </summary>
+    /// <value>
+    ///    The false row key.
+    /// </value>
+    [ConfigurationProperty(_falseRowKeyName, IsRequired = false, DefaultValue = Api.Stargate.DefaultFalseRowKey)]
+    public string FalseRowKey
+    {
+      get { return this[_falseRowKeyName] as string; }
+      set { this[_falseRowKeyName] = value; }
+    }
 
-		/// <summary>
-		///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
-		/// </summary>
-		/// <returns>
-		///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
-		/// </returns>
-		public override bool IsReadOnly()
-		{
-			return false;
-		}
-	}
+    /// <summary>
+    ///    Gets a value indicating whether the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only.
+    /// </summary>
+    /// <returns>
+    ///    true if the <see cref="T:System.Configuration.ConfigurationElement" /> object is read-only; otherwise, false.
+    /// </returns>
+    public override bool IsReadOnly()
+    {
+      return false;
+    }
+  }
 }

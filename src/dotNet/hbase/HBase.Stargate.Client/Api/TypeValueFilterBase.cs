@@ -25,31 +25,31 @@ using Newtonsoft.Json.Linq;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Provides a base class for scanner filters that will render as
-	///    a "type" property and a "value" property.
-	/// </summary>
-	public abstract class TypeValueFilterBase : ScannerFilterBase
-	{
-		private const string _valuePropertyName = "value";
+  /// <summary>
+  ///    Provides a base class for scanner filters that will render as
+  ///    a "type" property and a "value" property.
+  /// </summary>
+  public abstract class TypeValueFilterBase : ScannerFilterBase
+  {
+    private const string _valuePropertyName = "value";
 
-		/// <summary>
-		///    Converts the filter to its JSON representation.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		public override JObject ConvertToJson(ICodec codec)
-		{
-			JObject json = base.ConvertToJson(codec);
+    /// <summary>
+    ///    Converts the filter to its JSON representation.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    public override JObject ConvertToJson(ICodec codec)
+    {
+      JObject json = base.ConvertToJson(codec);
 
-			json[_valuePropertyName] = GetValueJToken(codec);
+      json[_valuePropertyName] = GetValueJToken(codec);
 
-			return json;
-		}
+      return json;
+    }
 
-		/// <summary>
-		///    Gets the token to use as the value.
-		/// </summary>
-		/// <param name="codec">The codec to use for encoding values.</param>
-		protected abstract JToken GetValueJToken(ICodec codec);
-	}
+    /// <summary>
+    ///    Gets the token to use as the value.
+    /// </summary>
+    /// <param name="codec">The codec to use for encoding values.</param>
+    protected abstract JToken GetValueJToken(ICodec codec);
+  }
 }

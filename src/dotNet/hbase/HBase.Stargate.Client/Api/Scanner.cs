@@ -27,127 +27,127 @@ using HBase.Stargate.Client.Models;
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    Provides a standard implementation of the <see cref="IScanner" /> interface.
-	/// </summary>
-	public class Scanner : IScanner
-	{
-		private readonly IList<CellSet> _cachedResults;
-		private readonly IStargate _stargate;
-		private int _resultIndex;
-		private bool _isDisposed;
+  /// <summary>
+  ///    Provides a standard implementation of the <see cref="IScanner" /> interface.
+  /// </summary>
+  public class Scanner : IScanner
+  {
+    private readonly IList<CellSet> _cachedResults;
+    private readonly IStargate _stargate;
+    private int _resultIndex;
+    private bool _isDisposed;
 
-		/// <summary>
-		///    Initializes a new instance of the <see cref="Scanner" /> class.
-		/// </summary>
-		/// <param name="tableName">The HBase table name.</param>
-		/// <param name="resource">The resource.</param>
-		/// <param name="stargate">The current Stargate.</param>
-		public Scanner(string tableName, string resource, IStargate stargate)
-		{
-			_cachedResults = new List<CellSet>();
-			_stargate = stargate;
-			Table = tableName;
-			Resource = resource;
-		}
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="Scanner" /> class.
+    /// </summary>
+    /// <param name="tableName">The HBase table name.</param>
+    /// <param name="resource">The resource.</param>
+    /// <param name="stargate">The current Stargate.</param>
+    public Scanner(string tableName, string resource, IStargate stargate)
+    {
+      _cachedResults = new List<CellSet>();
+      _stargate = stargate;
+      Table = tableName;
+      Resource = resource;
+    }
 
-		/// <summary>
-		///    Gets the table name.
-		/// </summary>
-		/// <value>
-		///    The table name.
-		/// </value>
-		public string Table { get; private set; }
+    /// <summary>
+    ///    Gets the table name.
+    /// </summary>
+    /// <value>
+    ///    The table name.
+    /// </value>
+    public string Table { get; private set; }
 
-		/// <summary>
-		///    Gets the resource.
-		/// </summary>
-		/// <value>
-		///    The resource.
-		/// </value>
-		public string Resource { get; private set; }
+    /// <summary>
+    ///    Gets the resource.
+    /// </summary>
+    /// <value>
+    ///    The resource.
+    /// </value>
+    public string Resource { get; private set; }
 
-		/// <summary>
-		///    Deletes this scanner and disables it to prevent future use.
-		/// </summary>
-		public void Dispose()
-		{
-			if (_isDisposed) return;
+    /// <summary>
+    ///    Deletes this scanner and disables it to prevent future use.
+    /// </summary>
+    public void Dispose()
+    {
+      if (_isDisposed) return;
 
-			_stargate.DeleteScanner(this);
-			Resource = null;
-			_isDisposed = true;
-		}
+      _stargate.DeleteScanner(this);
+      Resource = null;
+      _isDisposed = true;
+    }
 
-		/// <summary>
-		///    Returns an enumerator that iterates through the collection.
-		/// </summary>
-		public IEnumerator<CellSet> GetEnumerator()
-		{
-			return this;
-		}
+    /// <summary>
+    ///    Returns an enumerator that iterates through the collection.
+    /// </summary>
+    public IEnumerator<CellSet> GetEnumerator()
+    {
+      return this;
+    }
 
-		/// <summary>
-		///    Returns an enumerator that iterates through a collection.
-		/// </summary>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+    /// <summary>
+    ///    Returns an enumerator that iterates through a collection.
+    /// </summary>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return GetEnumerator();
+    }
 
-		/// <summary>
-		///    Advances the enumerator to the next element of the collection.
-		/// </summary>
-		public bool MoveNext()
-		{
-			AssertNotDisposed();
+    /// <summary>
+    ///    Advances the enumerator to the next element of the collection.
+    /// </summary>
+    public bool MoveNext()
+    {
+      AssertNotDisposed();
 
-			if (_resultIndex >= _cachedResults.Count)
-			{
-				if (Current != null) _cachedResults.Add(Current);
-				Current = _stargate.GetScannerResult(this);
-			}
-			else if (_resultIndex >= 0)
-			{
-				Current = _cachedResults[_resultIndex];
-			}
+      if (_resultIndex >= _cachedResults.Count)
+      {
+        if (Current != null) _cachedResults.Add(Current);
+        Current = _stargate.GetScannerResult(this);
+      }
+      else if (_resultIndex >= 0)
+      {
+        Current = _cachedResults[_resultIndex];
+      }
 
-			_resultIndex++;
-			return Current != null;
-		}
+      _resultIndex++;
+      return Current != null;
+    }
 
-		/// <summary>
-		///    Sets the enumerator to its initial position, which is before the first element in the collection.
-		/// </summary>
-		public void Reset()
-		{
-			AssertNotDisposed();
+    /// <summary>
+    ///    Sets the enumerator to its initial position, which is before the first element in the collection.
+    /// </summary>
+    public void Reset()
+    {
+      AssertNotDisposed();
 
-			_resultIndex = 0;
-		}
+      _resultIndex = 0;
+    }
 
-		/// <summary>
-		///    Gets the element in the collection at the current position of the enumerator.
-		/// </summary>
-		public CellSet Current { get; private set; }
+    /// <summary>
+    ///    Gets the element in the collection at the current position of the enumerator.
+    /// </summary>
+    public CellSet Current { get; private set; }
 
-		/// <summary>
-		///    Gets the element in the collection at the current position of the enumerator.
-		/// </summary>
-		object IEnumerator.Current
-		{
-			get { return Current; }
-		}
+    /// <summary>
+    ///    Gets the element in the collection at the current position of the enumerator.
+    /// </summary>
+    object IEnumerator.Current
+    {
+      get { return Current; }
+    }
 
-		/// <summary>
-		///    Asserts that this instance is not disposed.
-		/// </summary>
-		private void AssertNotDisposed()
-		{
-			if (_isDisposed)
-			{
-				throw new ObjectDisposedException(GetType().Name);
-			}
-		}
-	}
+    /// <summary>
+    ///    Asserts that this instance is not disposed.
+    /// </summary>
+    private void AssertNotDisposed()
+    {
+      if (_isDisposed)
+      {
+        throw new ObjectDisposedException(GetType().Name);
+      }
+    }
+  }
 }

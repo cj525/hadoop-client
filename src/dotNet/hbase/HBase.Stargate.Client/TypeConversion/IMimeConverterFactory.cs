@@ -17,15 +17,15 @@
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Provides easy access to MIME-specific converter creation capabilities.
-	/// </summary>
-	public interface IMimeConverterFactory
-	{
-		/// <summary>
-		///    Creates the converter appropriate for the specified MIME type.
-		/// </summary>
-		/// <param name="mimeType">The MIME type.</param>
-		IMimeConverter CreateConverter(string mimeType);
-	}
+  /// <summary>
+  ///    Provides easy access to MIME-specific converter creation capabilities.
+  /// </summary>
+  public interface IMimeConverterFactory
+  {
+    /// <summary>
+    ///    Creates the converter appropriate for the specified MIME type.
+    /// </summary>
+    /// <param name="mimeType">The MIME type.</param>
+    IMimeConverter CreateConverter(string mimeType);
+  }
 }

@@ -21,16 +21,16 @@
 
 namespace HBase.Stargate.Client.Api
 {
-	/// <summary>
-	///    This filter is used to filter based on the column family.
-	/// </summary>
-	public class FamilyFilter : ComparisonScannerFilterBase
-	{
-		/// <summary>
-		///    Initializes a new instance of the <see cref="FamilyFilter" /> class.
-		/// </summary>
-		/// <param name="columnFamily">The column family.</param>
-		/// <param name="comparison">The comparison.</param>
-		public FamilyFilter(string columnFamily, FilterComparisons comparison) : base(columnFamily, comparison) {}
-	}
+  /// <summary>
+  ///    This filter is used to filter based on the column family.
+  /// </summary>
+  public class FamilyFilter : ComparisonScannerFilterBase
+  {
+    /// <summary>
+    ///    Initializes a new instance of the <see cref="FamilyFilter" /> class.
+    /// </summary>
+    /// <param name="columnFamily">The column family.</param>
+    /// <param name="comparison">The comparison.</param>
+    public FamilyFilter(string columnFamily, FilterComparisons comparison) : base(columnFamily, comparison) {}
+  }
 }

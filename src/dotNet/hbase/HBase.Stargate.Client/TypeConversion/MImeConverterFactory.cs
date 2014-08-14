@@ -21,29 +21,29 @@ using System.Linq;
 
 namespace HBase.Stargate.Client.TypeConversion
 {
-	/// <summary>
-	///    Defines an IoC-driven implementation of <see cref="IMimeConverterFactory" />.
-	/// </summary>
-	public class MimeConverterFactory : IMimeConverterFactory
-	{
-		private readonly IEnumerable<IMimeConverter> _converters;
+  /// <summary>
+  ///    Defines an IoC-driven implementation of <see cref="IMimeConverterFactory" />.
+  /// </summary>
+  public class MimeConverterFactory : IMimeConverterFactory
+  {
+    private readonly IEnumerable<IMimeConverter> _converters;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MimeConverterFactory"/> class.
-		/// </summary>
-		/// <param name="converters">The converters.</param>
-		public MimeConverterFactory(IEnumerable<IMimeConverter> converters)
-		{
-			_converters = converters;
-		}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MimeConverterFactory"/> class.
+    /// </summary>
+    /// <param name="converters">The converters.</param>
+    public MimeConverterFactory(IEnumerable<IMimeConverter> converters)
+    {
+      _converters = converters;
+    }
 
-		/// <summary>
-		/// Creates the converter appropriate for the specified MIME type.
-		/// </summary>
-		/// <param name="mimeType">The MIME type.</param>
-		public IMimeConverter CreateConverter(string mimeType)
-		{
-			return _converters.FirstOrDefault(converter => StringComparer.OrdinalIgnoreCase.Equals(converter.MimeType, mimeType));
-		}
-	}
+    /// <summary>
+    /// Creates the converter appropriate for the specified MIME type.
+    /// </summary>
+    /// <param name="mimeType">The MIME type.</param>
+    public IMimeConverter CreateConverter(string mimeType)
+    {
+      return _converters.FirstOrDefault(converter => StringComparer.OrdinalIgnoreCase.Equals(converter.MimeType, mimeType));
+    }
+  }
 }

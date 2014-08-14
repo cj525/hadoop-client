@@ -26,30 +26,30 @@ using HBase.Stargate.Client.Models;
 
 namespace _specs.Models
 {
-	public class HBaseContext
-	{
-		public IStargate Stargate { get; set; }
+  public class HBaseContext
+  {
+    public IStargate Stargate { get; set; }
 
-		public Identifier Identifier { get; set; }
+    public Identifier Identifier { get; set; }
 
-		public Identifier SecondIdentifier { get; set; }
+    public Identifier SecondIdentifier { get; set; }
 
-		public CellSet CellSet { get; set; }
+    public CellSet CellSet { get; set; }
 
-		public Cell Cell { get; set; }
+    public Cell Cell { get; set; }
 
-		public string CellValue { get; set; }
+    public string CellValue { get; set; }
 
-		public string RawContent { get; set; }
+    public string RawContent { get; set; }
 
-		public CellQuery Query { get; set; }
+    public CellQuery Query { get; set; }
 
-		public TableSchema TableSchema { get; set; }
+    public TableSchema TableSchema { get; set; }
 
-		public IEnumerable<string> TableNames { get; set; }
+    public IEnumerable<string> TableNames { get; set; }
 
-		public IScanner Scanner { get; set; }
+    public IScanner Scanner { get; set; }
 
-		public bool IdentifierMatchResult { get; set; }
-	}
+    public bool IdentifierMatchResult { get; set; }
+  }
 }
