@@ -33,8 +33,10 @@ namespace HBase.Stargate.Client.Api
     private const string _familyPropertyName = "family";
     private const string _qualifierPropertyName = "qualifier";
     private const string _latestVersionPropertyName = "latestVersion";
+    private const string _ifMissingPropertyName = "ifMissing";
     private readonly string _family;
     private readonly bool _latestVersion;
+    private readonly bool _ifMissing;
     private readonly string _qualifier;
 
     /// <summary>
@@ -47,12 +49,16 @@ namespace HBase.Stargate.Client.Api
     /// <param name="latestVersion">
     ///   if set to <c>true</c>, only return the latest version.
     /// </param>
-    public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true)
+    /// <param name="ifMissing">
+    ///   if set to <c>true</c>, filter entire row if column is not found.
+    /// </param>
+    public SingleColumnValueFilter(string family, string qualifier, string value, FilterComparisons comparison, bool latestVersion = true, bool ifMissing = true)
       : base(value, comparison)
     {
       _family = family;
       _qualifier = qualifier;
       _latestVersion = latestVersion;
+      _ifMissing = ifMissing;
     }
 
     /// <summary>
@@ -61,10 +67,19 @@ namespace HBase.Stargate.Client.Api
     /// <param name="codec">The codec to use for encoding values.</param>
     public override JObject ConvertToJson(ICodec codec)
     {
-      JObject json = base.ConvertToJson(codec);
-      json[_familyPropertyName] = new JValue(codec.Encode(_family));
-      json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
+      // NOTE: SingleColumnValueFilter is peculiar about the order of its JSON
+      //       representation.  The easiest fix is to *append* the base class
+      //       JSON representation to our own, Stargate seems happy with that.
+      var json = new JObject();
+
       json[_latestVersionPropertyName] = new JValue(_latestVersion);
+      json[_ifMissingPropertyName] = new JValue(_ifMissing);
+      json[_qualifierPropertyName] = new JValue(codec.Encode(_qualifier));
+      json[_familyPropertyName] = new JValue(codec.Encode(_family));
+
+      // TODO: replace with .Merge() once we upgrade to a version with it.
+      json.Add(base.ConvertToJson(codec).Children());
+
       return json;
     }
   }
