@@ -28,84 +28,84 @@ using HBase.Stargate.Client.TypeConversion;
 
 namespace _specs.Models
 {
-	public class ContentConverter : IMimeConverter
-	{
-		private IMimeConverter _converter;
+  public class ContentConverter : IMimeConverter
+  {
+    private IMimeConverter _converter;
 
-		public string MimeType { get; private set; }
+    public string MimeType { get; private set; }
 
-		public string ConvertCells(IEnumerable<Cell> cells)
-		{
-			if (_converter != null)
-			{
-				return _converter.ConvertCells(cells);
-			}
+    public string ConvertCells(IEnumerable<Cell> cells)
+    {
+      if (_converter != null)
+      {
+        return _converter.ConvertCells(cells);
+      }
 
-			throw new NotImplementedException();
-		}
+      throw new NotImplementedException();
+    }
 
-		public string ConvertCell(Cell cell)
-		{
-			if (_converter != null)
-			{
-				return _converter.ConvertCell(cell);
-			}
+    public string ConvertCell(Cell cell)
+    {
+      if (_converter != null)
+      {
+        return _converter.ConvertCell(cell);
+      }
 
-			throw new NotImplementedException();
-		}
+      throw new NotImplementedException();
+    }
 
-		public IEnumerable<Cell> ConvertCells(string data, string tableName)
-		{
-			if (_converter != null)
-			{
-				return _converter.ConvertCells(data, tableName);
-			}
+    public CellSet ConvertCells(string data, string tableName)
+    {
+      if (_converter != null)
+      {
+        return _converter.ConvertCells(data, tableName);
+      }
 
-			throw new NotImplementedException();
-		}
+      throw new NotImplementedException();
+    }
 
-		public TableSchema ConvertSchema(string data)
-		{
-			if (_converter != null)
-			{
-				return _converter.ConvertSchema(data);
-			}
+    public TableSchema ConvertSchema(string data)
+    {
+      if (_converter != null)
+      {
+        return _converter.ConvertSchema(data);
+      }
 
-			throw new NotImplementedException();
-		}
+      throw new NotImplementedException();
+    }
 
-		public string ConvertSchema(TableSchema schema)
-		{
-			if (_converter != null)
-			{
-				return _converter.ConvertSchema(schema);
-			}
+    public string ConvertSchema(TableSchema schema)
+    {
+      if (_converter != null)
+      {
+        return _converter.ConvertSchema(schema);
+      }
 
-			throw new NotImplementedException();
-		}
+      throw new NotImplementedException();
+    }
 
-		public void SetConversionToXml()
-		{
-			MimeType = HBaseMimeTypes.Xml;
-			_converter = new XmlMimeConverter(new SimpleValueConverter(), new Base64Codec());
-		}
+    public void SetConversionToXml()
+    {
+      MimeType = HBaseMimeTypes.Xml;
+      _converter = new XmlMimeConverter(new SimpleValueConverter(), new Base64Codec());
+    }
 
-		public void SetConversionToJson()
-		{
-			MimeType = HBaseMimeTypes.Json;
-			//TODO: _converter = new JsonMimeConverter();
-		}
+    public void SetConversionToJson()
+    {
+      MimeType = HBaseMimeTypes.Json;
+      //TODO: _converter = new JsonMimeConverter();
+    }
 
-		public void SetConversionToProtobuf()
-		{
-			MimeType = HBaseMimeTypes.Protobuf;
-			//TODO: _converter = new ProtobufMimeConverter();
-		}
+    public void SetConversionToProtobuf()
+    {
+      MimeType = HBaseMimeTypes.Protobuf;
+      //TODO: _converter = new ProtobufMimeConverter();
+    }
 
-		public void SetConversionToBinary()
-		{
-			MimeType = HBaseMimeTypes.Stream;
-			//TODO: _converter = new BinaryMimeConverter();
-		}
-	}
+    public void SetConversionToBinary()
+    {
+      MimeType = HBaseMimeTypes.Stream;
+      //TODO: _converter = new BinaryMimeConverter();
+    }
+  }
 }

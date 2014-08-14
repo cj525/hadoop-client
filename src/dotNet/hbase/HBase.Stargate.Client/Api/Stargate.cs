@@ -131,13 +131,13 @@ namespace HBase.Stargate.Client.Api
       WriteValueInternal(identifier, value, SendRequest);
     }
 
-    T WriteValueInternal<T>(Identifier identifier, string value, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T WriteValueInternal<T>(Identifier identifier, string value, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string contentType = Options.ContentType;
       string resource = ResourceBuilder.BuildSingleValueAccess(identifier);
       string content = Converter.ConvertCell(new Cell(identifier, value));
 
-      return action(Method.POST, resource, contentType, contentType, content, new[]{HttpStatusCode.OK});
+      return action(Method.POST, resource, contentType, contentType, content, new[] {HttpStatusCode.OK});
     }
 
     /// <summary>
@@ -158,13 +158,13 @@ namespace HBase.Stargate.Client.Api
       WriteCellsInternal(cells, SendRequest);
     }
 
-    T WriteCellsInternal<T>(CellSet cells, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T WriteCellsInternal<T>(CellSet cells, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string contentType = Options.ContentType;
-      var tableIdentifier = new Identifier { Table = cells.Table };
+      var tableIdentifier = new Identifier {Table = cells.Table};
       string resource = ResourceBuilder.BuildBatchInsert(tableIdentifier);
-      
-      return action(Method.POST, resource, contentType, contentType, Converter.ConvertCells(cells), new[] { HttpStatusCode.OK });
+
+      return action(Method.POST, resource, contentType, contentType, Converter.ConvertCells(cells), new[] {HttpStatusCode.OK});
     }
 
     /// <summary>
@@ -185,11 +185,11 @@ namespace HBase.Stargate.Client.Api
       DeleteItemInternal(identifier, SendRequest);
     }
 
-    T DeleteItemInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T DeleteItemInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string resource = ResourceBuilder.BuildDeleteItem(identifier);
 
-      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
+      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK});
     }
 
     /// <summary>
@@ -210,16 +210,16 @@ namespace HBase.Stargate.Client.Api
       return ProcessReadValueResponse(ReadValueInternal(identifier, SendRequest), identifier);
     }
 
-    T ReadValueInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T ReadValueInternal<T>(Identifier identifier, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string resource = identifier.Timestamp.HasValue
         ? ResourceBuilder.BuildCellOrRowQuery(identifier.ToQuery())
         : ResourceBuilder.BuildSingleValueAccess(identifier, true);
 
-      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NotFound });
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK, HttpStatusCode.NotFound});
     }
 
-    string ProcessReadValueResponse(IRestResponse response, Identifier identifier)
+    private string ProcessReadValueResponse(IRestResponse response, Identifier identifier)
     {
       return response.StatusCode == HttpStatusCode.OK
         ? Converter.ConvertCells(response.Content, identifier.Table).Select(cell => cell.Value).FirstOrDefault()
@@ -244,14 +244,14 @@ namespace HBase.Stargate.Client.Api
       return ProcessFindCellResponse(FindCellsInternal(query, SendRequest), query);
     }
 
-    T FindCellsInternal<T>(CellQuery query, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T FindCellsInternal<T>(CellQuery query, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string resource = ResourceBuilder.BuildCellOrRowQuery(query);
 
-      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NotFound });
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK, HttpStatusCode.NotFound});
     }
 
-    CellSet ProcessFindCellResponse(IRestResponse response, CellQuery query)
+    private CellSet ProcessFindCellResponse(IRestResponse response, CellQuery query)
     {
       var set = new CellSet
       {
@@ -284,13 +284,13 @@ namespace HBase.Stargate.Client.Api
       return CreateTableInternal(tableSchema, SendRequestAsync);
     }
 
-    T CreateTableInternal<T>(TableSchema tableSchema, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T CreateTableInternal<T>(TableSchema tableSchema, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string resource = ResourceBuilder.BuildTableSchemaAccess(tableSchema);
       ErrorProvider.ThrowIfSchemaInvalid(tableSchema);
       string data = Converter.ConvertSchema(tableSchema);
 
-      return action(Method.PUT, resource, Options.ContentType, Options.ContentType, data, new[] { HttpStatusCode.OK });
+      return action(Method.PUT, resource, Options.ContentType, Options.ContentType, data, new[] {HttpStatusCode.OK});
     }
 
     /// <summary>
@@ -332,11 +332,11 @@ namespace HBase.Stargate.Client.Api
       return DeleteTableInternal(tableName, SendRequestAsync);
     }
 
-    T DeleteTableInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T DeleteTableInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
-      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema { Name = tableName });
+      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema {Name = tableName});
 
-      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
+      return action(Method.DELETE, resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK});
     }
 
     /// <summary>
@@ -357,14 +357,14 @@ namespace HBase.Stargate.Client.Api
       return ProcessGetTableSchemaResponse(GetTableSchemaInternal(tableName, SendRequest));
     }
 
-    T GetTableSchemaInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T GetTableSchemaInternal<T>(string tableName, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
-      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema { Name = tableName });
+      string resource = ResourceBuilder.BuildTableSchemaAccess(new TableSchema {Name = tableName});
 
-      return action(Method.GET, resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK });
+      return action(Method.GET, resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK});
     }
 
-    TableSchema ProcessGetTableSchemaResponse(IRestResponse response)
+    private TableSchema ProcessGetTableSchemaResponse(IRestResponse response)
     {
       return Converter.ConvertSchema(response.Content);
     }
@@ -387,14 +387,14 @@ namespace HBase.Stargate.Client.Api
       return ProcessCreateScannerResponse(CreateScannerInternal(options, SendRequest), options);
     }
 
-    T CreateScannerInternal<T>(ScannerOptions options, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T CreateScannerInternal<T>(ScannerOptions options, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
       string resource = ResourceBuilder.BuildScannerCreate(options);
 
-      return action(Method.PUT, resource, HBaseMimeTypes.Xml, null, ScannerConverter.Convert(options), new[] { HttpStatusCode.Created });
+      return action(Method.PUT, resource, HBaseMimeTypes.Xml, null, ScannerConverter.Convert(options), new[] {HttpStatusCode.Created});
     }
 
-    IScanner ProcessCreateScannerResponse(IRestResponse response, ScannerOptions options)
+    private IScanner ProcessCreateScannerResponse(IRestResponse response, ScannerOptions options)
     {
       string scannerLocation =
         response.Headers.Where(header => header.Type == ParameterType.HttpHeader && header.Name == RestConstants.LocationHeader)
@@ -440,14 +440,14 @@ namespace HBase.Stargate.Client.Api
       return ProcessScannerResultResponse(await GetScannerResultInternal(scanner, SendRequestAsync), scanner);
     }
 
-    T GetScannerResultInternal<T>(IScanner scanner, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
+    private T GetScannerResultInternal<T>(IScanner scanner, Func<Method, string, string, string, string, HttpStatusCode[], T> action)
     {
-      return action(Method.GET, scanner.Resource, Options.ContentType, null, null, new[] { HttpStatusCode.OK, HttpStatusCode.NoContent });
+      return action(Method.GET, scanner.Resource, Options.ContentType, null, null, new[] {HttpStatusCode.OK, HttpStatusCode.NoContent});
     }
 
-    CellSet ProcessScannerResultResponse(IRestResponse response, IScanner scanner)
+    private CellSet ProcessScannerResultResponse(IRestResponse response, IScanner scanner)
     {
-      return response.StatusCode == HttpStatusCode.NoContent ? null : new CellSet(Converter.ConvertCells(response.Content, scanner.Table));
+      return response.StatusCode == HttpStatusCode.NoContent ? null : Converter.ConvertCells(response.Content, scanner.Table);
     }
 
     /// <summary>
@@ -458,7 +458,7 @@ namespace HBase.Stargate.Client.Api
     /// <param name="falseRowKey">The false row key.</param>
     public static IStargate Create(string serverUrl, string contentType = DefaultContentType, string falseRowKey = DefaultFalseRowKey)
     {
-      return Create(new StargateOptions { ServerUrl = serverUrl, ContentType = contentType, FalseRowKey = falseRowKey });
+      return Create(new StargateOptions {ServerUrl = serverUrl, ContentType = contentType, FalseRowKey = falseRowKey});
     }
 
     /// <summary>
@@ -505,7 +505,7 @@ namespace HBase.Stargate.Client.Api
       return GetValidatedResponse(await Client.ExecuteTaskAsync(request), validStatuses);
     }
 
-    IRestResponse GetValidatedResponse(IRestResponse response, HttpStatusCode[] validStatuses)
+    private IRestResponse GetValidatedResponse(IRestResponse response, HttpStatusCode[] validStatuses)
     {
       if (response.ResponseStatus == ResponseStatus.Error && response.ErrorException != null)
       {
@@ -513,9 +513,13 @@ namespace HBase.Stargate.Client.Api
       }
 
       if (validStatuses == null)
+      {
         ErrorProvider.ThrowIfStatusMismatch(response, HttpStatusCode.OK);
+      }
       else
+      {
         ErrorProvider.ThrowIfStatusMismatch(response, validStatuses);
+      }
 
       return response;
     }
