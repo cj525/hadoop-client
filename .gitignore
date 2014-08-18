@@ -111,3 +111,5 @@ UpgradeLog*.XML
 
 *.azw~
 *.exe
+
+/.vagrant/machines
