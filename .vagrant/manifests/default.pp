@@ -45,7 +45,7 @@ file { '/etc/init.d/hbase':
 
 # Git can mess up line endings.
 exec { 'fix initd':
-  command   => 'sudo chmod +x /etc/init.d/hbase; sudo dos2unix /etc/init.d/hbase',
+  command   => 'chmod +x /etc/init.d/hbase; dos2unix /etc/init.d/hbase',
   notify    => Service['hbase'],
   path      => $::path,
   require   => Package['dos2unix'],
@@ -59,7 +59,7 @@ file { '/etc/profile.d/hbase.sh':
 
 # Git can mess up line endings.
 exec { 'fix profiled':
-  command   => 'sudo chmod +x /etc/profile.d/hbase.sh; sudo dos2unix /etc/profile.d/hbase.sh',
+  command   => 'chmod +x /etc/profile.d/hbase.sh; dos2unix /etc/profile.d/hbase.sh',
   path      => $::path,
   require   => Package['dos2unix'],
   subscribe => File['/etc/profile.d/hbase.sh'],
