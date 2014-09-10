@@ -35,7 +35,7 @@ namespace HBase.Stargate.Client.TypeConversion
     private const string _startRowName = "startRow";
     private const string _stopRowName = "stopRow";
     private const string _startTimeName = "startTime";
-    private const string _stopTimeName = "stopTime";
+    private const string _stopTimeName = "endTime";
     private const string _batchSizeName = "batch";
     private const string _filterName = "filter";
     private readonly ICodec _codec;
