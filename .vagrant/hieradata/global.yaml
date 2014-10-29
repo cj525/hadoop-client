@@ -1,1 +1,1 @@
-hbase_port: 9090
+hbase::port: 9090

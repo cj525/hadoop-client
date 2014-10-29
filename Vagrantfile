@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 require 'yaml'
 
-hbase_port = YAML.load_file('.vagrant/hieradata/global.yaml')['hbase_port']
+hbase_port = YAML.load_file('.vagrant/hieradata/global.yaml')['hbase::port']
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos-64-x64-vbox4210'
@@ -29,6 +29,7 @@ Vagrant.configure('2') do |config|
   config.vm.provision 'shell' do |shell|
     shell.inline = 
       "echo $'---\n:backends:\n  - yaml\n:yaml:\n  :datadir: /etc/puppet/hieradata\n:hierarchy:\n  - global' > /etc/puppet/hiera.yaml;" +
+      '[[ -d /etc/puppet/modules/hbase ]] || sudo puppet module install myoung34-hbase;' +
       'rm -rf /etc/puppet/hieradata;' +
       'cp -r /vagrant/.vagrant/hieradata /etc/puppet;'
   end
